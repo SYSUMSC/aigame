@@ -3,8 +3,8 @@ from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.db.session import get_session
-from app.schemas.problem import Problem, ProblemSchema, ProblemSearchSchema
+from db.session import get_session
+from schemas.problem import Problem, ProblemSchema, ProblemSearchSchema
 
 from ..response_model import ResponseModel
 

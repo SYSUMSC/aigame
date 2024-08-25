@@ -3,9 +3,9 @@ from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.core.security import get_password_hash
-from app.db.session import get_session
-from app.schemas.user import User, UserSchema, UserSearchSchema
+from core.security import get_password_hash
+from db.session import get_session
+from schemas.user import User, UserSchema, UserSearchSchema
 
 from ..response_model import ResponseModel
 

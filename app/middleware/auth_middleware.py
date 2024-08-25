@@ -2,7 +2,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.core.security import get_current_admin, get_current_user, oauth2_scheme_admin, oauth2_scheme_user
+from core.security import get_current_admin, get_current_user, oauth2_scheme_admin, oauth2_scheme_user
 
 class AdminAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):

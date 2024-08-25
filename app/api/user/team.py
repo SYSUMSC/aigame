@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.api.response_model import ResponseModel
-from app.db.session import get_session
-from app.schemas.team import Team, TeamSchema
-from app.schemas.user import User
-from app.core.security import get_current_user
+from api.response_model import ResponseModel
+from db.session import get_session
+from schemas.team import Team, TeamSchema
+from schemas.user import User
+from core.security import get_current_user
 
 team_router = APIRouter()
 

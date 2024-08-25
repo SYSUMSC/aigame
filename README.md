@@ -9,6 +9,14 @@
 python -m isort .
 ```
 
+美化jinja html
+
+```
+d:\ProgramData\miniconda3\envs\newaigame\python.exe -m pip install -U djlint --target D:\ProgramData\miniconda3\envs\newaigame\Lib\site-packages
+```
+
+
+
 fastcrud文档：https://igorbenav.github.io/fastcrud/
 
 SQLModel文档：https://sqlmodel.fastapi.org.cn/
@@ -26,6 +34,15 @@ SQLModel文档：https://sqlmodel.fastapi.org.cn/
 - 查询
     post参数根据ModelSearchSchema的字段进行查询，如果是int则=匹配，如果是str则like % %匹配
     get参数为page，limit
+
+# vscode拓展
+
+admin相关
+
+- Jinja2 Snippet Kit
+- Better Jinja
+- djlint
+
 
 # 杂
 

@@ -1,6 +1,8 @@
 import os
 import sys
 
+from fastapi.staticfiles import StaticFiles
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from fastapi import FastAPI, HTTPException, Request
@@ -10,12 +12,13 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from admin.router import admin_router
 
-from app.api.admin.router import admin_api_router
-from app.api.user.router import user_router
-from app.core.config import settings
-from app.db.session import get_session, lifespan
-from app.middleware.auth_middleware import AdminAuthMiddleware, UserAuthMiddleware
+from api.admin.router import admin_api_router
+from api.user.router import user_router
+from core.config import settings
+from db.session import get_session, lifespan
+from middleware.auth_middleware import AdminAuthMiddleware, UserAuthMiddleware
 
 app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_ADMIN_STR}/openapi.json",
     openapi_tags=[
@@ -72,10 +75,14 @@ async def generic_exception_handler(request: Request, exc: Exception):
             "data": None
         }
     )
-
+# 后台api
 app.include_router(admin_api_router, prefix=settings.API_ADMIN_STR)
-
+# 用户api
 app.include_router(user_router, prefix=settings.API_USER_STR)
+# admin静态文件目录
+app.mount("/admin/static", StaticFiles(directory="admin/static"), name="admin_static")
+# 包含admin路由
+app.include_router(admin_router)
 
 def custom_openapi():
     if app.openapi_schema:

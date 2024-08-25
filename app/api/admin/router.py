@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from app.core.security import oauth2_scheme_admin as oauth2_scheme
+from core.security import oauth2_scheme_admin as oauth2_scheme
 
 from .auth import auth_router
 from .team import team_router

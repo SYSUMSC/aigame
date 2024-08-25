@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel, select
 
-from app.core.config import settings
-from app.core.security import get_password_hash
-from app.schemas.config import Config
+from core.config import settings
+from core.security import get_password_hash
+from schemas.config import Config
 
 DATABASE_URL = settings.DATABASE_URI
 engine = create_async_engine(DATABASE_URL, echo=True)
