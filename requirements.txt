@@ -1,0 +1,10 @@
+fastapi
+pydantic_settings
+bcrypt
+uvicorn
+sqlmodel
+sqlalchemy
+pydantic
+passlib[bcrypt]
+python-jose
+aiosqlite
