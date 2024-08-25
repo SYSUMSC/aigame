@@ -2,13 +2,18 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from core.security import get_current_admin
+from core.security import get_current_admin, get_current_user
+
+
+from core.security import oauth2_scheme_user
 
 class AdminAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if request.url.path.startswith("/api/admin") and not request.url.path.startswith("/api/admin/login") \
             and not request.url.path.startswith(("/docs", "/redoc")) \
             and not request.url.path.startswith("/api/user") \
+            and not request.url.path.startswith("/admin") \
+            and not request.url.path.startswith("/user") \
             and not request.url.path.endswith("/openapi.json"):
             try:
                 access_token = None
@@ -55,6 +60,8 @@ class UserAuthMiddleware(BaseHTTPMiddleware):
              and not request.url.path.startswith("/api/user/register") \
             and not request.url.path.startswith(("/docs", "/redoc")) \
             and not request.url.path.startswith("/api/admin") \
+            and not request.url.path.startswith("/admin") \
+            and not request.url.path.startswith("/user") \
             and not request.url.path.endswith("/openapi.json"):
             try:
                 token = await oauth2_scheme_user(request)
