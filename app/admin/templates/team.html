@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% block title %}
+  队伍管理
+{% endblock %}
+{% block content %}
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">队伍名称</label>
+          <div class="layui-input-inline">
+            <input type="text" name="name" placeholder="请输入队伍名称" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">队长</label>
+          <div class="layui-input-inline">
+            <input type="text" name="captain" placeholder="请输入队长名称" autocomplete="off" class="layui-input" />
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">状态</label>
+          <div class="layui-input-inline">
+            <select name="status" class="layui-input">
+              <option value="">请选择</option>
+              <option value="INACTIVE">未激活</option>
+              <option value="PENDING_REVIEW">待审核</option>
+              <option value="ACTIVE">已激活</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="LAY-app-search"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="layui-card-body">
+      <div style="padding-bottom: 10px">
+        <button class="layui-btn layuiadmin-btn-list" data-type="batchdel">删除</button>
+        <button class="layui-btn layuiadmin-btn-list" data-type="add">添加</button>
+      </div>
+      <table id="LAY-app-list" lay-filter="LAY-app-list"></table>
+      <script type="text/html" id="table-action-list">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+          <i class="layui-icon layui-icon-edit"></i>
+          <span class="layui-hide-xs">编辑</span>
+        </a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+          <i class="layui-icon layui-icon-delete"></i>
+          <span class="layui-hide-xs">删除</span>
+        </a>
+      </script>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    layui
+      .config({
+        base: '/admin/static/' // 静态资源所在路径
+      })
+      .use(['index', 'table', 'laytpl', "admin"], function(){
+        var table = layui.table
+        ,form = layui.form, laytpl = layui.laytpl, admin = layui.admin,$ = layui.$,
+        setter=layui.setter,
+        request = setter.request;
+        table.set({
+            method: "post",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            headers: {'access_token': layui.data(setter.tableName)[request.tokenName]}
+        });
+
+        table.render({
+          elem: "#LAY-app-list",
+          url: "/api/admin/team/search",
+          cols: [[
+            { type: "checkbox", fixed: "left" },
+            { field: "id", width: 100, title: "ID", sort: true },
+            { field: "name", title: "名称", width: 150 },
+            { field: "avatar", title: "头像", templet: function(d) {
+                return '<img style="display: inline-block; width: 50%; height: 100%;" src="' + d.avatar + '">';
+              }, width: 100 },
+            { field: "captain", title: "队长", width: 100 },
+            { field: "status", title: "状态", templet: function(d) {
+                var statusMap = {
+                  "INACTIVE": "未激活",
+                  "PENDING_REVIEW": "待审核",
+                  "ACTIVE": "已激活"
+                };
+                return statusMap[d.status];
+              }, width: 200 },
+            { field: "invite_code", title: "邀请码", width: 150 },
+            {
+              title: "操作",
+              minWidth: admin.screen() < 2 ? 150 : 200,
+              align: "center",
+              fixed: "right",
+              toolbar: "#table-action-list",
+            },
+          ]],
+          page: true,
+          limit: 10,
+          limits: [10, 15, 20, 25, 30],
+          text: {
+            none: "无数据",
+          },
+        });
+
+        //事件-搜索
+        form.on('submit(LAY-app-search)', function(data){
+          var field = data.field;
+
+          //执行重载
+          table.reloadData('LAY-app-list', {
+            where: field
+          });
+        });
+
+        var active = {
+          batchdel: function(){
+            var checkStatus = table.checkStatus('LAY-app-list')
+            ,checkData = checkStatus.data; //得到选中的数据
+
+            if(checkData.length === 0){
+              return layer.msg('请选择数据');
+            }
+
+            layer.confirm('确定删除吗？', function(index) {
+              var ids = checkData.map(function(item){ return item.id; });
+              admin.req({
+                url: "/api/admin/team", // FastAPI的批量删除队伍接口
+                type: "DELETE",
+                data: {
+                  ids: ids.join(',')
+                },
+                success: function(response) {
+                  if (response.code === 0) {
+                    layer.msg('删除成功', {icon: 1});
+                    table.reloadData('LAY-app-list');
+                  } else {
+                    layer.msg('删除失败', {icon: 2});
+                  }
+                }
+              });
+              layer.close(index);
+            });
+          },
+          add: function(){
+            layer.open({
+              type: 2,
+              title: '添加队伍',
+              content: "/admin/team_form", // 表单页面的URL
+              maxmin: true,
+              area: ['550px', '550px'],
+              btn: ['确定', '取消'],
+              yes: function (index, layero) {
+                var iframeWindow = window["layui-layer-iframe" + index],
+                  submitID = "LAY-user-front-submit",
+                  submit = layero
+                    .find("iframe")
+                    .contents()
+                    .find("#" + submitID);
+                iframeWindow.layui.form.on(
+                  "submit(" + submitID + ")",
+                  function (data) {
+                    var field = data.field;
+                    var load = layer.load();
+                    admin.req({
+                      url: "/api/admin/team", // FastAPI的创建队伍接口
+                      data: JSON.stringify(field),
+                      method: "POST",
+                      contentType: "application/json",
+                      success: function (res) {
+                        if (res.code == 0) {
+                          layer.msg(res.msg, { icon: 1 });
+                          table.reloadData("LAY-app-list");
+                          layer.close(index);
+                        } else {
+                          layer.msg(res.msg);
+                        }
+                      },
+                      complete: function () {
+                        layer.close(load);
+                      },
+                    });
+                  }
+                );
+                submit.trigger("click");
+              },
+            });
+          }
+        };
+
+        $('.layui-btn.layuiadmin-btn-list').on('click', function(){
+          var type = $(this).data('type');
+          active[type] ? active[type].call(this) : '';
+        });
+
+        table.on('tool(LAY-app-list)', function(obj){
+          var event = obj.event;
+          var trData = obj.data;
+          var id = obj.data.id;
+          if(event === 'del'){
+            layer.confirm('确定删除吗？', function(index){
+              admin.req({
+                url: "/api/admin/team/" + id, // FastAPI的删除队伍接口
+                type: "DELETE",
+                success: function(response) {
+                  if (response.code === 0) {
+                    layer.msg('删除成功', {icon: 1});
+                    table.reloadData('LAY-app-list');
+                  } else {
+                    layer.msg('删除失败', {icon: 2});
+                  }
+                }
+              });
+              layer.close(index);
+            });
+          } else if(event === 'edit'){
+            layer.open({
+              type: 2,
+              title: '编辑队伍',
+              content: "/admin/team_form?id=" + id, // 表单页面的URL
+              maxmin: true,
+              area: ['550px', '550px'],
+              btn: ['确定', '取消'],
+              yes: function (index, layero) {
+                var iframeWindow = window["layui-layer-iframe" + index],
+                  submitID = "LAY-user-front-submit",
+                  submit = layero
+                    .find("iframe")
+                    .contents()
+                    .find("#" + submitID);
+                iframeWindow.layui.form.on(
+                  "submit(" + submitID + ")",
+                  function (data) {
+                    var field = data.field;
+                    var load = layer.load();
+                    admin.req({
+                      url: "/api/admin/team/" + id, // FastAPI的更新队伍接口
+                      data: JSON.stringify(field),
+                      method: "PUT",
+                      contentType: "application/json",
+                      success: function (res) {
+                        if (res.code == 0) {
+                          layer.msg(res.msg, { icon: 1 });
+                          table.reloadData("LAY-app-list");
+                          layer.close(index);
+                        } else {
+                          layer.msg(res.msg);
+                        }
+                      },
+                      complete: function () {
+                        layer.close(load);
+                      },
+                    });
+                  }
+                );
+                submit.trigger("click");
+              },
+            });
+          }
+        });
+
+      });
+  </script>
+{% endblock %}

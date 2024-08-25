@@ -11,7 +11,8 @@ from .problem import problem_router
 admin_api_router = APIRouter()
 
 admin_api_router.include_router(auth_router)
-admin_api_router.include_router(user_router, dependencies=[Depends(oauth2_scheme)])
-admin_api_router.include_router(team_router, dependencies=[Depends(oauth2_scheme)])
-admin_api_router.include_router(competition_router, dependencies=[Depends(oauth2_scheme)])
-admin_api_router.include_router(problem_router, dependencies=[Depends(oauth2_scheme)])
+# , dependencies=[Depends(oauth2_scheme)]
+admin_api_router.include_router(user_router)
+admin_api_router.include_router(team_router)
+admin_api_router.include_router(competition_router)
+admin_api_router.include_router(problem_router)
