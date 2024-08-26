@@ -260,6 +260,10 @@
                 );
                 submit.trigger("click");
               },
+              success: function (layero, index) {
+                let iframeWin = window[layero.find("iframe")[0]["name"]];
+                iframeWin.initForm(trData);
+              },
             });
           }
         });

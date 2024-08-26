@@ -34,6 +34,15 @@ SQLModel文档：https://sqlmodel.fastapi.org.cn/
 - 查询
     post参数根据ModelSearchSchema的字段进行查询，如果是int则=匹配，如果是str则like % %匹配
     get参数为page，limit
+    
+- 使用json body传参（后台layuiadmin需要修改）
+
+    ```
+                      contentType: "application/json;charset=UTF-8",
+                      data: JSON.stringify(field),
+    ```
+
+    
 
 # vscode拓展
 

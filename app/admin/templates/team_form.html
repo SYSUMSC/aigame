@@ -1,0 +1,97 @@
+{% extends 'form_base.html' %}
+{% block title %}
+  队伍管理-表单
+{% endblock %}
+{% block content %}
+  <div class="layui-form" lay-filter="layuiadmin-form" id="layuiadmin-form" style="padding: 20px 0 0 0">
+    <input type="hidden" name="id" value="0" />
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">队伍名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="name" required lay-verify="required" placeholder="请输入队伍名称" autocomplete="off" class="layui-input" value="">
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">队长</label>
+      <div class="layui-input-inline">
+        <select name="captain_id" required lay-verify="required">
+          <option value="">请选择队长</option>
+          {% for user in users %}
+            <option value="{{ user.id }}">
+              {{ user.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <label class="layui-form-label">状态</label>
+      <div class="layui-input-inline">
+        <select name="status" lay-verify="required">
+          <option value="">请选择状态</option>
+          <option value="INACTIVE">未激活</option>
+          <option value="PENDING_REVIEW">待审核</option>
+          <option value="ACTIVE">已激活</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认" />
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+
+    let initData
+
+    function initForm(data) {
+      let jsonString = JSON.stringify(data)
+      initData = JSON.parse(jsonString)
+    }
+
+    function initDatePickers() {
+      layui.use('laydate', function () {
+        var laydate = layui.laydate
+
+        if (document.getElementById('start_time')) {
+          laydate.render({
+            elem: '#start_time', // 开始时间元素的 ID
+            type: 'date' // 设置日期选择器类型为日期
+          })
+        }
+
+        if (document.getElementById('end_time')) {
+          laydate.render({
+            elem: '#end_time', // 结束时间元素的 ID
+            type: 'date' // 设置日期选择器类型为日期
+          })
+        }
+      })
+    }
+    layui.config({
+        base: '/admin/static/' // 静态资源所在路径
+    }).use(['index', 'form'], function () {
+      var $ = layui.$,
+        form = layui.form;
+        //接收初始化数据
+        if (initData != undefined && initData != null) {
+          console.log(initData)
+          if (initData.status == 0) {
+            initData.status = ''
+          }
+          //额外，根据captain_id选择
+          initData.captain = initData.captain_id
+          form.val('layuiadmin-form', initData)
+          $('input[type="password"]').val('')
+        }
+
+        initDatePickers() // 初始化日期选择器
+    });
+  </script>
+{% endblock %}
