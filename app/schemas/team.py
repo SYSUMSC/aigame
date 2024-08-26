@@ -20,3 +20,5 @@ class TeamSchema(SQLModel):
 
 class TeamSearchSchema(SQLModel):
     name: str | None = None
+    captain_id: int | None = None
+    status: str | None = None

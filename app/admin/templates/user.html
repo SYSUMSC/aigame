@@ -38,12 +38,14 @@
         <button class="layui-btn layuiadmin-btn-list" data-type="add">添加</button>
       </div>
       <table id="LAY-user-list" lay-filter="LAY-user-list"></table>
-      <script type="text/html" id="table-user-action">
+      <script type="text/html" id="table-action-list">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
-          <i class="layui-icon layui-icon-edit"></i> 编辑
+          <i class="layui-icon layui-icon-edit"></i>
+          <span class="layui-hide-xs">编辑</span>
         </a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
-          <i class="layui-icon layui-icon-delete"></i> 删除
+          <i class="layui-icon layui-icon-delete"></i>
+          <span class="layui-hide-xs">删除</span>
         </a>
       </script>
     </div>
@@ -77,7 +79,7 @@
           { field: 'email', title: '邮箱', width: 200 },
           { field: 'student_id', title: '学号', width: 150 },
           { field: 'is_active', title: '状态', width: 100, templet: d => d.is_active ? '激活' : '未激活' },
-          { title: '操作', minWidth: 150, align: 'center', fixed: 'right', toolbar: '#table-user-action' }
+          { title: '操作', minWidth: 150, align: 'center', fixed: 'right', toolbar: '#table-action-list' }
         ]],
         page: true,
         limit: 10,
