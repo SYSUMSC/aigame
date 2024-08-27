@@ -6,47 +6,13 @@
   <div class="layui-form" lay-filter="layuiadmin-form" id="layuiadmin-form" style="padding: 20px 0 0 0">
     <input type="hidden" name="id" value="0" />
 
-    <div class="layui-form-item">
-      <label class="layui-form-label">用户名</label>
-      <div class="layui-input-inline">
-        <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" />
-      </div>
-    </div>
+    {% from 'form_macros.html' import input_field, select_field %}
+    {{ input_field('用户名', 'username', '请输入用户名') }}
+    {{ input_field('姓名', 'name', '请输入姓名') }}
+    {{ input_field('邮箱', 'email', '请输入邮箱', 'email') }}
 
-    <div class="layui-form-item">
-      <label class="layui-form-label">姓名</label>
-      <div class="layui-input-inline">
-        <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input" />
-      </div>
-    </div>
+    {{ select_field('状态', 'status', [{'value': 'active', 'label': '激活'}, {'value': 'inactive', 'label': '未激活'}]) }}
 
-    <div class="layui-form-item">
-      <label class="layui-form-label">邮箱</label>
-      <div class="layui-input-inline">
-        <input type="email" name="email" required lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input" />
-      </div>
-    </div>
-
-    <div class="layui-form-item">
-      <label class="layui-form-label">学号</label>
-      <div class="layui-input-inline">
-        <input type="text" name="student_id" required lay-verify="required" placeholder="请输入学号" autocomplete="off" class="layui-input" />
-      </div>
-    </div>
-
-    <div class="layui-form-item">
-      <label class="layui-form-label">密码</label>
-      <div class="layui-input-inline">
-        <input type="password" name="password" lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input" />
-      </div>
-    </div>
-
-    <div class="layui-form-item">
-      <label class="layui-form-label">状态</label>
-      <div class="layui-input-inline">
-        <input type="checkbox" name="is_active" lay-skin="switch" lay-text="激活|停用" checked />
-      </div>
-    </div>
 
     <div class="layui-form-item layui-hide">
       <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认" />

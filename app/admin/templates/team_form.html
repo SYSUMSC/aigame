@@ -6,12 +6,9 @@
   <div class="layui-form" lay-filter="layuiadmin-form" id="layuiadmin-form" style="padding: 20px 0 0 0">
     <input type="hidden" name="id" value="0" />
 
-    <div class="layui-form-item">
-      <label class="layui-form-label">队伍名称</label>
-      <div class="layui-input-inline">
-        <input type="text" name="name" required lay-verify="required" placeholder="请输入队伍名称" autocomplete="off" class="layui-input" value="">
-      </div>
-    </div>
+    {% from 'form_macros.html' import input_field, select_field %}
+
+    {{ input_field('队伍名称', 'name', '请输入队伍名称') }}
 
     <div class="layui-form-item">
       <label class="layui-form-label">队长</label>
@@ -27,24 +24,9 @@
       </div>
     </div>
 
-    <div class="layui-form-item">
-      <label class="layui-form-label">邀请码</label>
-      <div class="layui-input-inline">
-        <input type="text" name="invite_code" required lay-verify="required" placeholder="请输入邀请码" autocomplete="off" class="layui-input" value="">
-      </div>
-    </div>
+    {{ input_field('邀请码', 'invite_code', '请输入邀请码') }}
 
-    <div class="layui-form-item">
-      <label class="layui-form-label">状态</label>
-      <div class="layui-input-inline">
-        <select name="status" lay-verify="required">
-          <option value="">请选择状态</option>
-          <option value="INACTIVE">未激活</option>
-          <option value="PENDING_REVIEW">待审核</option>
-          <option value="ACTIVE">已激活</option>
-        </select>
-      </div>
-    </div>
+    {{ select_field('状态', 'status', [{'value': 'INACTIVE', 'label': '未激活'}, {'value': 'PENDING_REVIEW', 'label': '待审核'}, {'value': 'ACTIVE', 'label': '已激活'}]) }}
 
     <div class="layui-form-item layui-hide">
       <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认" />

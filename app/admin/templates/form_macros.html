@@ -1,0 +1,21 @@
+{% macro input_field(label, name, placeholder='', type='text', value='') %}
+  <div class="layui-form-item">
+    <label class="layui-form-label">{{ label }}</label>
+    <div class="layui-input-inline">
+      <input type="{{ type }}" name="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" value="{{ value }}" />
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro select_field(label, name, options=[]) %}
+  <div class="layui-form-item">
+    <label class="layui-form-label">{{ label }}</label>
+    <div class="layui-input-inline">
+      <select name="{{ name }}" class="layui-input">
+        {% for option in options %}
+          <option value="{{ option.value }}">{{ option.label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endmacro %}
