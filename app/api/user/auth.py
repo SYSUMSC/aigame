@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -36,8 +37,14 @@ async def register(user: UserSchema, session: AsyncSession = Depends(get_session
         return ResponseModel(code=0, msg="用户注册成功", data=user_db.model_dump())
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
 @auth_router.post("/login", response_model=ResponseModel, tags=["User"])
-async def login(username: str, password: str, session: AsyncSession = Depends(get_session)):
+async def login(request: LoginRequest, session: AsyncSession = Depends(get_session)):
+    username = request.username
+    password = request.password
     try:
         # 检查用户是否存在
         user = await session.execute(select(User).where(User.username == username))

@@ -26,19 +26,6 @@ app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_ADMIN_STR
         {"name": "User", "description": "前台api"},
     ], lifespan=lifespan)
 
-# CORS
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 app.add_middleware(AdminAuthMiddleware)
 app.add_middleware(UserAuthMiddleware)
 
@@ -105,6 +92,17 @@ def custom_openapi():
     return app.openapi_schema
 
 app.openapi = custom_openapi
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="localhost", port=8000, reload=True)

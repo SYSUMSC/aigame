@@ -94,6 +94,21 @@ python main.py
 
 # 开发说明
 
+# 前台前端开发说明
+
+采用ts+vue3+pinia+tailwind+pnpm
+
+### 初始化环境
+
+```
+cd frontend
+pnpm i
+```
+
+运行则输入`pnpm dev`
+
+
+
 ## 后台前端开发说明
 
 采用layuiadmin,layui官网：[开始使用 - Layui 文档](https://layui.dev/docs/2/)
