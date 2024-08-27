@@ -1,6 +1,6 @@
 fastapi
 pydantic_settings
-bcrypt
+bcrypt==4.0.1
 uvicorn
 sqlmodel
 sqlalchemy
@@ -9,3 +9,4 @@ passlib[bcrypt]
 python-jose
 aiosqlite
 Jinja2
+python-multipart

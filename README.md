@@ -1,10 +1,44 @@
-# 路径说明
-```
-- app #python fastapi后端与admin(采用layuiadmin非前后端分离)
-- frontend #用户端 前后端分离
+# 环境配置
+
+默认采用 conda 进行 Pyhton 虚拟环境管理，请提前配好 conda 环境
+
+1. **创建 Python 虚拟环境**
+
+```bash
+conda create -n aigame python=3.12
+conda activate aigame
 ```
 
-# 格式化import
+如果是在 windows 上使用 conda，可能会遇到 `conda activate` 无效问题，请查看此[链接](https://blog.csdn.net/u010393510/article/details/130715238)解决
+
+2. **下载 Python 依赖**
+
+```bash
+git clone https://github.com/SYSUMSC/aigame.git
+cd aigame
+
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+pip install -r requirements.txt
+```
+
+3. **运行**
+
+```bash
+cd app
+python main.py
+```
+
+接着在本地浏览器打开 `localhost:8000/admin` 路径，开发默认账号是 **admin**，密码是 **123456**
+
+# 路径说明
+
+```
+- app #python fastapi后端与admin(采用layuiadmin非前后端分离)
+- frontend # 用户端 前后端分离
+```
+
+# 格式化 import
+
 ```
 python -m isort .
 ```
