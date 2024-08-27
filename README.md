@@ -110,7 +110,7 @@ python main.py
 
 以`user.html`为例子
 
-创建在template，大概只需要改title和header要查询的字段，然后extra_js改具体url
+创建在template，大概只需要改title和header要查询的字段，然后extra_js改具体url，比如队伍就是team的；以及修改table.render的col字段，定义显示什么
 
 ```html
 {% extends 'table_base.html' %}
