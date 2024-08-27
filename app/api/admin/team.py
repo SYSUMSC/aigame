@@ -73,7 +73,7 @@ async def search_teams(search: TeamSearchSchema, page: int = 1, limit: int = 10,
         query = select(Team)
         filters = []
         for field, value in search.model_dump(exclude_unset=True).items():
-            if isinstance(value, str):
+            if isinstance(value, str) and field!="status":
                 filters.append(getattr(Team, field).like(f"%{value}%"))
             else:
                 filters.append(getattr(Team, field) == value)
