@@ -96,7 +96,7 @@ python main.py
 
 # 前台前端开发说明
 
-采用ts+vue3+pinia+tailwind+pnpm
+采用ts+vue3+pinia+tailwind+bootstrap5+pnpm
 
 ### 初始化环境
 
