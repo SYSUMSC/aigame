@@ -1,21 +1,30 @@
-{% macro input_field(label, name, placeholder='', type='text', value='') %}
+{% macro input_field(label, name, placeholder='', type='text', value='', required=False) %}
   <div class="layui-form-item">
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
-      <input type="{{ type }}" name="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" value="{{ value }}" />
+      <input type="{{ type }}" name="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" value="{{ value }}" {% if required %}required  lay-verify="required"{% endif %} />
     </div>
   </div>
 {% endmacro %}
 
-{% macro select_field(label, name, options=[]) %}
+{% macro select_field(label, name, options=[], required=False) %}
   <div class="layui-form-item">
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
-      <select name="{{ name }}" class="layui-input">
+      <select name="{{ name }}" class="layui-input" {% if required %}required  lay-verify="required"{% endif %}>
         {% for option in options %}
           <option value="{{ option.value }}">{{ option.label }}</option>
         {% endfor %}
       </select>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro textarea_field(label, name, placeholder='', required=False) %}
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">{{ label }}</label>
+    <div class="layui-input-block">
+      <textarea name="{{ name }}" class="layui-textarea" placeholder="{{ placeholder }}" {% if required %}required  lay-verify="required"{% endif %}></textarea>
     </div>
   </div>
 {% endmacro %}

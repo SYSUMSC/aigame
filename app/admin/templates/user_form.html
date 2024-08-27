@@ -4,9 +4,8 @@
 {% endblock %}
 {% block content %}
     {% from 'form_macros.html' import input_field, select_field %}
-    {{ input_field('用户名', 'username', '请输入用户名') }}
-    {{ input_field('姓名', 'name', '请输入姓名') }}
-    {{ input_field('邮箱', 'email', '请输入邮箱', 'email') }}
-
-    {{ select_field('状态', 'status', [{'value': 'active', 'label': '激活'}, {'value': 'inactive', 'label': '未激活'}]) }}
+    {{ input_field('用户名', 'username', '请输入用户名', required=True) }}
+    {{ input_field('姓名', 'name', '请输入姓名', required=True) }}
+    {{ input_field('邮箱', 'email', '请输入邮箱', 'email', required=True) }}
+    {{ select_field('状态', 'status', [{'value': 'active', 'label': '激活'}, {'value': 'inactive', 'label': '未激活'}], required=True) }}
 {% endblock %}
