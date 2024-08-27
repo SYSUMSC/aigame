@@ -45,3 +45,19 @@ async def user(request: Request):
 @admin_router.get("/admin/user_form")
 async def user_form(request: Request):
     return templates.TemplateResponse("user_form.html", {"request": request})
+
+# 题目
+@admin_router.get("/admin/problem")
+async def problem(request: Request):
+    return templates.TemplateResponse("problem.html", {"request": request})
+@admin_router.get("/admin/problem_form")
+async def problem_form(request: Request):
+    return templates.TemplateResponse("problem_form.html", {"request": request})
+
+# 比赛
+@admin_router.get("/admin/competition")
+async def competition(request: Request):
+    return templates.TemplateResponse("competition.html", {"request": request})
+@admin_router.get("/admin/competition_form")
+async def competition_form(request: Request):
+    return templates.TemplateResponse("competition_form.html", {"request": request})

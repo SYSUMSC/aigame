@@ -106,6 +106,10 @@ python main.py
 
 推荐使用vscode `aide`插件，复制app/admin,app/schema给ai，就可以快速让ai写出来增删改查页面
 
+### 导航
+
+在`template/index.html`修改具体url
+
 ### table页面
 
 以`user.html`为例子
