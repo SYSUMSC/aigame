@@ -6,3 +6,4 @@ __pycache__/
 
 # Ignore database files
 *.db
+目录.py
