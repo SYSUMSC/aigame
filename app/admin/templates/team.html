@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block header %}
+  {% from 'form_macros.html' import search_field %}
   {{ search_field('队伍名称', 'name', '请输入队伍名称') }}
   {{ search_field('队长', 'captain', '请输入队长名称') }}
   {{ search_field('状态', 'status', '请选择', 'select', [{ value: 'INACTIVE', label: '未激活' }, { value: 'PENDING_REVIEW', label: '待审核' }, { value: 'ACTIVE', label: '已激活' }]) }}
