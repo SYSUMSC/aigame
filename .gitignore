@@ -7,3 +7,7 @@ __pycache__/
 # Ignore database files
 *.db
 目录.py
+
+# pnpm前端
+node_modules
+pnpm-lock.yaml
