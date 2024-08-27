@@ -4,27 +4,9 @@
 {% endblock %}
 
 {% block header %}
-  <div class="layui-inline">
-    <label class="layui-form-label">用户名</label>
-    <div class="layui-input-inline">
-      <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input" />
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">邮箱</label>
-    <div class="layui-input-inline">
-      <input type="text" name="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input" />
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">学号</label>
-    <div class="layui-input-inline">
-      <input type="text" name="student_id" placeholder="请输入学号" autocomplete="off" class="layui-input" />
-    </div>
-  </div>
-  <div class="layui-inline">
-    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="LAY-user-search"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i></button>
-  </div>
+  {{ search_field('用户名', 'username', '请输入用户名') }}
+  {{ search_field('邮箱', 'email', '请输入邮箱') }}
+  {{ search_field('学号', 'student_id', '请输入学号') }}
 {% endblock %}
 
 {% block extra_js %}
@@ -70,7 +52,7 @@
         })
 
         // 搜索事件
-        form.on('submit(LAY-user-search)', function (data) {
+        form.on('submit(LAY-search)', function (data) {
           var field = data.field
           table.reload('LAY-list', {
             where: field

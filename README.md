@@ -30,12 +30,154 @@ python main.py
 
 接着在本地浏览器打开 `localhost:8000/admin` 路径，开发默认账号是 **admin**，密码是 **123456**
 
+后台API文档地址`localhost:8000/docs`
+
 # 路径说明
 
 ```
-- app #python fastapi后端与admin(采用layuiadmin非前后端分离)
-- frontend # 用户端 前后端分离
+|-app #fastapi后台
+|---admin #admin后台，采用layuiadmin框架开发
+|-----static
+|-------adminui
+|---------dist
+|-----------css
+|-----------modules
+|-------layui
+|---------css
+|---------font
+|-------modules
+|---------layim
+|-----------res
+|-------------html
+|-------------images
+|-------------skin
+|-------------voice
+|-------style
+|---------imgs
+|-----------template
+|-----templates
+|-----router.py
+|---api #api，采用fastapi+sqlmodel
+|-----admin
+|-------auth.py
+|-------competition.py
+|-------problem.py
+|-------router.py
+|-------team.py
+|-------user.py
+|-----user
+|-------auth.py
+|-------info.py
+|-------router.py
+|-------team.py
+|-----deps.py
+|-----exception_handler.py
+|-----response_model.py
+|---core #定义一些辅助函数
+|-----__init__.py
+|-----config.py
+|-----security.py
+|-----utils.py
+|---db #定义数据库连接器
+|-----session.py
+|---middleware #定义鉴权工具
+|-----auth_middleware.py
+|---schemas #定义数据库模型和api模型
+|-----__init__.py
+|-----competition.py
+|-----config.py
+|-----problem.py
+|-----team.py
+|-----user.py
+|---main.py #启动文件
 ```
+
+# 开发说明
+
+## 后台前端开发说明
+
+采用layuiadmin,layui官网：[开始使用 - Layui 文档](https://layui.dev/docs/2/)
+
+对于一个数据模型， 主要包含增删改查，
+
+- 增改，通过table页面点添加或者编辑，打开form页面
+
+- 删查，在table页面进行，支持单个删除，整体删除，查询
+
+推荐使用vscode `aide`插件，复制app/admin,app/schema给ai，就可以快速让ai写出来增删改查页面
+
+### table页面
+
+以`user.html`为例子
+
+创建在template，大概只需要改title和header要查询的字段，然后extra_js改具体url
+
+```html
+{% extends 'table_base.html' %}
+{% block title %}
+  用户管理
+{% endblock %}
+
+{% block header %}
+  {{ search_field('用户名', 'username', '请输入用户名') }}
+  {{ search_field('邮箱', 'email', '请输入邮箱') }}
+  {{ search_field('学号', 'student_id', '请输入学号') }}
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    layui
+      .config({
+        base: '/admin/static/' // 静态资源所在路径
+      })
+      .use(['index', 'table', 'laytpl', 'admin'], function () {
+        //省略
+  </script>
+{% endblock %}
+
+```
+
+在`router.py`定义路由
+
+```python
+@admin_router.get("/admin/user")
+async def user(request: Request):
+    return templates.TemplateResponse("user.html", {"request": request})
+```
+
+
+
+### form页面
+
+以`user_form.html`为例子
+
+创建在template
+
+```html
+{% extends 'form_base.html' %}
+{% block title %}
+  用户管理-表单
+{% endblock %}
+{% block content %}
+    {% from 'form_macros.html' import input_field, select_field %}
+    {{ input_field('用户名', 'username', '请输入用户名', required=True) }}
+    {{ input_field('姓名', 'name', '请输入姓名', required=True) }}
+    {{ input_field('邮箱', 'email', '请输入邮箱', 'email', required=True) }}
+    {{ select_field('状态', 'status', [{'value': 'active', 'label': '激活'}, {'value': 'inactive', 'label': '未激活'}], required=True) }}
+{% endblock %}
+
+```
+
+根据`form_macros`定义的宏，类似调用函数来构建表单，减少重复代码
+
+在`router.py`定义路由
+
+```python
+async def user_form(request: Request):
+    return templates.TemplateResponse("user_form.html", {"request": request})
+```
+
+
 
 # 格式化 import
 
@@ -68,7 +210,7 @@ SQLModel文档：https://sqlmodel.fastapi.org.cn/
 - 查询
     post参数根据ModelSearchSchema的字段进行查询，如果是int则=匹配，如果是str则like % %匹配
     get参数为page，limit
-    
+
 - 使用json body传参（后台layuiadmin需要修改）
 
     ```
@@ -76,7 +218,6 @@ SQLModel文档：https://sqlmodel.fastapi.org.cn/
                       data: JSON.stringify(field),
     ```
 
-    
 
 # vscode拓展
 

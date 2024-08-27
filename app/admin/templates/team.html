@@ -4,32 +4,9 @@
 {% endblock %}
 
 {% block header %}
-  <div class="layui-inline">
-    <label class="layui-form-label">队伍名称</label>
-    <div class="layui-input-inline">
-      <input type="text" name="name" placeholder="请输入队伍名称" autocomplete="off" class="layui-input" />
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">队长</label>
-    <div class="layui-input-inline">
-      <input type="text" name="captain" placeholder="请输入队长名称" autocomplete="off" class="layui-input" />
-    </div>
-  </div>
-  <div class="layui-inline">
-    <label class="layui-form-label">状态</label>
-    <div class="layui-input-inline">
-      <select name="status" class="layui-input">
-        <option value="">请选择</option>
-        <option value="INACTIVE">未激活</option>
-        <option value="PENDING_REVIEW">待审核</option>
-        <option value="ACTIVE">已激活</option>
-      </select>
-    </div>
-  </div>
-  <div class="layui-inline">
-    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="LAY-app-search"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i></button>
-  </div>
+  {{ search_field('队伍名称', 'name', '请输入队伍名称') }}
+  {{ search_field('队长', 'captain', '请输入队长名称') }}
+  {{ search_field('状态', 'status', '请选择', 'select', [{ value: 'INACTIVE', label: '未激活' }, { value: 'PENDING_REVIEW', label: '待审核' }, { value: 'ACTIVE', label: '已激活' }]) }}
 {% endblock %}
 
 {% block extra_js %}
@@ -102,7 +79,7 @@
         })
 
         //事件-搜索
-        form.on('submit(LAY-app-search)', function (data) {
+        form.on('submit(LAY-search)', function (data) {
           var field = data.field
 
           //执行重载

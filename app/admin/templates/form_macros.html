@@ -28,3 +28,22 @@
     </div>
   </div>
 {% endmacro %}
+
+{% macro search_field(label, name, placeholder='', type='text', options=[], required=False) %}
+  <div class="layui-inline">
+    <label class="layui-form-label">{{ label }}</label>
+    <div class="layui-input-inline">
+      {% if type == 'select' %}
+        <select name="{{ name }}" class="layui-input" {% if required %}required{% endif %}>
+          <option value="">{{ placeholder }}</option>
+          {% for option in options %}
+            <option value="{{ option.value }}">{{ option.label }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input type="{{ type }}" name="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" {% if required %}required{% endif %} />
+      {% endif %}
+    </div>
+  </div>
+{% endmacro %}
+
