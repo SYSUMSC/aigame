@@ -1,23 +1,29 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import Reg from "../views/Reg.vue";
 import UserCenter from "../views/UserCenter.vue";
 import { useUserStore } from "../stores/user";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
+    name: "首页",
     component: Home,
   },
   {
     path: "/user/login",
-    name: "Login",
+    name: "登录",
     component: Login,
   },
   {
+    path: "/user/reg",
+    name: "注册",
+    component: Reg,
+  },
+  {
     path: "/user",
-    name: "UserCenter",
+    name: "用户中心",
     component: UserCenter,
     meta: { requiresAuth: true },
   },
@@ -30,6 +36,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!userStore.isLoggedIn()) {
       next({ name: "Login" });
@@ -38,6 +45,14 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     next();
+  }
+
+  // 更新网页标题
+  const defaultTitle = 'AI 竞赛平台'; // 默认的网页标题
+  if (to.name) {
+    document.title = `${defaultTitle} -- ${to.name}`;
+  } else {
+    document.title = defaultTitle;
   }
 });
 

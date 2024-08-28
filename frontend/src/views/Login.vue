@@ -1,44 +1,47 @@
 <template>
-  <div
-    class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12"
-  >
-    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
-      <div
-        class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20"
-      >
-        <h1 class="text-2xl font-bold mb-6">登录</h1>
-        <form @submit.prevent="login">
-          <div class="mb-4">
-            <label for="username" class="block text-gray-700">用户名</label>
-            <input
-              type="text"
-              id="username"
-              v-model="username"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-              required
-            />
+  <div class="container pt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-center">登录</h3>
           </div>
-          <div class="mb-4">
-            <label for="password" class="block text-gray-700">密码</label>
-            <input
-              type="password"
-              id="password"
-              v-model="password"
-              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-              required
-            />
+          <div class="card-body">
+            <form @submit.prevent="login">
+              <div class="form-group mb-3">
+                <label for="username">用户名</label>
+                <input
+                  type="text"
+                  id="username"
+                  v-model="username"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group mb-3">
+                <label for="password">密码</label>
+                <input
+                  type="password"
+                  id="password"
+                  v-model="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+              >
+                登录
+              </button>
+            </form>
           </div>
-          <button
-            type="submit"
-            class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            登录
-          </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import { ref } from 'vue';
