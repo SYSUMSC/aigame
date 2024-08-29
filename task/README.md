@@ -1,8 +1,8 @@
 # 赛题模板文档
 
-赛题模板已给出，详情参考路径 [task/task-template](task/task-template)。
+赛题模板已给出，详情参考路径 [task/task-template](task-template)。
 
-样例赛题已给出，详情参考路径 [task/task-0](task/task-0)。
+样例赛题已给出，详情参考路径 [task/task-0](task-0)。
 
 其中，相关文件及文件夹解释如下：
 
