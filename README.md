@@ -32,6 +32,10 @@ python main.py
 
 后台API文档地址`localhost:8000/docs`
 
+# 赛题模板
+
+点此处跳转至[塞梯模板文档](task/README.md)
+
 # 路径说明
 
 ```
@@ -245,12 +249,3 @@ admin相关
 - Jinja2 Snippet Kit
 - Better Jinja
 - djlint
-
-
-# 杂
-
-
-在我电脑的conda上不知道为啥需要指定才能安装到特定环境的路径
-```
-pip install -r requirements.txt --target D:\ProgramData\miniconda3\envs\newaigame\Lib\site-packages
-```
