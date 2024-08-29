@@ -16,7 +16,17 @@
 
 # 结果提交
 
-(说明一下结果的提交方式，`answer.json` 的组织方式)
+请参赛者将要提交的图片转换为 base64 编码的字符串，并参照 `example.json` 的样例格式提交。
+
+```json
+{
+    "answer": [
+        "image_0_base64_code",
+        "image_1_base64_code",
+        "image_2_base64_code"
+    ]
+}
+```
 
 # 评价指标
 
