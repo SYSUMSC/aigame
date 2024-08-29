@@ -34,14 +34,14 @@ const originalTextIntro = "欢迎来到 AI 竞赛平台，在这里你可以参�
 const originalTextWelc = "无论你是初学者还是经验丰富的开发者，我们的平台都能为你提供适合的竞赛和学习资源，助力你的 AI 旅程。"  
   
 // 格式化后的文本，用于逐字显示  
-const TextIntro = ref('\n')  
-const TextWelc = ref('\n')  
+const TextIntro = ref('')  
+const TextWelc = ref('')  
   
 // 模拟打字效果  
 const typeEffect = (text: string, target: Ref<string>, interval = 100) => {  
   let index = 0  
   const type = setInterval(() => {  
-    if (index < text.length) {  
+    if (index < text.length) {
       target.value += text.charAt(index)  
       index++  
     } else {  
@@ -54,8 +54,4 @@ onMounted(() => {
   typeEffect(originalTextIntro, TextIntro)  
   typeEffect(originalTextWelc, TextWelc, 120) // 稍微慢一点的间隔  
 })  
-</script>  
-  
-<style scoped>  
-/* 可以在这里添加一些 CSS 样式，但逐字书写效果主要通过 JavaScript 实现 */  
-</style>
+</script>
