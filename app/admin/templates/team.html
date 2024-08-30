@@ -208,9 +208,9 @@
                   var load = layer.load()
                   admin.req({
                     url: '/api/admin/team/' + id, // FastAPI的更新队伍接口
-                    data: JSON.stringify(field),
                     method: 'PUT',
                     contentType: 'application/json',
+                    data: JSON.stringify(field),
                     success: function (res) {
                       if (res.code == 0) {
                         layer.msg(res.msg, { icon: 1 })
@@ -229,7 +229,7 @@
               },
               success: function (layero, index) {
                 let iframeWin = window[layero.find('iframe')[0]['name']]
-                iframeWin.initForm(trData)
+                iframeWin.initForm(data)
               }
             })
           }

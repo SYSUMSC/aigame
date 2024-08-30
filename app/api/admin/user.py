@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+import secrets
 
 from core.security import get_password_hash
 from db.session import get_session
@@ -14,12 +15,14 @@ user_router = APIRouter()
 @user_router.post("/user", response_model=ResponseModel, tags=["Admin"])
 async def create_user(user: UserSchema, session: AsyncSession = Depends(get_session)):
     try:
+        if user.password is None:
+            user.password = secrets.token_urlsafe(10)  # 生成随机密码
         user_db = User(**user.model_dump())
         user_db.password = get_password_hash(user.password)
         session.add(user_db)
         await session.commit()
         await session.refresh(user_db)
-        return ResponseModel(code=0, msg="用户创建成功", data=user_db.model_dump())
+        return ResponseModel(code=0, msg="用户创建成功，默认密码是"+user.password, data=user_db.model_dump())
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 
@@ -33,7 +36,12 @@ async def update_user(user_id: int, user: UserSchema, session: AsyncSession = De
             return ResponseModel(code=1, msg="用户未找到")
         user_data = user.model_dump(exclude_unset=True)
         for key, value in user_data.items():
-            setattr(user_db, key, value)
+            if value is None:
+                continue
+            if key == "password":
+                setattr(user_db, key, get_password_hash(value))
+            else:
+                setattr(user_db, key, value)
         session.add(user_db)
         await session.commit()
         await session.refresh(user_db)

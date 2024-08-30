@@ -160,12 +160,15 @@
                   admin.req({
                     url: '/api/admin/user/' + field.id,
                     method: 'PUT',
-                    data: field,
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(field),
                     success: function (res) {
-                      layer.msg(res.msg)
-                      if (res.code === 0) {
-                        table.reload('LAY-list')
+                      if (res.code == 0) {
+                        layer.msg(res.msg, { icon: 1 })
+                        table.reloadData('LAY-list')
                         layer.close(index)
+                      } else {
+                        layer.msg(res.msg)
                       }
                     }
                   })
@@ -174,7 +177,7 @@
               },
               success: function (layero, index) {
                 let iframeWin = window[layero.find('iframe')[0]['name']]
-                iframeWin.initForm(trData)
+                iframeWin.initForm(data)
               }
             })
           }
