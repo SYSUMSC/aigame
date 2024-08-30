@@ -1,7 +1,7 @@
 {
     "emmet.includeLanguages": {"jinja-html": "html"},
     "[jinja-html]": {
-        "editor.defaultFormatter": "Glavin001.beautify-vscode",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true
     },
     "files.associations": {

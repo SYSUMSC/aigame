@@ -5,12 +5,31 @@ from sqlmodel import select
 
 from db.session import get_session
 from schemas.user import User
+from schemas.config import Config  # 引入 Config 模型
+from api.response_model import ResponseModel  # 引入 ResponseModel 以处理异常响应
+
 admin_router = APIRouter()
 templates = Jinja2Templates(directory="admin/templates")
 
 @admin_router.get("/admin/")
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+async def index(request: Request, session: AsyncSession = Depends(get_session)):
+    try:
+        # 从数据库中读取管理员用户名
+        statement = select(Config).where(Config.k == "admin_user")
+        result = await session.execute(statement)
+        config = result.scalar_one_or_none()
+
+        if not config:
+            return ResponseModel(code=1, msg="管理员用户未找到")
+
+        admin_name = config.v  # 获取管理员用户名
+
+    except Exception as e:
+        # 处理可能出现的错误
+        return {"code": 1, "msg": str(e), "data": None}
+
+    # 渲染模板并传递管理员用户名
+    return templates.TemplateResponse("index.html", {"request": request, "admin_name": admin_name})
 
 
 @admin_router.get("/admin/console")
