@@ -206,7 +206,7 @@
                     function (data) {
                       var field = data.field;
                       admin.req({
-                        url: "/api/admin/" + window.config.url + field.id,
+                        url: "/api/admin/" + window.config.url,
                         method: "PUT",
                         contentType: "application/json;charset=UTF-8",
                         data: JSON.stringify(field),
