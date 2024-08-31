@@ -34,7 +34,7 @@ python main.py
 
 # 赛题模板
 
-点此处跳转至[塞梯模板文档](task/README.md)
+点此处跳转至[赛题模板文档](task/README.md)
 
 # 路径说明
 
