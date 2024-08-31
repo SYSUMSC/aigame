@@ -1,0 +1,40 @@
+{% extends 'table_base.html' %} {% block title %} 比赛管理 {% endblock %} 
+{%block header %} {% from 'form_macros.html' import search_field %} 
+{{ search_field('赛题名', 'name', '请输入赛题名') }} 
+{{ search_field('赛题类型','problem_type', '请输入赛题类型') }} 
+{{ search_field('赛题难度','difficulty', '请输入赛题难度') }} 
+{% endblock %} {% block extra_js %}
+    <script>
+      var config = {
+        url: "problem",
+        name: "赛题",
+        table: {
+          elem: "#LAY-list",
+          url: "/api/admin/user/search",
+          cols: [
+            [
+              { type: "checkbox", fixed: "left" },
+              { field: "id", width: 80, title: "ID", sort: true },
+              { field: "name", title: "赛题名", width: 150 },
+              { field: "problem_type", title: "赛题类型", width: 150 },
+              { field: "difficulty", title: "赛题难度", width: 150 },
+              { field: "score", title: "分值", width: 150 },
+
+              {
+                field: "status",
+                title: "状态",
+                width: 100,
+                templet: (d) => (d.is_active ? "进行中" : "未开始"),
+              },
+            ],
+          ],
+          page: true,
+          limit: 10,
+          text: {
+            none: "暂无数据",
+          },
+        },
+      };
+    </script>
+    {% endblock %}
+    

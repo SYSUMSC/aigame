@@ -7,18 +7,18 @@ class Competition(SQLModel, table=True):
     name: str
     start_time: datetime
     end_time: datetime
-    status: str
+    status: int
     description: Optional[str] = None
 
 class CompetitionSchema(SQLModel):
     name: str
     start_time: datetime
     end_time: datetime
-    status: str
+    status: int
     description: Optional[str] = None
 
 class CompetitionSearchSchema(SQLModel):
     name: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[int] = None
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None

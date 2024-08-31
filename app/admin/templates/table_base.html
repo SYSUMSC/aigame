@@ -174,7 +174,7 @@
                 "确定删除" + window.config.name + "吗？",
                 function (index) {
                   admin.req({
-                    url: "/api/admin/" + window.config.url + data.id,
+                    url: "/api/admin/" + window.config.url + '/' + data.id,
                     method: "DELETE",
                     success: function (res) {
                       layer.msg(res.msg);
