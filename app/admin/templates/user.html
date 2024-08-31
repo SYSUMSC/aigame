@@ -1,190 +1,43 @@
-{% extends 'table_base.html' %}
-{% block title %}
-  用户管理
-{% endblock %}
-
-{% block header %}
-  {% from 'form_macros.html' import search_field %}
-  {{ search_field('用户名', 'username', '请输入用户名') }}
-  {{ search_field('邮箱', 'email', '请输入邮箱') }}
-  {{ search_field('学号', 'student_id', '请输入学号') }}
-{% endblock %}
-
-{% block extra_js %}
-  <script>
-    layui
-      .config({
-        base: '/admin/static/' // 静态资源所在路径
-      })
-      .use(['index', 'table', 'laytpl', 'admin'], function () {
-        var table = layui.table,
-          form = layui.form,
-          laytpl = layui.laytpl,
-          admin = layui.admin,
-          $ = layui.$,
-          setter = layui.setter,
-          request = setter.request
-        table.set({
-          method: 'post',
-          contentType: 'application/json;charset=UTF-8',
-          dataType: 'json',
-          headers: { access_token: layui.data(setter.tableName)[request.tokenName] }
-        })
-
-        table.render({
-          elem: '#LAY-list',
-          url: '/api/admin/user/search',
-          cols: [
-            [
-              { type: 'checkbox', fixed: 'left' },
-              { field: 'id', width: 80, title: 'ID', sort: true },
-              { field: 'username', title: '用户名', width: 150 },
-              { field: 'email', title: '邮箱', width: 200 },
-              { field: 'student_id', title: '学号', width: 150 },
-              { field: 'is_active', title: '状态', width: 100, templet: (d) => (d.is_active ? '激活' : '未激活') },
-              { title: '操作', minWidth: 150, align: 'center', fixed: 'right', toolbar: '#table-action-list' }
-            ]
-          ],
-          page: true,
-          limit: 10,
-          text: {
-            none: '暂无数据'
-          }
-        })
-
-        // 搜索事件
-        form.on('submit(LAY-search)', function (data) {
-          var field = data.field
-          table.reload('LAY-list', {
-            where: field
-          })
-        })
-
-        // 添加和删除事件
-        var active = {
-          batchdel: function () {
-            var checkStatus = table.checkStatus('LAY-list'),
-              checkData = checkStatus.data
-
-            if (checkData.length === 0) {
-              return layer.msg('请选择数据')
-            }
-
-            layer.confirm('确定删除选中的用户吗？', function (index) {
-              var ids = checkData.map((item) => item.id)
-              admin.req({
-                url: '/api/admin/user',
-                method: 'DELETE',
-                data: { ids: ids.join(',') },
-                success: function (res) {
-                  layer.msg(res.msg)
-                  if (res.code === 0) {
-                    table.reload('LAY-list')
-                  }
-                }
-              })
-              layer.close(index)
-            })
+{% extends 'table_base.html' %} {% block title %} 用户管理 {% endblock %} {%
+block header %} {% from 'form_macros.html' import search_field %} {{
+search_field('用户名', 'username', '请输入用户名') }} {{
+search_field('邮箱','email', '请输入邮箱') }} {{ search_field('学号',
+'student_id', '请输入学号') }} {% endblock %} {% block extra_js %}
+<script>
+  var config = {
+    url: "user",
+    name: "用户",
+    table: {
+      elem: "#LAY-list",
+      url: "/api/admin/user/search",
+      cols: [
+        [
+          { type: "checkbox", fixed: "left" },
+          { field: "id", width: 80, title: "ID", sort: true },
+          { field: "username", title: "用户名", width: 150 },
+          { field: "email", title: "邮箱", width: 200 },
+          { field: "student_id", title: "学号", width: 150 },
+          {
+            field: "is_active",
+            title: "状态",
+            width: 100,
+            templet: (d) => (d.is_active ? "激活" : "未激活"),
           },
-          add: function () {
-            layer.open({
-              type: 2,
-              title: '添加用户',
-              content: '/admin/user_form',
-              area: ['550px', '550px'],
-              btn: ['确定', '取消'],
-              yes: function (index, layero) {
-                var iframeWindow = window['layui-layer-iframe' + index],
-                  submitID = 'LAY-user-front-submit',
-                  submit = layero
-                    .find('iframe')
-                    .contents()
-                    .find('#' + submitID)
-
-                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                  var field = data.field
-                  admin.req({
-                    url: '/api/admin/user',
-                    method: 'POST',
-                    contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify(field),
-                    success: function (res) {
-                      layer.msg(res.msg)
-                      if (res.code === 0) {
-                        table.reload('LAY-list')
-                        layer.close(index)
-                      }
-                    }
-                  })
-                })
-                submit.trigger('click')
-              }
-            })
-          }
-        }
-
-        // 监听工具条
-        table.on('tool(LAY-list)', function (obj) {
-          var data = obj.data
-          if (obj.event === 'del') {
-            layer.confirm('确定删除吗？', function (index) {
-              admin.req({
-                url: '/api/admin/user/' + data.id,
-                method: 'DELETE',
-                success: function (res) {
-                  layer.msg(res.msg)
-                  if (res.code === 0) {
-                    table.reload('LAY-list')
-                  }
-                }
-              })
-              layer.close(index)
-            })
-          } else if (obj.event === 'edit') {
-            layer.open({
-              type: 2,
-              title: '编辑用户',
-              content: '/admin/user_form?id=' + data.id,
-              area: ['550px', '550px'],
-              btn: ['确定', '取消'],
-              yes: function (index, layero) {
-                var iframeWindow = window['layui-layer-iframe' + index],
-                  submitID = 'LAY-user-front-submit',
-                  submit = layero
-                    .find('iframe')
-                    .contents()
-                    .find('#' + submitID)
-
-                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
-                  var field = data.field
-                  admin.req({
-                    url: '/api/admin/user/' + field.id,
-                    method: 'PUT',
-                    data: field,
-                    success: function (res) {
-                      layer.msg(res.msg)
-                      if (res.code === 0) {
-                        table.reload('LAY-list')
-                        layer.close(index)
-                      }
-                    }
-                  })
-                })
-                submit.trigger('click')
-              },
-              success: function (layero, index) {
-                let iframeWin = window[layero.find('iframe')[0]['name']]
-                iframeWin.initForm(trData)
-              }
-            })
-          }
-        })
-
-        // 绑定按钮事件
-        $('.layui-btn.layuiadmin-btn-list').on('click', function () {
-          var type = $(this).data('type')
-          active[type] && active[type].call(this)
-        })
-      })
-  </script>
+          {
+            title: "操作",
+            minWidth: 150,
+            align: "center",
+            fixed: "right",
+            toolbar: "#table-action-list",
+          },
+        ],
+      ],
+      page: true,
+      limit: 10,
+      text: {
+        none: "暂无数据",
+      },
+    },
+  };
+</script>
 {% endblock %}

@@ -48,7 +48,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content={
             "code": 1,
             "msg": "请求参数验证失败",
-            "data": exc.errors()
+            "data": str(exc.errors())
         }
     )
 

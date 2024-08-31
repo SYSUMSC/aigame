@@ -16,7 +16,7 @@ class UserSchema(SQLModel):
     email: str
     name: str
     student_id: str
-    password: str
+    password: str | None = Field(default=None)
     is_active: bool = True
     team_id: int | None = None
 
