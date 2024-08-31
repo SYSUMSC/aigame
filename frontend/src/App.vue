@@ -28,69 +28,67 @@ const navigateAndCloseNav = (routePath: string) => {
 </script>
 
 <template>
-  <div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <RouterLink class="navbar-brand" to="/">AI 竞赛平台</RouterLink>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <RouterLink class="navbar-brand" to="/">AI 竞赛平台</RouterLink>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              @click.prevent="navigateAndCloseNav('/')"
+              href="#"
+              >首页</a
+            >
+          </li>
+          <template v-if="userStore.isLoggedIn()">
             <li class="nav-item">
               <a
                 class="nav-link"
-                @click.prevent="navigateAndCloseNav('/')"
+                @click.prevent="navigateAndCloseNav('/user/')"
                 href="#"
-                >首页</a
+                >用户中心</a
               >
             </li>
-            <template v-if="userStore.isLoggedIn()">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  @click.prevent="navigateAndCloseNav('/user/')"
-                  href="#"
-                  >用户中心</a
-                >
-              </li>
-              <li class="nav-item">
-                <button @click="logout" class="btn nav-link">退出</button>
-              </li>
-            </template>
-            <template v-else>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  @click.prevent="navigateAndCloseNav('/user/login')"
-                  href="#"
-                  >登录</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  @click.prevent="navigateAndCloseNav('/user/reg')"
-                  href="#"
-                  >注册</a
-                >
-              </li>
-            </template>
-          </ul>
-        </div>
+            <li class="nav-item">
+              <button @click="logout" class="btn nav-link">退出</button>
+            </li>
+          </template>
+          <template v-else>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                @click.prevent="navigateAndCloseNav('/user/login')"
+                href="#"
+                >登录</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                @click.prevent="navigateAndCloseNav('/user/reg')"
+                href="#"
+                >注册</a
+              >
+            </li>
+          </template>
+        </ul>
       </div>
-    </nav>
-    <!-- 灰色背景 -->
-    <div class="bg-gray-100"><RouterView /></div>
-  </div>
+    </div>
+  </nav>
+  <!-- 灰色背景 -->
+  <RouterView class="container"/>
 </template>
 
 <style scoped>

@@ -1,9 +1,8 @@
 <template>
-    <div class="relative bg-gray-100 min-h-screen flex items-center">
-      <div class="container">
+    <div class="pt-5">
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <div class="card bg-gray-100">
+          <div class="card">
             <div class="card-header">
               <h3 class="text-center">注册</h3>
             </div>
@@ -70,7 +69,6 @@
           </div>
         </div>
       </div>
-    </div>
     </div>
   </template>
 

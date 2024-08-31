@@ -1,43 +1,40 @@
 <template>
-  <div class="ralative bg-gray-100 min-h-screen flex items-center">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card bg-gray-100">
-          <!-- <div class="card"> -->
-            <div class="card-header">
-              <h3 class="text-center">登录</h3>
-            </div>
-            <div class="card-body">
-              <form @submit.prevent="login">
-                <div class="form-group mb-3">
-                  <label for="username">用户名</label>
-                  <input
-                    type="text"
-                    id="username"
-                    v-model="username"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <div class="form-group mb-3">
-                  <label for="password">密码</label>
-                  <input
-                    type="password"
-                    id="password"
-                    v-model="password"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100"
-                >
-                  登录
-                </button>
-              </form>
-            </div>
+  <div class="pt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="text-center">登录</h3>
+          </div>
+          <div class="card-body">
+            <form @submit.prevent="login">
+              <div class="form-group mb-3">
+                <label for="username">用户名</label>
+                <input
+                  type="text"
+                  id="username"
+                  v-model="username"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group mb-3">
+                <label for="password">密码</label>
+                <input
+                  type="password"
+                  id="password"
+                  v-model="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary w-100"
+              >
+                登录
+              </button>
+            </form>
           </div>
         </div>
       </div>

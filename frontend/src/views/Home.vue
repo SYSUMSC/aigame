@@ -52,6 +52,6 @@ const typeEffect = (text: string, target: Ref<string>, interval: number = 100) =
   
 onMounted(() => {  
   typeEffect(originalTextIntro, TextIntro)  
-  typeEffect(originalTextWelc, TextWelc, 120) // 稍微慢一点的间隔  
+  typeEffect(originalTextWelc, TextWelc, 130) // 稍微慢一点的间隔  
 })  
 </script>
