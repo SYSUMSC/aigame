@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-6 flex flex-col sm:py-12">
+  <div class="min-h-screen py-6 flex flex-col sm:py-12">
     <div class="container mx-auto">
       <div class="card shadow-lg">
         <div class="card-body p-6">
