@@ -6,7 +6,7 @@ from sqlmodel import select
 from db.session import get_session
 from schemas.competition import Competition, CompetitionSchema, CompetitionSearchSchema
 
-from ..response_model import ResponseModel
+from ..models import BatchDeleteRequest, ResponseModel
 
 competition_router = APIRouter()
 
@@ -54,9 +54,9 @@ async def delete_competition(competition_id: int, session: AsyncSession = Depend
         return ResponseModel(code=1, msg=str(e))
 
 @competition_router.delete("/competition", response_model=ResponseModel, tags=["Admin"])
-async def delete_competitions(ids: str, session: AsyncSession = Depends(get_session)):
+async def delete_competitions(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
     try:
-        competition_ids = [int(id) for id in ids.split(",")]
+        competition_ids = request.ids
         statement = select(Competition).where(Competition.id.in_(competition_ids))
         result = await session.execute(statement)
         competitions_db = result.scalars().all()

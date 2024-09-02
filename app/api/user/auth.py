@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.response_model import ResponseModel
+from app.api.models import ResponseModel
 from core.security import (create_access_token, get_password_hash,
                                verify_password)
 from db.session import get_session

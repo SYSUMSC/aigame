@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
 
-from api.response_model import ResponseModel
+from app.api.models import ResponseModel
 from core.security import create_access_token, verify_password, get_current_admin
 from core.utils import load_config_from_db
 from db.session import get_session

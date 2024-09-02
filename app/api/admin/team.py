@@ -6,7 +6,7 @@ from sqlmodel import select
 from db.session import get_session
 from schemas.team import Team, TeamSchema, TeamSearchSchema
 
-from ..response_model import ResponseModel
+from ..models import BatchDeleteRequest, ResponseModel
 
 team_router = APIRouter()
 
@@ -54,9 +54,9 @@ async def delete_team(team_id: int, session: AsyncSession = Depends(get_session)
         return ResponseModel(code=1, msg=str(e))
 
 @team_router.delete("/team", response_model=ResponseModel, tags=["Admin"])
-async def delete_teams(ids: str, session: AsyncSession = Depends(get_session)):
+async def delete_teams(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
     try:
-        team_ids = [int(id) for id in ids.split(",")]
+        team_ids = request.ids
         statement = select(Team).where(Team.id.in_(team_ids))
         result = await session.execute(statement)
         teams_db = result.scalars().all()

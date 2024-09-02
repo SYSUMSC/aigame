@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from api.response_model import ResponseModel
+from app.api.models import ResponseModel
 from db.session import get_session
 from schemas.user import User, UserSchema
 from core.security import get_current_user, get_password_hash

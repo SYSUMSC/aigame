@@ -6,7 +6,7 @@ from sqlmodel import select
 from db.session import get_session
 from schemas.problem import Problem, ProblemSchema, ProblemSearchSchema
 
-from ..response_model import ResponseModel
+from ..models import BatchDeleteRequest, ResponseModel
 
 problem_router = APIRouter()
 
@@ -54,9 +54,9 @@ async def delete_problem(problem_id: int, session: AsyncSession = Depends(get_se
         return ResponseModel(code=1, msg=str(e))
 
 @problem_router.delete("/problem", response_model=ResponseModel, tags=["Admin"])
-async def delete_problems(ids: str, session: AsyncSession = Depends(get_session)):
+async def delete_problems(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
     try:
-        problem_ids = [int(id) for id in ids.split(",")]
+        problem_ids = request.ids
         statement = select(Problem).where(Problem.id.in_(problem_ids))
         result = await session.execute(statement)
         problems_db = result.scalars().all()
