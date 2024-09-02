@@ -73,12 +73,11 @@ async def join_team(invite_code: str, current_user: str = Depends(get_current_us
 async def get_team_info(current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
         # 获取当前用户
-        statement = select(User.username).where(User.username == current_user)
+        statement = select(User).where(User.username == current_user)
         result = await session.execute(statement)
         user_db = result.scalar_one_or_none()
         if not user_db:
             return ResponseModel(code=1, msg="用户未找到")
-
         # 获取队伍信息
         if not user_db.team_id:
             return ResponseModel(code=1, msg="用户不在任何队伍中")

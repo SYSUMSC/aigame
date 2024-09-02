@@ -30,7 +30,7 @@
             </form>
           </div>
 
-          <div v-else>
+          <div v-else-if="teamInfo">
             <!-- 用户已加入队伍，显示队伍信息 -->
             <h2 class="text-xl font-bold mb-4">当前队伍信息</h2>
             <p><strong>队伍名称:</strong> {{ teamInfo.name }}</p>
@@ -129,6 +129,9 @@ const fetchTeamInfo = async () => {
     const res = await axios.get("/api/user/team_info");
     if (res.status === 200 && res.data.code === 0) {
       teamInfo.value = res.data.data;
+      if (userStore.user) {
+        userStore.user.team_id = teamInfo.value.id;
+      }
       isCaptain.value = teamInfo.value.captain_id === userStore.user?.id;
     } else {
       alert(res.data.msg);
@@ -160,9 +163,10 @@ const leaveTeam = async () => {
   try {
     const res = await axios.post("/api/user/leave_team");
     if (res.status === 200 && res.data.code === 0) {
+      if (userStore.user) {
+        userStore.user.team_id = null;
+      }
       alert("成功退出队伍");
-      userStore.user!.team_id = null;
-      router.push("/");
     } else {
       alert(res.data.msg);
     }
@@ -176,9 +180,10 @@ const disbandTeam = async () => {
   try {
     const res = await axios.post("/api/user/disband_team");
     if (res.status === 200 && res.data.code === 0) {
+      if (userStore.user) {
+        userStore.user.team_id = null;
+      }
       alert("成功解散队伍");
-      userStore.user!.team_id = null;
-      router.push("/");
     } else {
       alert(res.data.msg);
     }
@@ -223,8 +228,12 @@ const createTeam = async () => {
   }
 };
 
-fetchTeamInfo();
-
+// fetchTeamInfo();
+onMounted(() => {
+  if (userStore.user?.team_id) {
+    fetchTeamInfo();
+  }
+});
 </script>
 
 <style scoped></style>
