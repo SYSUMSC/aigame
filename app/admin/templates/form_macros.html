@@ -2,7 +2,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
-      <input type="{{ type }}" name="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" value="{{ value }}" {% if required %}required  lay-verify="required"{% endif %} />
+      <input type="{{ type }}" name="{{ name }}" id="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" value="{{ value }}" {% if required %}required  lay-verify="required"{% endif %} />
     </div>
   </div>
 {% endmacro %}
@@ -11,7 +11,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
-      <select name="{{ name }}" class="layui-input" {% if required %}required  lay-verify="required"{% endif %}>
+      <select name="{{ name }}" id="{{ name }}" class="layui-input" {% if required %}required  lay-verify="required"{% endif %}>
         {% for option in options %}
           <option value="{{ option.value }}">{{ option.label }}</option>
         {% endfor %}
@@ -24,7 +24,7 @@
   <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-block">
-      <textarea name="{{ name }}" class="layui-textarea" placeholder="{{ placeholder }}" {% if required %}required  lay-verify="required"{% endif %}></textarea>
+      <textarea name="{{ name }}" id="{{ name }}" class="layui-textarea" placeholder="{{ placeholder }}" {% if required %}required  lay-verify="required"{% endif %}></textarea>
     </div>
   </div>
 {% endmacro %}
@@ -34,14 +34,14 @@
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
       {% if type == 'select' %}
-        <select name="{{ name }}" class="layui-input" {% if required %}required{% endif %}>
+        <select name="{{ name }}" id="{{ name }}" class="layui-input" {% if required %}required{% endif %}>
           <option value="">{{ placeholder }}</option>
           {% for option in options %}
             <option value="{{ option.value }}">{{ option.label }}</option>
           {% endfor %}
         </select>
       {% else %}
-        <input type="{{ type }}" name="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" {% if required %}required{% endif %} />
+        <input type="{{ type }}" name="{{ name }}" id="{{ name }}" placeholder="{{ placeholder }}" autocomplete="off" class="layui-input" {% if required %}required{% endif %} />
       {% endif %}
     </div>
   </div>
