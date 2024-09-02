@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Reg from "../views/Reg.vue";
 import UserCenter from "../views/UserCenter.vue";
+import Team from "../views/Team.vue";
 import { useUserStore } from "../stores/user";
 
 const routes: Array<RouteRecordRaw> = [
@@ -20,6 +21,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user/reg",
     name: "注册",
     component: Reg,
+  },
+  {
+    path: "/user/team",
+    name: "队伍管理",
+    component: Team,
+    meta: { requiresAuth: true },
   },
   {
     path: "/user",

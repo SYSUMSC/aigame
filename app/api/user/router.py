@@ -9,5 +9,5 @@ from .team import team_router
 user_router = APIRouter()
 
 user_router.include_router(auth_router)
-user_router.include_router(info_router, dependencies=[Depends(oauth2_scheme)])
-user_router.include_router(team_router, dependencies=[Depends(oauth2_scheme)])
+user_router.include_router(info_router)
+user_router.include_router(team_router)

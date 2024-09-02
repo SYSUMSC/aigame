@@ -8,7 +8,7 @@ from core.security import get_password_hash
 from db.session import get_session
 from schemas.user import User, UserSchema, UserSearchSchema
 
-from ..response_model import ResponseModel
+from ..models import BatchDeleteRequest, ResponseModel
 
 user_router = APIRouter()
 
@@ -64,9 +64,9 @@ async def delete_user(user_id: int, session: AsyncSession = Depends(get_session)
         return ResponseModel(code=1, msg=str(e))
 
 @user_router.delete("/user", response_model=ResponseModel, tags=["Admin"])
-async def delete_users(ids: str, session: AsyncSession = Depends(get_session)):
+async def delete_users(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
     try:
-        user_ids = [int(id) for id in ids.split(",")]
+        user_ids = request.ids
         statement = select(User).where(User.id.in_(user_ids))
         result = await session.execute(statement)
         users_db = result.scalars().all()

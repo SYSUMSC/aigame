@@ -6,18 +6,6 @@ search_field('队伍名称', 'name', '请输入队伍名称') }} {{ search_field
 label: '待审核' }, { value: 'ACTIVE', label: '已激活' }]) }} {% endblock %} {%
 block extra_js %}
 <script>
-  function screen() {
-    var width = window.innerWidth;
-    if (width > 1200) {
-      return 3; // 大屏幕
-    } else if (width > 992) {
-      return 2; // 中屏幕
-    } else if (width > 768) {
-      return 1; // 小屏幕
-    } else {
-      return 0; // 超小屏幕
-    }
-  }
   var config = {
     url: "team",
     name: "队伍",

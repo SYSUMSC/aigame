@@ -5,8 +5,9 @@ from sqlmodel import select
 
 from db.session import get_session
 from schemas.user import User
-from schemas.config import Config  # 引入 Config 模型
-from api.response_model import ResponseModel  # 引入 ResponseModel 以处理异常响应
+from schemas.config import Config
+from schemas.competition import Competition
+from app.api.models import *
 
 admin_router = APIRouter()
 templates = Jinja2Templates(directory="admin/templates")
@@ -70,8 +71,19 @@ async def user_form(request: Request):
 async def problem(request: Request):
     return templates.TemplateResponse("problem.html", {"request": request})
 @admin_router.get("/admin/problem_form")
-async def problem_form(request: Request):
-    return templates.TemplateResponse("problem_form.html", {"request": request})
+async def problem_form(request: Request, session: AsyncSession = Depends(get_session)):
+    try:
+        # 获取所有比赛
+        statement = select(Competition)
+        result = await session.execute(statement)
+        competitions = result.scalars().all()
+
+        # 将比赛列表转换为模板需要的格式
+        competition_options = [{"value": comp.id, "label": comp.name} for comp in competitions]
+
+        return templates.TemplateResponse("problem_form.html", {"request": request, "competitions": competition_options})
+    except Exception as e:
+        return {"code": 1, "msg": str(e), "data": None}
 
 # 比赛
 @admin_router.get("/admin/competition")

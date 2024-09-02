@@ -1,15 +1,44 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from api.response_model import ResponseModel
+from app.api.models import ResponseModel
 from db.session import get_session
 from schemas.team import Team, TeamSchema
 from schemas.user import User
 from core.security import get_current_user
 
 team_router = APIRouter()
+@team_router.post("/create_team", response_model=ResponseModel, tags=["User"])
+async def create_team(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    try:
+        body = await request.json()
+        name = body.get("name")
+        # 检查用户是否已经有队伍
+        statement = select(User).where(User.username == current_user)
+        result = await session.execute(statement)
+        user_db = result.scalar_one_or_none()
+        if not user_db:
+            return ResponseModel(code=1, msg="用户未找到")
 
+        if user_db.team_id:
+            return ResponseModel(code=1, msg="用户已经在队伍中，无法创建新的队伍")
+
+        # 创建新队伍
+        new_team = Team(name=name, captain_id=user_db.id)
+        session.add(new_team)
+        await session.commit()
+        await session.refresh(new_team)
+
+        # 将用户加入队伍
+        user_db.team_id = new_team.id
+        session.add(user_db)
+        await session.commit()
+        await session.refresh(user_db)
+
+        return ResponseModel(code=0, msg="队伍创建成功", data=new_team.model_dump())
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
 @team_router.post("/join_team", response_model=ResponseModel, tags=["User"])
 async def join_team(invite_code: str, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
@@ -49,7 +78,6 @@ async def get_team_info(current_user: str = Depends(get_current_user), session: 
         user_db = result.scalar_one_or_none()
         if not user_db:
             return ResponseModel(code=1, msg="用户未找到")
-
         # 获取队伍信息
         if not user_db.team_id:
             return ResponseModel(code=1, msg="用户不在任何队伍中")

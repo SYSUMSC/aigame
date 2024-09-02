@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime
 from sqlmodel import Field, SQLModel
 
@@ -19,6 +19,6 @@ class CompetitionSchema(SQLModel):
 
 class CompetitionSearchSchema(SQLModel):
     name: Optional[str] = None
-    status: Optional[int] = None
-    start_time: Optional[datetime] = None
-    end_time: Optional[datetime] = None
+    status: Optional[Union[int, str]] = None
+    start_time: Optional[Union[datetime, str]] = None
+    end_time: Optional[Union[datetime, str]] = None

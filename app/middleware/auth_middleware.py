@@ -64,15 +64,14 @@ class UserAuthMiddleware(BaseHTTPMiddleware):
             and not request.url.path.startswith("/user") \
             and not request.url.path.endswith("/openapi.json"):
             try:
-                token = await oauth2_scheme_user(request)
-                user = await get_current_user(token)
+                user = await get_current_user(request)
                 request.state.user = user
             except Exception as e:
                 return JSONResponse(
                     status_code=200,
                     content={
                         "code": 1,
-                        "msg": "未授权",
+                        "msg": "未授权："+str(e),
                         "data": None
                     }
                 )

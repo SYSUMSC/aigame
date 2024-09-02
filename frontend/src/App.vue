@@ -62,6 +62,14 @@ const navigateAndCloseNav = (routePath: string) => {
               >
             </li>
             <li class="nav-item">
+              <a
+                class="nav-link"
+                @click.prevent="navigateAndCloseNav('/user/team')"
+                href="#"
+                >队伍管理</a
+              >
+            </li>
+            <li class="nav-item">
               <button @click="logout" class="btn nav-link">退出</button>
             </li>
           </template>
