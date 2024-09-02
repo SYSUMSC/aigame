@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Union
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -20,5 +20,5 @@ class TeamSchema(SQLModel):
 
 class TeamSearchSchema(SQLModel):
     name: str | None = None
-    captain_id: int | None = None
+    captain_id: Optional[Union[int, str]] = None
     status: str | None = None

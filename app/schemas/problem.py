@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from sqlmodel import Field, SQLModel
 
 class Problem(SQLModel, table=True):
@@ -23,6 +23,6 @@ class ProblemSchema(SQLModel):
 class ProblemSearchSchema(SQLModel):
     name: Optional[str] = None
     problem_type: Optional[str] = None
-    difficulty: Optional[int] = None
+    difficulty: Optional[Union[int, str]] = None
     status: Optional[str] = None
-    competition_id: Optional[int] = None
+    competition_id: Optional[Union[int, str]] = None

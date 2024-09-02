@@ -73,6 +73,8 @@ async def search_competitions(search: CompetitionSearchSchema, page: int = 1, li
         query = select(Competition)
         filters = []
         for field, value in search.model_dump(exclude_unset=True).items():
+            if value is None or value == "":
+                continue
             if isinstance(value, str):
                 filters.append(getattr(Competition, field).like(f"%{value}%"))
             else:
