@@ -64,15 +64,38 @@ class UserAuthMiddleware(BaseHTTPMiddleware):
             and not request.url.path.startswith("/user") \
             and not request.url.path.endswith("/openapi.json"):
             try:
-                token = await oauth2_scheme_user(request)
-                user = await get_current_user(token)
+                access_token = None
+                # 先尝试从请求头中获取 access_token
+                if "access_token" in request.headers:
+                    access_token = request.headers["access_token"]
+                elif request.method == "POST":
+                    if "application/json" in request.headers.get("Content-Type", ""):
+                        # 从 POST 请求体中获取 access_token (JSON body)
+                        access_token = (await request.json()).get("access_token")
+                    elif "application/x-www-form-urlencoded" in request.headers.get("Content-Type", ""):
+                        # 从 POST 请求体中获取 access_token (表单)
+                        form = await request.form()
+                        access_token = form.get("access_token")
+                elif request.method == "GET":
+                    # 从 GET 请求参数中获取 access_token
+                    access_token = request.query_params.get("access_token")
+                if not access_token:
+                    return JSONResponse(
+                        status_code=200,
+                        content={
+                            "code": 1,
+                            "msg": "未授权，没传输access_token",
+                            "data": None
+                        }
+                    )
+                user = await get_current_user(access_token)
                 request.state.user = user
             except Exception as e:
                 return JSONResponse(
                     status_code=200,
                     content={
                         "code": 1,
-                        "msg": "未授权",
+                        "msg": "未授权："+str(e),
                         "data": None
                     }
                 )
