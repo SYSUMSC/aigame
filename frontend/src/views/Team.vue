@@ -5,7 +5,7 @@
         <div class="card-body p-6">
           <h1 class="text-2xl font-bold mb-6 text-center">队伍管理</h1>
 
-          <div v-if="!userStore.user.team_id">
+          <div v-if="!userStore.user?.team_id">
             <!-- 用户未加入任何队伍，显示加入或创建队伍的选项 -->
             <button
               @click="showCreateTeamModal = true"
