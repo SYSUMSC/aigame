@@ -1,3 +1,5 @@
+import random
+import string
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
@@ -9,6 +11,51 @@ from schemas.user import User
 from core.security import get_current_user
 
 team_router = APIRouter()
+# 生成邀请码的工具函数
+def generate_invite_code():
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+@team_router.post("/create_invite_code", response_model=ResponseModel, tags=["User"])
+async def create_invite_code(current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    try:
+        # 获取当前用户
+        statement = select(User).where(User.username == current_user)
+        result = await session.execute(statement)
+        user_db = result.scalar_one_or_none()
+        if not user_db:
+            return ResponseModel(code=1, msg="用户未找到")
+
+        # 检查用户是否是队长
+        if not user_db.team_id:
+            return ResponseModel(code=1, msg="用户不在任何队伍中")
+
+        statement = select(Team).where(Team.id == user_db.team_id, Team.captain_id == user_db.id)
+        result = await session.execute(statement)
+        team_db = result.scalar_one_or_none()
+        if not team_db:
+            return ResponseModel(code=1, msg="用户不是队长，无法创建邀请码")
+
+        # 生成唯一的邀请码
+        invite_code = generate_invite_code()
+
+        # 检查邀请码是否重复
+        statement = select(Team).where(Team.invite_code == invite_code)
+        result = await session.execute(statement)
+        existing_code = result.scalar_one_or_none()
+        while existing_code:
+            invite_code = generate_invite_code()
+            statement = select(Team).where(Team.invite_code == invite_code)
+            result = await session.execute(statement)
+            existing_code = result.scalar_one_or_none()
+
+        # 更新队伍的邀请码
+        team_db.invite_code = invite_code
+        session.add(team_db)
+        await session.commit()
+        await session.refresh(team_db)
+
+        return ResponseModel(code=0, msg="邀请码创建成功", data={"invite_code": invite_code})
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
 @team_router.post("/create_team", response_model=ResponseModel, tags=["User"])
 async def create_team(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
