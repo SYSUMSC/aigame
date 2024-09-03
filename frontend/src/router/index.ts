@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
   // 更新网页标题
   const defaultTitle = 'AI 竞赛平台'; // 默认的网页标题
   if (to.name) {
-    document.title = `${defaultTitle} -- ${to.name}`;
+    document.title = `${defaultTitle} -- ${String(to.name)}`;
   } else {
     document.title = defaultTitle;
   }
