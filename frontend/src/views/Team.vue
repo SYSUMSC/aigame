@@ -50,6 +50,13 @@
             </ul>
             <button
               v-if="isCaptain"
+              @click="generateInviteCode"
+              class="btn btn-info mt-4"
+            >
+              生成邀请码
+            </button>
+            <button
+              v-if="isCaptain"
               @click="disbandTeam"
               class="btn btn-danger mt-4"
             >
@@ -228,7 +235,22 @@ const createTeam = async () => {
   }
 };
 
-// fetchTeamInfo();
+// 新增的生成邀请码功能
+const generateInviteCode = async () => {
+  try {
+    const res = await axios.post("/api/user/create_invite_code");
+    if (res.status === 200 && res.data.code === 0) {
+      teamInfo.value.invite_code = res.data.data.invite_code; // 更新队伍信息中的邀请码
+      alert("邀请码生成成功: " + res.data.data.invite_code);
+    } else {
+      alert(res.data.msg);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("生成邀请码失败，请稍后再试。");
+  }
+};
+
 onMounted(() => {
   if (userStore.user?.team_id) {
     fetchTeamInfo();
