@@ -5,7 +5,7 @@
         <div class="card-body p-6">
           <h1 class="text-2xl font-bold mb-6 text-center">队伍管理</h1>
 
-          <div v-if="!userStore.user.team_id">
+          <div v-if="!userStore.user?.team_id">
             <!-- 用户未加入任何队伍，显示加入或创建队伍的选项 -->
             <button
               @click="showCreateTeamModal = true"
@@ -114,10 +114,10 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useUserStore } from "../stores/user";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const router = useRouter();
+// const router = useRouter();
 const inviteCode = ref("");
 const newTeamName = ref("");
 const teamInfo = ref<any>(null);
