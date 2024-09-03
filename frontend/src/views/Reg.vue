@@ -86,7 +86,7 @@
 
   const reg = async () => {
     try {
-      const res = await axios.post("/api/user/reg", {
+      const res = await axios.post("/api/user/register", {
         username: username.value,
         email: email.value,
         name: name.value,
