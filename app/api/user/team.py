@@ -244,3 +244,37 @@ async def leave_team(current_user: str = Depends(get_current_user), session: Asy
         return ResponseModel(code=0, msg="退出队伍成功")
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
+    
+@team_router.post("/transfer_captain", response_model=ResponseModel, tags=["Team"])  
+async def transfer_captain(new_captain_id: int, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):  
+    try:  
+        # 获取当前用户  
+        statement = select(User).where(User.username == current_user)  
+        current_user_db = await session.execute(statement).scalar_one()  
+  
+        # 检查当前用户是否在队伍中  
+        if not current_user_db.team_id:  
+            raise HTTPException(status_code=400, detail="用户不在任何队伍中")  
+  
+        # 获取当前用户所在的队伍  
+        team_statement = select(Team).where(Team.id == current_user_db.team_id)  
+        team_db = await session.execute(team_statement).scalar_one()  
+  
+        # 检查当前用户是否是队长  
+        if team_db.captain_id != current_user_db.id:  
+            raise HTTPException(status_code=403, detail="用户不是队长，无法进行转让")  
+  
+        # 验证新队长是否在队伍中  
+        new_captain_statement = select(User).where(User.id == new_captain_id, User.team_id == team_db.id)  
+        new_captain_db = await session.execute(new_captain_statement).scalar_one_or_none()  
+        if not new_captain_db:  
+            raise HTTPException(status_code=400, detail="新队长未找到或不在队伍中")  
+  
+        # 更新队伍的队长  
+        team_db.captain_id = new_captain_id  
+        session.add(team_db)  
+        await session.commit()  
+  
+        return ResponseModel(code=0, msg="队伍转让成功")  
+    except Exception as e:  
+        return ResponseModel(code=1, msg=str(e))
