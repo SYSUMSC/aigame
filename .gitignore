@@ -11,3 +11,5 @@ __pycache__/
 # pnpm前端
 node_modules
 pnpm-lock.yaml
+
+.idea
