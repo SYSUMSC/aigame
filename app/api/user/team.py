@@ -1,6 +1,6 @@
 import random
 import string
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
@@ -87,7 +87,7 @@ async def create_team(request: Request, current_user: str = Depends(get_current_
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 @team_router.post("/join_team", response_model=ResponseModel, tags=["User"])
-async def join_team(invite_code: str, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+async def join_team(invite_code: str = Form(...), current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
         # 获取当前用户
         statement = select(User).where(User.username == current_user)

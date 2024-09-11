@@ -98,7 +98,7 @@ python main.py
 
 # 开发说明
 
-# 前台前端开发说明
+## 前台前端开发说明
 
 采用ts+vue3+pinia+tailwind+bootstrap5+pnpm
 
@@ -201,6 +201,93 @@ async def user_form(request: Request):
 ```
 
 
+
+## 后端API开发说明
+
+在 `/app/api` 定义了 `admin` 与 `user` 的后端API，通过 `router.py` 结合不同的路由
+
+鉴权通过中间件 `app\middleware\auth_middleware.py` 要求请求`header`或者`json body`包含`access_token` 目前比较混乱
+
+### 前台API开发说明
+
+数据结构定义在 `app\schemas`，通过`SQLModel`封装，无需手动写`sql`
+
+#### 传递参数方式
+
+##### json body
+
+后端
+
+（其实更好的做法应该类似后台那样先定义接收模型，而不是用`await request.json()`接收，这里偷懒了）
+
+```python
+@team_router.post("/create_team", response_model=ResponseModel, tags=["User"])
+async def create_team(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    try:
+        body = await request.json()
+        name = body.get("name")
+```
+
+前端
+
+```js
+const res = await axios.post("/api/user/create_team", {
+  name: newTeamName.value,
+});
+```
+
+前端负载为json
+
+![](./img/jsonapi.png)
+
+##### form参数
+
+后端
+
+```python
+async def join_team(invite_code: str = Form(...), current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+```
+
+前端
+
+常规应该是提取form的内容，然而这里没有实际的form所以要先创建form对象
+
+```js
+const formData = new FormData();
+formData.append("invite_code", inviteCode.value);
+const res = await axios.post("/api/user/join_team", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+```
+负载会显示表单数据
+![alt text](./img/formapi.png)
+
+### 后台API开发说明
+
+数据结构定义在 `app\schemas`，通过`SQLModel`封装，无需手动写`sql`
+
+主要是对数据表的增删改查， 比如`user.py`就是对`app\schemas\user.py`的增删改查
+
+数据传输通过`POST` `json`
+
+在 `app\schemas\user.py` 定义的 `UserSchema` 用于 增加，修改 需要传递的参数
+
+在 `app\schemas\user.py` 定义的 `UserSearchSchema` 用于 搜索（查找） 需要传递的参数
+
+一个提交post json的例子，主要是设置`contentType` 和 `data`记得`JSON.stringify`
+
+```js
+$.ajax({
+  url: "/api/admin/",
+  method: "POST",
+  contentType: "application/json;charset=UTF-8",
+  data: JSON.stringify({ ids: ids }),
+  success: function (res) {
+  },
+});
+```
 
 # 格式化 import
 

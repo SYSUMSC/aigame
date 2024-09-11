@@ -123,31 +123,31 @@
       </div>
     </div>
     <!-- 队伍转让模态框 -->
-    <div v-if="showTransferModal" 
-    class="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">  
-      <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">  
-        <div class="flex justify-between items-center">  
-          <h3 class="text-xl font-bold">选择新队长</h3>  
-            <button class="text-gray-700 mt-2" 
+    <div v-if="showTransferModal"
+    class="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+      <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+        <div class="flex justify-between items-center">
+          <h3 class="text-xl font-bold">选择新队长</h3>
+            <button class="text-gray-700 mt-2"
               @click="showTransferModal = false"
             >
             &times;
-            </button>  
-        </div>  
+            </button>
+        </div>
         <div class="overflow-y-auto h-60">
-          <ol>  
-            <li v-for="member in teamInfo.members" :key="member.userId">  
-              <input type="radio" :id="member.userId" v-model="selectedCaptainId" :value="member.id" class="mr-2">  
-              <label :for="member.userId" class="font-medium text-gray-700">{{ member.name }}</label>  
-            </li>  
-          </ol> 
-        </div>  
+          <ol>
+            <li v-for="member in teamInfo.members" :key="member.userId">
+              <input type="radio" :id="member.userId" v-model="selectedCaptainId" :value="member.id" class="mr-2">
+              <label :for="member.userId" class="font-medium text-gray-700">{{ member.name }}</label>
+            </li>
+          </ol>
+        </div>
         <div class="flex justify-end mt-4">
-          <button :disabled="!selectedCaptainId" class="border-2 border-white rounded-md btn btn-primary ml-2" @click="transferCaptaincy">确认转让</button> 
-          <button class="border-2 border-white rounded-md btn btn-secondary" @click="showTransferModal = false">取消</button>   
-        </div>  
-      </div>  
-    </div> 
+          <button :disabled="!selectedCaptainId" class="border-2 border-white rounded-md btn btn-primary ml-2" @click="transferCaptaincy">确认转让</button>
+          <button class="border-2 border-white rounded-md btn btn-secondary" @click="showTransferModal = false">取消</button>
+        </div>
+      </div>
+    </div>
     <div v-if="showCreateTeamModal" class="modal-backdrop fade show"></div>
   </div>
 </template>
@@ -172,19 +172,19 @@ const selectedCaptainId = ref("")
 
 const copyToClipboard = async(text: string) => {
   // 使用原生api
-  try {  
-    await navigator.clipboard.writeText(text);  
-    alert('邀请码已复制到剪贴板！');  
-  } catch (err) {  
-    console.error('复制失败:', err);  
-    alert('复制邀请码失败，请手动复制。');  
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('邀请码已复制到剪贴板！');
+  } catch (err) {
+    console.error('复制失败:', err);
+    alert('复制邀请码失败，请手动复制。');
   }
 }
 /**@deprecated */
 const oldCopyToClipboard = async(text: string) => {
   try {
-    await new ClipboardJS('.btn', {  
-      text: () => text  
+    await new ClipboardJS('.btn', {
+      text: () => text
     });
     alert('邀请码已复制到剪贴板！')
   } catch (err) {
@@ -215,7 +215,13 @@ const fetchTeamInfo = async () => {
 
 const joinTeam = async () => {
   try {
-    const res = await axios.post(`/api/user/join_team?invite_code=${encodeURIComponent(inviteCode.value)}`)
+    const formData = new FormData();
+    formData.append("invite_code", inviteCode.value);
+    const res = await axios.post("/api/user/join_team", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     if (res.status === 200 && res.data.code === 0) {
       alert("成功加入队伍");
       await fetchTeamInfo();
