@@ -264,6 +264,23 @@ const res = await axios.post("/api/user/join_team", formData, {
 负载会显示表单数据
 ![alt text](./img/formapi.png)
 
+#### get参数
+
+
+早期join_team如下
+
+`invite_code` 没有指定`Form`类型，所以是get参数
+
+```python
+async def join_team(invite_code: str, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+```
+
+url中`?`后面的都是get参数
+
+```js
+const res = await axios.post(`/api/user/join_team?invite_code=${encodeURIComponent(inviteCode.value)}`)
+```
+
 ### 后台API开发说明
 
 数据结构定义在 `app\schemas`，通过`SQLModel`封装，无需手动写`sql`
