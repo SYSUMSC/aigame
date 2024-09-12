@@ -9,7 +9,13 @@ __pycache__/
 目录.py
 
 # pnpm前端
-node_modules
+node_modules/
 pnpm-lock.yaml
 
-.idea
+# 屏蔽所有子文件夹中的 .vscode idea 文件夹
+**/.vscode/
+**/.idea/
+
+# 屏蔽根目录中的 .vscode idea 文件夹
+.vscode/
+.idea/
