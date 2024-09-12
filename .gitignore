@@ -12,10 +12,6 @@ __pycache__/
 node_modules/
 pnpm-lock.yaml
 
-# 屏蔽所有子文件夹中的 .vscode idea 文件夹
-**/.vscode/
-**/.idea/
-
-# 屏蔽根目录中的 .vscode idea 文件夹
+# 屏蔽 .vscode idea 文件夹
 .vscode/
 .idea/
