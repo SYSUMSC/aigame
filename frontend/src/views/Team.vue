@@ -215,24 +215,20 @@ const fetchTeamInfo = async () => {
 
 const joinTeam = async () => {
   try {
-    const formData = new FormData();
-    formData.append("invite_code", inviteCode.value);
-    const res = await axios.post("/api/user/join_team", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const res = await axios.post("/api/user/join_team", { 
+      invite_code: inviteCode.value 
+    })
     if (res.status === 200 && res.data.code === 0) {
-      alert("成功加入队伍");
-      await fetchTeamInfo();
+      alert("成功加入队伍")
+      await fetchTeamInfo()
     } else {
-      alert(res.data.msg);
+      alert(res.data.msg)
     }
   } catch (error) {
     console.error(error);
-    alert("加入队伍失败，请稍后再试。");
+    alert("加入队伍失败，请稍后重试。")
   }
-};
+}
 
 const leaveTeam = async () => {
   try {
@@ -323,11 +319,12 @@ const generateInviteCode = async () => {
 const transferCaptaincy = async() => {
   try{
     const res = await axios.post('api/user/transfer_captain', {
-      newCaptainId: selectedCaptainId.value
+      new_captain_id: selectedCaptainId.value
     })
     if(res.status === 200 && res.data.code === 0) {
       alert("转让队伍成功")
       await fetchTeamInfo()
+      router.replace('/user/team')
     } else {
       alert(res.data.msg)
       router.replace('/user/team')

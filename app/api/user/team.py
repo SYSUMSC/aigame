@@ -87,35 +87,33 @@ async def create_team(request: Request, current_user: str = Depends(get_current_
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 @team_router.post("/join_team", response_model=ResponseModel, tags=["User"])
-async def join_team(invite_code: str = Form(...), current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+async def join_team(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
-        # 获取当前用户
+        body = await request.json()
+        invite_code = body.get("invite_code")
         statement = select(User).where(User.username == current_user)
         result = await session.execute(statement)
         user_db = result.scalar_one_or_none()
+        # get current user
         if not user_db:
-            return ResponseModel(code=1, msg="用户未找到")
-
-        # 检查用户是否已经在队伍中
+            return ResponseModel(code=1, msg="未找到用户")
+        # check whether cur_user is in this team(?)
         if user_db.team_id:
-            return ResponseModel(code=1, msg="用户已经在队伍中")
-
-        # 查找队伍
+            return ResponseModel(code=1, msg="用户已在队伍中")
+        # search for team
         statement = select(Team).where(Team.invite_code == invite_code)
         result = await session.execute(statement)
         team_db = result.scalar_one_or_none()
         if not team_db:
             return ResponseModel(code=1, msg="邀请码无效")
-
-        # 加入队伍
+        # add user to team
         user_db.team_id = team_db.id
-        session.add(user_db)
+        session.add(team_db)
         await session.commit()
         await session.refresh(user_db)
         return ResponseModel(code=0, msg="加入队伍成功", data=team_db.model_dump())
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
-
 @team_router.get("/team_info", response_model=ResponseModel, tags=["User"])
 async def get_team_info(current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
@@ -180,9 +178,11 @@ async def disband_team(current_user: str = Depends(get_current_user), session: A
         return ResponseModel(code=1, msg=str(e))
 
 @team_router.post("/remove_member", response_model=ResponseModel, tags=["User"])
-async def remove_member(member_id: int, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+async def remove_member(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
         # 获取当前用户
+        body = await request.json()
+        member_id = body.get("member_id")
         statement = select(User).where(User.username == current_user)
         result = await session.execute(statement)
         user_db = result.scalar_one_or_none()
@@ -245,35 +245,46 @@ async def leave_team(current_user: str = Depends(get_current_user), session: Asy
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
     
-@team_router.post("/transfer_captain", response_model=ResponseModel, tags=["Team"])  
-async def transfer_captain(new_captain_id: int, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):  
+@team_router.post("/transfer_captain", response_model=ResponseModel, tags=["User", "Team"])  
+async def transfer_captain(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):  
     try:  
-        # 获取当前用户  
-        statement = select(User).where(User.username == current_user)  
-        current_user_db = await session.execute(statement).scalar_one()  
-  
-        # 检查当前用户是否在队伍中  
-        if not current_user_db.team_id:  
-            raise HTTPException(status_code=400, detail="用户不在任何队伍中")  
-  
-        # 获取当前用户所在的队伍  
-        team_statement = select(Team).where(Team.id == current_user_db.team_id)  
-        team_db = await session.execute(team_statement).scalar_one()  
-  
-        # 检查当前用户是否是队长  
-        if team_db.captain_id != current_user_db.id:  
-            raise HTTPException(status_code=403, detail="用户不是队长，无法进行转让")  
-  
-        # 验证新队长是否在队伍中  
-        new_captain_statement = select(User).where(User.id == new_captain_id, User.team_id == team_db.id)  
-        new_captain_db = await session.execute(new_captain_statement).scalar_one_or_none()  
-        if not new_captain_db:  
-            raise HTTPException(status_code=400, detail="新队长未找到或不在队伍中")  
-  
-        # 更新队伍的队长  
-        team_db.captain_id = new_captain_id  
-        session.add(team_db)  
-        await session.commit()  
+        # # 获取当前用户  
+        # statement = select(User).where(User.username == current_user)  
+        # current_user_db = await session.execute(statement).scalar_one()  
+        body = await request.json()
+        new_captain_id = body.get("new_captain_id")
+        statement = select(User).where(User.username == current_user)
+        result = await session.execute(statement)
+        user_db = result.scalar_one_or_none()
+        # get current user
+        if not user_db:
+            return ResponseModel(code=1, msg="用户未找到")
+        # 检查当前用户是否在队伍中
+        if not user_db.team_id:
+            return ResponseModel(code=1, msg="用户不在任何队伍中")
+        
+        # get team_id
+        team_statement = select(Team).where(Team.id == user_db.team_id)
+        result_team = await session.execute(team_statement)
+        team_db = result_team.scalar_one()
+        # return ResponseModel(code=0, msg="队伍转让成功") 
+        # check whether current user is captain
+        if team_db.captain_id!= user_db.id:
+            return ResponseModel(code=1, msg="用户不是队长，无法转让队长")
+        
+        # check whether new_captain_id is in team
+        new_captain_statement = select(User).where(User.id == new_captain_id, User.team_id == team_db.id)
+        new_captain_db = (await session.execute(new_captain_statement)).scalar_one_or_none()
+        # result_new_captain = await session.execute(new_captain_statement)
+        # new_captain_db = result_new_captain.scalar_one_or_none()
+        if not new_captain_db:
+            return ResponseModel(code=1, msg="新队长未找到或不在队伍中")
+        
+        # update team's captain_id
+        team_db.captain_id = new_captain_id
+        session.add(team_db)
+        await session.commit()
+        await session.refresh(team_db)
   
         return ResponseModel(code=0, msg="队伍转让成功")  
     except Exception as e:  
