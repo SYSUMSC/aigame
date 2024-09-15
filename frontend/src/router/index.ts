@@ -67,7 +67,8 @@ router.beforeEach(async (to, from, next) => {
   // 如果目标路由需要认证
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!userStore.isLoggedIn()) {
-      next({ name: "Login" }); // 如果未登录，跳转到登录页面
+      console.log("未登录");
+      next({ name: "登录" }); // 如果未登录，跳转到登录页面
     } else {
       next(); // 用户已登录，继续导航
     }
