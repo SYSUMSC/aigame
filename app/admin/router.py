@@ -92,3 +92,13 @@ async def competition(request: Request):
 @admin_router.get("/admin/competition_form")
 async def competition_form(request: Request):
     return templates.TemplateResponse("competition_form.html", {"request": request})
+
+
+# 题目类型
+@admin_router.get("/admin/problem_type")
+async def problem_type(request: Request):
+    return templates.TemplateResponse("problem_type.html", {"request": request})
+
+@admin_router.get("/admin/problem_type_form")
+async def problem_type_form(request: Request):
+    return templates.TemplateResponse("problem_type_form.html", {"request": request})

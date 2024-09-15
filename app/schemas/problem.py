@@ -7,7 +7,7 @@ class Problem(SQLModel, table=True):
     problem_type: str #赛题类型
     content: str #赛题描述
     score: int #分数
-    difficulty: int #难度类型（0简单，1中等，2困难）
+    difficulty: int #难度类型 旅行、经典、专家、大师（1-4）
     status: int
     competition_id: int = Field(foreign_key="competition.id")
 
