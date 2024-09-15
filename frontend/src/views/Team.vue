@@ -203,9 +203,14 @@ const fetchTeamInfo = async () => {
       }
       isCaptain.value = teamInfo.value.captain_id === userStore.user?.id;
     } else {
-      alert(res.data.msg);
-      // 暂时试试返回用户界面看是否还有其它问题产生
-      router.push("/user")
+      if(res.data.msg === "用户不在任何队伍中" && userStore.user) {
+        // 只要让这里不再显示任何信息，由于此时没有报错，用户可以再次使用当前页面重新加入队伍
+        userStore.user.team_id = null
+      } else {
+        alert(res.data.msg);
+        // 暂时试试返回用户界面看是否还有其它问题产生
+        router.push("/user")
+      }
     }
   } catch (error) {
     console.error(error);
@@ -336,9 +341,10 @@ const transferCaptaincy = async() => {
 }
 
 onMounted(() => {
-  if (userStore.user?.team_id) {
-    fetchTeamInfo();
-  }
+  // if (userStore.user?.team_id) {
+  //   fetchTeamInfo();
+  // }
+  fetchTeamInfo()
 });
 </script>
 
