@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import axios from "axios";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Reg from "../views/Reg.vue";
@@ -41,26 +42,45 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
 
+  // 如果有 Token 且用户未登录，需要获取用户信息
+  if (userStore.isLoggedIn()) {
+    try {
+      // 获取用户信息
+      const userInfoRes = await axios.get("/api/user/info");
+      if (userInfoRes.status === 200 && userInfoRes.data.code === 0) {
+        const userData = userInfoRes.data.data;
+        userStore.setUser(userData); // 将用户信息存储到 Pinia
+      } else {
+        localStorage.removeItem("token");
+        userStore.setUser(null);
+      }
+    } catch (error) {
+      console.error("获取用户信息失败:", error);
+      localStorage.removeItem("token");
+      userStore.setUser(null);
+    }
+  }
+
+  // 如果目标路由需要认证
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!userStore.isLoggedIn()) {
-      next({ name: "Login" });
+      next({ name: "Login" }); // 如果未登录，跳转到登录页面
     } else {
-      next();
+      next(); // 用户已登录，继续导航
     }
   } else {
-    next();
+    next(); // 不需要认证的路由，直接继续导航
   }
 
   // 更新网页标题
-  const defaultTitle = 'AI 竞赛平台'; // 默认的网页标题
+  const defaultTitle = "AI 竞赛平台"; // 默认的网页标题
   if (to.name) {
     document.title = `${defaultTitle} -- ${String(to.name)}`;
   } else {
     document.title = defaultTitle;
   }
 });
-
 export default router;
