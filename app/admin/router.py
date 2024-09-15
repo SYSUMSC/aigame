@@ -7,6 +7,7 @@ from db.session import get_session
 from schemas.user import User
 from schemas.config import Config
 from schemas.competition import Competition
+from schemas.problem_type import ProblemType
 from app.api.models import *
 
 admin_router = APIRouter()
@@ -78,10 +79,16 @@ async def problem_form(request: Request, session: AsyncSession = Depends(get_ses
         result = await session.execute(statement)
         competitions = result.scalars().all()
 
-        # 将比赛列表转换为模板需要的格式
-        competition_options = [{"value": comp.id, "label": comp.name} for comp in competitions]
+        # 获取所有题目类型
+        problem_type_statement = select(ProblemType)
+        problem_type_result = await session.execute(problem_type_statement)
+        problem_types = problem_type_result.scalars().all()
 
-        return templates.TemplateResponse("problem_form.html", {"request": request, "competitions": competition_options})
+        # 将比赛和题目类型列表转换为模板需要的格式
+        competition_options = [{"value": comp.id, "label": comp.name} for comp in competitions]
+        problem_type_options = [{"value": pt.id, "label": pt.name} for pt in problem_types]
+
+        return templates.TemplateResponse("problem_form.html", {"request": request, "competitions": competition_options, "problem_types": problem_type_options})
     except Exception as e:
         return {"code": 1, "msg": str(e), "data": None}
 

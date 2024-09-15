@@ -1,19 +1,21 @@
 from typing import Optional, Union
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 
 class Problem(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     name: str
-    problem_type: str #赛题类型
-    content: str #赛题描述
-    score: int #分数
-    difficulty: int #难度类型 旅行、经典、专家、大师（1-4）
+    problem_type_id: int = Field(foreign_key="problemtype.id")  # 修改为外键
+    content: str  # 题目描述
+    score: int  # 分数
+    difficulty: int  # 难度类型
     status: int
     competition_id: int = Field(foreign_key="competition.id")
 
+    problem_type: Optional["ProblemType"] = Relationship(back_populates="problems")  # 定义关系
+
 class ProblemSchema(SQLModel):
     name: str
-    problem_type: str
+    problem_type_id: int  # 引用problem_type的id
     content: str
     score: int
     difficulty: int
@@ -22,7 +24,7 @@ class ProblemSchema(SQLModel):
 
 class ProblemSearchSchema(SQLModel):
     name: Optional[str] = None
-    problem_type: Optional[str] = None
+    problem_type_id: Optional[int] = None  # 搜索时根据ID来关联
     difficulty: Optional[Union[int, str]] = None
     status: Optional[str] = None
     competition_id: Optional[Union[int, str]] = None
