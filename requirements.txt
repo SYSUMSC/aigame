@@ -10,3 +10,4 @@ python-jose
 aiosqlite
 Jinja2
 python-multipart
+itsdangerous

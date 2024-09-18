@@ -19,6 +19,8 @@ from api.user.router import user_router
 from core.config import settings
 from db.session import get_session, lifespan
 from middleware.auth_middleware import AdminAuthMiddleware, UserAuthMiddleware
+from starlette.middleware.sessions import SessionMiddleware
+
 
 app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_ADMIN_STR}/openapi.json",
     openapi_tags=[
@@ -28,6 +30,8 @@ app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_ADMIN_STR
 
 app.add_middleware(AdminAuthMiddleware)
 app.add_middleware(UserAuthMiddleware)
+# session中间件，用于admin api和admin 前端
+app.add_middleware(SessionMiddleware, secret_key='aigame')
 
 
 @app.exception_handler(StarletteHTTPException)

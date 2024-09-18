@@ -1,57 +1,65 @@
-from fastapi import Request
+from fastapi import Request, Depends
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from core.utils import load_config_from_db
+from core.security import verify_password
+from db.session import get_session
 from core.security import get_current_admin, get_current_user
-
-
 from core.security import oauth2_scheme_user
 
 class AdminAuthMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        if request.url.path.startswith("/api/admin") and not request.url.path.startswith("/api/admin/login") \
-            and not request.url.path.startswith(("/docs", "/redoc")) \
-            and not request.url.path.startswith("/api/user") \
-            and not request.url.path.startswith("/admin") \
-            and not request.url.path.startswith("/user") \
-            and not request.url.path.endswith("/openapi.json"):
-            try:
-                access_token = None
-                # 先尝试从请求头中获取 access_token
-                if "access_token" in request.headers:
-                    access_token = request.headers["access_token"]
-                elif request.method == "POST":
-                    if "application/json" in request.headers.get("Content-Type", ""):
-                        # 从 POST 请求体中获取 access_token (JSON body)
-                        access_token = (await request.json()).get("access_token")
-                    elif "application/x-www-form-urlencoded" in request.headers.get("Content-Type", ""):
-                        # 从 POST 请求体中获取 access_token (表单)
-                        form = await request.form()
-                        access_token = form.get("access_token")
-                elif request.method == "GET":
-                    # 从 GET 请求参数中获取 access_token
-                    access_token = request.query_params.get("access_token")
+    def __init__(self, app):
+        super().__init__(app)
 
-                if not access_token:
+    async def dispatch(self, request: Request, call_next):
+        # 使用 get_session 获取数据库会话
+        async for session in get_session():
+            if request.url.path.startswith("/api/admin") and not request.url.path.startswith("/api/admin/login") \
+                and not request.url.path.startswith(("/docs", "/redoc")) \
+                and not request.url.path.startswith("/api/user") \
+                and not request.url.path.startswith("/admin") \
+                and not request.url.path.startswith("/user") \
+                and not request.url.path.endswith("/openapi.json"):
+                try:
+                    # 检查会话中的 session_name 和 session_pwd
+                    session_name = request.session.get('session_name')
+                    session_pwd = request.session.get('session_pwd')
+
+                    if not session_name or not session_pwd:
+                        return JSONResponse(
+                            status_code=200,
+                            content={
+                                "code": 1,
+                                "msg": "未授权，未登录",
+                                "data": None
+                            }
+                        )
+
+                    # 从数据库中加载管理员用户信息进行验证
+                    config_dict = await load_config_from_db(session)
+                    admin_user = config_dict.get("admin_user")
+                    admin_pwd = config_dict.get("admin_pwd")
+                    if session_name != admin_user or not verify_password(session_pwd, admin_pwd):
+                        return JSONResponse(
+                            status_code=200,
+                            content={
+                                "code": 1,
+                                "msg": "未授权，登录信息无效",
+                                "data": None
+                            }
+                        )
+
+                except Exception as e:
                     return JSONResponse(
                         status_code=200,
                         content={
                             "code": 1,
-                            "msg": "未授权，没传输access_token",
+                            "msg": "未授权：" + str(e),
                             "data": None
                         }
                     )
-                user = await get_current_admin(access_token)
-                request.state.user = user
-            except Exception as e:
-                return JSONResponse(
-                    status_code=200,
-                    content={
-                        "code": 1,
-                        "msg": "未授权："+str(e),
-                        "data": None
-                    }
-                )
         return await call_next(request)
 
 class UserAuthMiddleware(BaseHTTPMiddleware):
