@@ -37,19 +37,6 @@ async def update_participation(participation_id: int, participation: Participati
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 
-@participation_router.delete("/participation/{participation_id}", response_model=ResponseModel, tags=["Admin"])
-async def delete_participation(participation_id: int, session: AsyncSession = Depends(get_session)):
-    try:
-        statement = select(Participation).where(Participation.id == participation_id)
-        result = await session.execute(statement)
-        participation_db = result.scalar_one_or_none()
-        if not participation_db:
-            return ResponseModel(code=1, msg="参与记录未找到")
-        await session.delete(participation_db)
-        await session.commit()
-        return ResponseModel(code=0, msg="参与记录删除成功")
-    except Exception as e:
-        return ResponseModel(code=1, msg=str(e))
 
 @participation_router.post("/participation/search", response_model=ResponseModel, tags=["Admin"])
 async def search_participations(search: ParticipationSearchSchema, page: int = 1, limit: int = 10, session: AsyncSession = Depends(get_session)):
@@ -68,5 +55,32 @@ async def search_participations(search: ParticipationSearchSchema, page: int = 1
         result = await session.execute(query)
         participations = result.scalars().all()
         return ResponseModel(code=0, msg="参与记录检索成功", data=[participation.model_dump() for participation in participations], count=total)
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
+@participation_router.delete("/participation/{participation_id}", response_model=ResponseModel, tags=["Admin"])
+async def delete_participation(participation_id: int, session: AsyncSession = Depends(get_session)):
+    try:
+        statement = select(Participation).where(Participation.id == participation_id)
+        result = await session.execute(statement)
+        participation_db = result.scalar_one_or_none()
+        if not participation_db:
+            return ResponseModel(code=1, msg="参与记录未找到")
+        await session.delete(participation_db)
+        await session.commit()
+        return ResponseModel(code=0, msg="参与记录删除成功")
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
+
+@participation_router.delete("/participation", response_model=ResponseModel, tags=["Admin"])
+async def delete_participations(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
+    try:
+        participation_ids = request.ids
+        statement = select(Participation).where(Participation.id.in_(participation_ids))
+        result = await session.execute(statement)
+        participations_db = result.scalars().all()
+        for participation_db in participations_db:
+            await session.delete(participation_db)
+        await session.commit()
+        return ResponseModel(code=0, msg="参与记录批量删除成功", count=len(participations_db))
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))

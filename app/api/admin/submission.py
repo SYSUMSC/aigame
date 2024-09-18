@@ -27,3 +27,30 @@ async def search_submissions(search: SubmissionSearchSchema, page: int = 1, limi
         return ResponseModel(code=0, msg="提交记录检索成功", data=[submission.model_dump() for submission in submissions], count=total)
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
+@submission_router.delete("/submission/{submission_id}", response_model=ResponseModel, tags=["Admin"])
+async def delete_submission(submission_id: int, session: AsyncSession = Depends(get_session)):
+    try:
+        statement = select(Submission).where(Submission.id == submission_id)
+        result = await session.execute(statement)
+        submission_db = result.scalar_one_or_none()
+        if not submission_db:
+            return ResponseModel(code=1, msg="提交记录未找到")
+        await session.delete(submission_db)
+        await session.commit()
+        return ResponseModel(code=0, msg="提交记录删除成功")
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
+
+@submission_router.delete("/submission", response_model=ResponseModel, tags=["Admin"])
+async def delete_submissions(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
+    try:
+        submission_ids = request.ids
+        statement = select(Submission).where(Submission.id.in_(submission_ids))
+        result = await session.execute(statement)
+        submissions_db = result.scalars().all()
+        for submission_db in submissions_db:
+            await session.delete(submission_db)
+        await session.commit()
+        return ResponseModel(code=0, msg="提交记录批量删除成功", count=len(submissions_db))
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
