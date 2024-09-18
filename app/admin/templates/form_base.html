@@ -65,12 +65,9 @@
               form = layui.form
             //接收初始化数据
             if (initData != undefined && initData != null) {
-              console.log(initData)
-              if (initData.status == 0) {
-                initData.status = ''
-              }
               //额外，根据captain_id选择
               initData.captain = initData.captain_id
+              console.log(initData)
               form.val('layuiadmin-form', initData)
               $('input[type="password"]').val('')
             }

@@ -22,7 +22,7 @@ extra_js %}
             field: "status",
             title: "状态",
             width: 100,
-            templet: (d) => (d.is_active ? "进行中" : "未开始"),
+            templet: (d) => (d.status ? "进行中" : "未开始"),
           },
           {
             title: "操作",

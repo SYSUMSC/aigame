@@ -12,7 +12,6 @@
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
       <select name="{{ name }}" id="{{ name }}" class="layui-input" {% if required %}required  lay-verify="required"{% endif %}>
-        {{ options }}
         {% for option in options %}
           <option value="{{ option.value }}">{{ option.label }}</option>
         {% endfor %}
