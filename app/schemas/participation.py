@@ -9,6 +9,7 @@ class Participation(SQLModel, table=True):
     team_id: int | None = Field(default=None, foreign_key="team.id")
     score: int | None = None  # 最终得分
     join_time: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # 加入时间
+    update_time : datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # 更新分数时间
 
 class ParticipationSchema(SQLModel):
     user_id: int
