@@ -1,3 +1,5 @@
-def cal_score() -> float:
+from typing import Dict
+
+def cal_score(answer_json:Dict) -> float:
     # TODO!
-    pass
+    return 0.0
