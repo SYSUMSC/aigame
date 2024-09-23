@@ -47,12 +47,12 @@
   </div>
 {% endmacro %}
 
-{% macro upload_field(label, name, target_id, accept='file', exts='', required=False) %}
+{% macro upload_field(label, name, accept='file', exts='', required=False) %}
   <div class="layui-form-item">
     <label class="layui-form-label">{{ label }}</label>
     <div class="layui-input-inline">
       <input type="hidden" name="{{ name }}" id="{{ name }}" class="layui-input" {% if required %}required lay-verify="required"{% endif %} />
-      <button type="button" class="layui-btn layui-btn-primary" id="{{ target_id }}" lay-options="{accept: '{{ accept }}', exts: '{{ exts }}'}">
+      <button type="button" class="layui-btn layui-btn-primary" target-id="{{ name }}" lay-options="{accept: '{{ accept }}', exts: '{{ exts }}'}">
         <i class="layui-icon layui-icon-upload"></i> 上传
       </button>
     </div>
