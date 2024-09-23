@@ -17,7 +17,11 @@ async def get_competition(session: AsyncSession = Depends(get_session)):
         # 获取所有比赛信息
         statement = select(Competition)
         result = await session.execute(statement)
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        print(result)
         competition_list = result.scalars().all()
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        print(competition_list)
         return ResponseModel(code=0, msg="比赛信息获取成功", data=[competition.model_dump() for competition in competition_list])
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
