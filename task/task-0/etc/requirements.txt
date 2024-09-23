@@ -1,0 +1,6 @@
+# Don't change Flask and gunicorn!
+Flask
+gunicorn
+# TODO! Add your 3party package after this line
+pillow
+numpy

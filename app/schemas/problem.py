@@ -8,6 +8,7 @@ class Problem(SQLModel, table=True):
     content: str  # 题目描述
     score: int  # 分数
     difficulty: int  # 难度类型
+    port: int = Field(unique=True)  # docker容器的端口
     status: int
     competition_id: int = Field(foreign_key="competition.id")
 
@@ -19,6 +20,7 @@ class ProblemSchema(SQLModel):
     content: str
     score: int
     difficulty: int
+    port: int
     status: int
     competition_id: int
 
