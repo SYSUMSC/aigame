@@ -5,10 +5,10 @@ WORKDIR /app
 
 # download nginx
 RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY etc/nginx.conf /etc/nginx/nginx.conf
 
 # change your pip env
-COPY requirements.txt .
+COPY etc/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 
 COPY . .

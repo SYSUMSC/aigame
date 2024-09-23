@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from rank import cal_score
+from etc.rank import cal_score
 
 app = Flask(__name__)
 

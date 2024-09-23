@@ -1,10 +1,11 @@
 import requests
 
+# TODO! write your test answer
 url = "http://localhost:5000/rank"
-data = {
+answer = {
     "answers": []
 }
 
-response = requests.post(url, json=data)
+response = requests.post(url, json=answer)
 
 print(response.json())

@@ -5,4 +5,4 @@ run:
 	docker run -d  --name aigame-task-template -p 5000:5000 aigame-task-template
 
 test:
-	python test.py
+	python etc/test.py
