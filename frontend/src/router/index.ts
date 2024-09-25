@@ -5,6 +5,7 @@ import Login from "../views/Login.vue";
 import Reg from "../views/Reg.vue";
 import UserCenter from "../views/UserCenter.vue";
 import Team from "../views/Team.vue";
+import CompetitionCenter from "../views/CompetitionCenter.vue";
 import { useUserStore } from "../stores/user";
 
 const routes: Array<RouteRecordRaw> = [
@@ -33,6 +34,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user",
     name: "用户中心",
     component: UserCenter,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/competitioncenter",
+    name: "比赛中心",
+    component: CompetitionCenter,
     meta: { requiresAuth: true },
   },
 ];

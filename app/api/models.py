@@ -9,3 +9,4 @@ class ResponseModel(BaseModel):
 
 class BatchDeleteRequest(BaseModel):
     ids: List[int]
+
