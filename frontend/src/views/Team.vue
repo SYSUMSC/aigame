@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen py-6 flex flex-col sm:py-12">
     <div class="container mx-auto">
-      <div class="card shadow-lg">
+      <div class="card shadow-lg rounded-lg border-0">
         <div class="card-body p-6">
           <h1 class="text-2xl font-bold mb-6 text-center">队伍管理</h1>
 
@@ -55,7 +55,7 @@
               @click="generateInviteCode"
               class="border-2 border-white rounded-md btn btn-info mt-4"
             >
-              生成邀请码
+              生成邀请码{{ isCaptain }}
             </button>
             <button
               v-if="isCaptain"
@@ -123,7 +123,7 @@
       </div>
     </div>
     <!-- 队伍转让模态框 -->
-    <div v-if="showTransferModal"
+    <div v-if="showTransferModal" @close="showTransferModal = false"
     class="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
       <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
         <div class="flex justify-between items-center">
@@ -137,8 +137,8 @@
         <div class="overflow-y-auto h-60">
           <ol>
             <li v-for="member in teamInfo.members" :key="member.userId">
-              <input type="radio" :id="member.userId" v-model="selectedCaptainId" :value="member.id" class="mr-2">
-              <label :for="member.userId" class="font-medium text-gray-700">{{ member.name }}</label>
+              <input v-if="isCaptain && member.id !== userStore.user?.id" type="radio" :id="member.userId" v-model="selectedCaptainId" :value="member.id" class="mr-2">
+              <label :for="member.userId" v-if="isCaptain && member.id !== userStore.user?.id" class="font-medium text-gray-700">{{ member.name }}</label>
             </li>
           </ol>
         </div>
@@ -170,11 +170,25 @@ const showTransferModal = ref(false)
 const selectedCaptainId = ref("")
 // const copyInviteCode = ref(false)
 
+// const sendData = () => {
+//   emit('commit', 
+//   // userStore.user?.id === teamInfo.value.captain_id
+//     isCaptain.value
+//   )
+//   console.log("send value is "+isCaptain.value)
+// }
+
+
+
 const copyToClipboard = async(text: string) => {
   // 使用原生api
   try {
-    await navigator.clipboard.writeText(text);
-    alert('邀请码已复制到剪贴板！');
+    if (!text) {
+      alert('邀请码为空，无法复制。')
+    } else {
+      await navigator.clipboard.writeText(text);
+      alert('邀请码已复制到剪贴板！')
+    }
   } catch (err) {
     console.error('复制失败:', err);
     alert('复制邀请码失败，请手动复制。');
@@ -183,10 +197,14 @@ const copyToClipboard = async(text: string) => {
 /**@deprecated */
 const oldCopyToClipboard = async(text: string) => {
   try {
-    await new ClipboardJS('.btn', {
-      text: () => text
-    });
-    alert('邀请码已复制到剪贴板！')
+      if (!text) { 
+        alert('邀请码为空，无法复制。')
+      } else {
+        await new ClipboardJS('.btn', {
+        text: () => text
+      });
+      alert('邀请码已复制到剪贴板！')
+    }
   } catch (err) {
     console.error('复制失败:', err)
     alert('复制邀请码失败，请手动复制。')
@@ -202,6 +220,7 @@ const fetchTeamInfo = async () => {
         userStore.user.team_id = teamInfo.value.id;
       }
       isCaptain.value = teamInfo.value.captain_id === userStore.user?.id;
+      console.log(isCaptain.value)
     } else {
       if(res.data.msg === "用户不在任何队伍中" && userStore.user) {
         // 只要让这里不再显示任何信息，由于此时没有报错，用户可以再次使用当前页面重新加入队伍
@@ -322,7 +341,7 @@ const generateInviteCode = async () => {
 
 // 新增队伍转让功能
 const transferCaptaincy = async() => {
-  try{
+  try {
     const res = await axios.post('api/user/transfer_captain', {
       new_captain_id: selectedCaptainId.value
     })
@@ -334,17 +353,18 @@ const transferCaptaincy = async() => {
       alert(res.data.msg)
       router.replace('/user/team')
     }
+    showTransferModal.value = false
   } catch (error) {
     console.error(error)
     alert("转让队伍失败，请稍后重试。")
   }
 }
 
-onMounted(() => {
-  // if (userStore.user?.team_id) {
-  //   fetchTeamInfo();
-  // }
-  fetchTeamInfo()
+onMounted(async () => {
+  await fetchTeamInfo()
+  console.log("end value" + isCaptain.value)
+  console.log(userStore.user?.id === teamInfo.value.captain_id)
+  console.log(userStore.user?.id)
 });
 </script>
 

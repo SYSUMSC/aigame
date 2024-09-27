@@ -83,7 +83,7 @@ const login = async () => {
         userStore.setUser(userData);
 
         // 跳转到用户主页
-        router.push("/user");
+        router.push("/info");
       } else {
         alert("获取用户信息失败");
       }
