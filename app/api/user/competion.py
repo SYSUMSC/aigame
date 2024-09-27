@@ -48,8 +48,8 @@ async def get_competition_detail(competition_id: int, session: AsyncSession = De
 @competition_router.get("/competition/{competition_id}/problems", response_model=ResponseModel, tags=["Problem"])
 async def get_filtered_problems(
     competition_id: int = Path(..., description="The ID of the competition"),
-    problem_type_id: Optional[int] = Query(None, description="Filter by problem type ID"),
-    difficulty: Optional[int] = Query(None, description="Filter by difficulty"),
+    problem_type_id: Optional[int|str] = Query(None, description="Filter by problem type ID"),
+    difficulty: Optional[int|str] = Query(None, description="Filter by difficulty"),
     session: AsyncSession = Depends(get_session)
 ):
     try:
@@ -64,10 +64,11 @@ async def get_filtered_problems(
 
         result = await session.execute(statement)
         problem_list = result.scalars().all()
-        return ResponseModel(code=0, msg="赛题列表获取成功", data=[problem.model_dump() for problem in problem_list])
+        data = [problem.model_dump() for problem in problem_list]
+        return ResponseModel(code=0, msg="赛题列表获取成功", data=data,count=len(data))
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
-    
+
 @competition_router.get("/problem_types", response_model=ResponseModel, tags=["ProblemType"])
 async def get_problem_types(session: AsyncSession = Depends(get_session)):
     try:
