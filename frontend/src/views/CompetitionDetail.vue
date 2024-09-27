@@ -2,12 +2,8 @@
   <main class="min-h-screen py-6 flex flex-col justify-center items-center">
     <div class="container mx-auto">
       <div class="card">
-        <header>
-          <h1 class="text-2xl font-bold mb-6 text-center text-primary">
-            比赛详情
-          </h1>
-        </header>
-        <main>
+        <div class="card-header">比赛详情</div>
+        <div class="card-body">
           <h1 class="mb-3 fs-4">{{ competition?.name }}</h1>
           <p>开始时间: {{ competition?.start_time }}</p>
           <p>结束时间: {{ competition?.end_time }}</p>
@@ -49,8 +45,7 @@
               }}
             </li>
           </ul>
-        </main>
-        <footer class="mb-4"></footer>
+        </div>
       </div>
     </div>
   </main>
