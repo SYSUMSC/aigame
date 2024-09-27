@@ -17,6 +17,7 @@
                                 class="btn btn-primary ml-6">报名</button>
                             <button v-else @click="quit(competition.id)" class="btn btn-danger ml-6">退出</button>
                         </div>
+                        <button @click="viewDetail(competition.id)" class="btn btn-secondary ml-6" >查看详情</button>
                     </div>
                 </div>
             </div>
@@ -27,6 +28,7 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
+import router from '../router';
 type Competition = {
     id: number;
     name: string;
@@ -113,4 +115,8 @@ onMounted(async () => {
     await getJoinInfo();
     await fetchTeamInfo();
 });
+//添加了查看详情按钮
+const viewDetail = (competition_id: any) => {
+    router.push({ name: 'CompetitionDetail', params: { id: competition_id }});
+};
 </script>
