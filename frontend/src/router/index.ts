@@ -6,6 +6,7 @@ import Reg from "../views/Reg.vue";
 import UserCenter from "../views/UserCenter.vue";
 import Team from "../views/Team.vue";
 import CompetitionCenter from "../views/CompetitionCenter.vue";
+import CompetitionDetail from "../views/CompetitionDetail.vue";
 import { useUserStore } from "../stores/user";
 import Column from "../views/Column.vue";
 
@@ -14,6 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "首页",
     component: Home,
+    alias: '/home'  
   },
   {
     path: "/user/login",
@@ -49,6 +51,13 @@ const routes: Array<RouteRecordRaw> = [
     component: CompetitionCenter,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/competition/:id',
+    name: 'CompetitionDetail',
+    component: CompetitionDetail,
+    meta: { requiresAuth: true },
+    props: true  // 使得可以通过路由传递参数到组件
+  }
 ];
 
 const router = createRouter({
@@ -70,19 +79,20 @@ router.beforeEach(async (to, from, next) => {
       } else {
         localStorage.removeItem("token");
         userStore.setUser(null);
+        next({ name: "登录" }); // 信息获取失败，重定向到登录页
       }
     } catch (error) {
       console.error("获取用户信息失败:", error);
       localStorage.removeItem("token");
       userStore.setUser(null);
+      next({ name: "登录" }); // 失败，重定向到登录页
     }
   }
 
   // 如果目标路由需要认证
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!userStore.isLoggedIn()) {
-      console.log("未登录");
-      next({ name: "登录" }); // 如果未登录，跳转到登录页面
+      next({ name: "登录", query: { redirect: to.fullPath }}); // 未登录，重定向到登录页面，并附带重定向路径
     } else {
       next(); // 用户已登录，继续导航
     }
@@ -98,4 +108,5 @@ router.beforeEach(async (to, from, next) => {
     document.title = defaultTitle;
   }
 });
+
 export default router;
