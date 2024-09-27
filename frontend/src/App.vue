@@ -78,8 +78,8 @@ onMounted( async () => {
             <!-- <li class="nav-item">
               <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/')" href="#">用户中心</a>
             </li> -->
-            <li class="nav-item">
-              <a class="nav-link" v-if="isCaptain" @click.prevent="navigateAndCloseNav('/user/team')" href="#">队伍管理</a>
+            <li class="nav-item"  v-if="isCaptain">
+              <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/team')" href="#">队伍管理</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" @click.prevent="navigateAndCloseNav('/info')" href="#">用户信息</a>
