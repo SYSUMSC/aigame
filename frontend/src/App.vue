@@ -75,14 +75,14 @@ onMounted( async () => {
             <a class="nav-link" @click.prevent="navigateAndCloseNav('/')" href="#">首页</a>
           </li>
           <template v-if="userStore.isLoggedIn()">
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/')" href="#">用户中心</a>
-            </li> -->
-            <li class="nav-item"  v-if="isCaptain">
+            </li>
+            <li class="nav-item">
               <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/team')" href="#">队伍管理</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" @click.prevent="navigateAndCloseNav('/info')" href="#">用户信息</a>
+              <a class="nav-link" @click.prevent="navigateAndCloseNav('/info')" href="#">用户信息-开发中</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" @click.prevent="navigateAndCloseNav('/competitioncenter')" href="#">比赛中心</a>

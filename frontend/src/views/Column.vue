@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <LeftComponent v-if="isCaptain"/>
-    <div v-else class="row">
+    <div class="row">
       <div class="col-md-6">
         <LeftComponent />
       </div>
@@ -15,7 +14,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import LeftComponent from './UserCenter.vue';
-import RightComponent from './TeamInfo.vue';
+import RightComponent from './Team.vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';

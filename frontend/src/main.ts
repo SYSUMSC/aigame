@@ -7,6 +7,8 @@ import router from "./router";
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { useUserStore } from "./stores/user";
+import { s3Layer } from 'vue3-layer';
+import 'vue3-layer/dist/s3Layer.css';
 
 // 初始化 Pinia
 const pinia = createPinia();
@@ -15,6 +17,7 @@ pinia.use(piniaPluginPersistedstate);
 // 创建 Vue 应用实例
 const app = createApp(App);
 
+app.component('s3-layer', s3Layer);
 // 全局配置 Axios
 axios.defaults.baseURL = "http://localhost:8000";
 axios.defaults.headers.common["access_token"] = localStorage.getItem("token");

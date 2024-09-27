@@ -66,7 +66,7 @@
               @click="generateInviteCode"
               class="border-2 border-white rounded-md btn btn-info mt-4"
             >
-              生成邀请码{{ isCaptain }}
+              生成邀请码
             </button>
             <button
               v-if="isCaptain"
@@ -193,6 +193,8 @@ import axios from "axios";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
 import ClipboardJS from "clipboard";
+import { layer } from "vue3-layer";
+
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -217,30 +219,30 @@ const copyToClipboard = async (text: string) => {
   // 使用原生api
   try {
     if (!text) {
-      alert("邀请码为空，无法复制。");
+      layer.msg("邀请码为空，无法复制。");
     } else {
       await navigator.clipboard.writeText(text);
-      alert("邀请码已复制到剪贴板！");
+      layer.msg("邀请码已复制到剪贴板！");
     }
   } catch (err) {
     console.error("复制失败:", err);
-    alert("复制邀请码失败，请手动复制。");
+    layer.msg("复制邀请码失败，请手动复制。");
   }
 };
 /**@deprecated */
 const oldCopyToClipboard = async (text: string) => {
   try {
     if (!text) {
-      alert("邀请码为空，无法复制。");
+      layer.msg("邀请码为空，无法复制。");
     } else {
       await new ClipboardJS(".btn", {
         text: () => text,
       });
-      alert("邀请码已复制到剪贴板！");
+      layer.msg("邀请码已复制到剪贴板！");
     }
   } catch (err) {
     console.error("复制失败:", err);
-    alert("复制邀请码失败，请手动复制。");
+    layer.msg("复制邀请码失败，请手动复制。");
   }
 };
 
@@ -259,14 +261,14 @@ const fetchTeamInfo = async () => {
         // 只要让这里不再显示任何信息，由于此时没有报错，用户可以再次使用当前页面重新加入队伍
         userStore.user.team_id = null;
       } else {
-        alert(res.data.msg);
+        layer.msg(res.data.msg);
         // 暂时试试返回用户界面看是否还有其它问题产生
         router.push("/user");
       }
     }
   } catch (error) {
     console.error(error);
-    alert("获取队伍信息失败，请稍后再试。");
+    layer.msg("获取队伍信息失败，请稍后再试。");
   }
 };
 
@@ -276,14 +278,14 @@ const joinTeam = async () => {
       invite_code: inviteCode.value,
     });
     if (res.status === 200 && res.data.code === 0) {
-      alert("成功加入队伍");
+      layer.msg("成功加入队伍");
       await fetchTeamInfo();
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("加入队伍失败，请稍后重试。");
+    layer.msg("加入队伍失败，请稍后重试。");
   }
 };
 
@@ -294,13 +296,13 @@ const leaveTeam = async () => {
       if (userStore.user) {
         userStore.user.team_id = null;
       }
-      alert("成功退出队伍");
+      layer.msg("成功退出队伍");
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("退出队伍失败，请稍后再试。");
+    layer.msg("退出队伍失败，请稍后再试。");
   }
 };
 
@@ -311,13 +313,13 @@ const disbandTeam = async () => {
       if (userStore.user) {
         userStore.user.team_id = null;
       }
-      alert("成功解散队伍");
+      layer.msg("成功解散队伍");
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("解散队伍失败，请稍后再试。");
+    layer.msg("解散队伍失败，请稍后再试。");
   }
 };
 
@@ -327,14 +329,14 @@ const removeMember = async (memberId: number) => {
       member_id: memberId,
     });
     if (res.status === 200 && res.data.code === 0) {
-      alert("成功移除队员");
+      layer.msg("成功移除队员");
       await fetchTeamInfo();
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("移除队员失败，请稍后再试。");
+    layer.msg("移除队员失败，请稍后再试。");
   }
 };
 
@@ -344,15 +346,15 @@ const createTeam = async () => {
       name: newTeamName.value,
     });
     if (res.status === 200 && res.data.code === 0) {
-      alert("成功创建队伍");
+      layer.msg("成功创建队伍");
       showCreateTeamModal.value = false;
       await fetchTeamInfo();
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("创建队伍失败，请稍后再试。");
+    layer.msg("创建队伍失败，请稍后再试。");
   }
 };
 
@@ -362,13 +364,13 @@ const generateInviteCode = async () => {
     const res = await axios.post("/api/user/create_invite_code");
     if (res.status === 200 && res.data.code === 0) {
       teamInfo.value.invite_code = res.data.data.invite_code; // 更新队伍信息中的邀请码
-      alert("邀请码生成成功: " + res.data.data.invite_code);
+      layer.msg("邀请码生成成功: " + res.data.data.invite_code);
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("生成邀请码失败，请稍后再试。");
+    layer.msg("生成邀请码失败，请稍后再试。");
   }
 };
 
@@ -379,17 +381,17 @@ const transferCaptaincy = async () => {
       new_captain_id: selectedCaptainId.value,
     });
     if (res.status === 200 && res.data.code === 0) {
-      alert("转让队伍成功");
+      layer.msg("转让队伍成功");
       await fetchTeamInfo();
       router.replace("/user/team");
     } else {
-      alert(res.data.msg);
+      layer.msg(res.data.msg);
       router.replace("/user/team");
     }
     showTransferModal.value = false;
   } catch (error) {
     console.error(error);
-    alert("转让队伍失败，请稍后重试。");
+    layer.msg("转让队伍失败，请稍后重试。");
   }
 };
 
