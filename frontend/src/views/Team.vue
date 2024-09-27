@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen py-6 flex flex-col sm:py-12">
     <div class="container mx-auto">
-      <div class="card shadow-lg rounded-lg border-0">
-        <div class="card-body p-6">
-          <h1 class="text-2xl font-bold mb-6 text-center">队伍管理</h1>
+      <div class="card">
+        <div class="card-header">队伍管理</div>
 
-          <div v-if="!userStore.user?.team_id">
+        <div class="card-body">
+          <template v-if="!userStore.user?.team_id">
             <!-- 用户未加入任何队伍，显示加入或创建队伍的选项 -->
             <button
               @click="showCreateTeamModal = true"
@@ -28,14 +28,25 @@
                 加入队伍
               </button>
             </form>
-          </div>
+          </template>
 
-          <div v-else-if="teamInfo">
+          <template v-else-if="teamInfo">
             <!-- 用户已加入队伍，显示队伍信息 -->
             <h2 class="text-xl font-bold mb-4">当前队伍信息</h2>
             <p><strong>队伍名称:</strong> {{ teamInfo.name }}</p>
-            <p><strong id="inviteCode" data-clipboard-text="{{ teamInfo.invite_code }}">邀请码:</strong> {{ teamInfo.invite_code }}
-              <button @click="oldCopyToClipboard(teamInfo.invite_code)" class="border-2 border-white bg-yellow-50 rounded-md btn ml-2">复制</button>
+            <p>
+              <strong
+                id="inviteCode"
+                data-clipboard-text="{{ teamInfo.invite_code }}"
+                >邀请码:</strong
+              >
+              {{ teamInfo.invite_code }}
+              <button
+                @click="oldCopyToClipboard(teamInfo.invite_code)"
+                class="border-2 border-white bg-yellow-50 rounded-md btn ml-2"
+              >
+                复制
+              </button>
             </p>
             <p><strong>队员:</strong></p>
             <ul>
@@ -74,7 +85,7 @@
             <button v-else @click="leaveTeam" class="btn btn-warning mt-4">
               退出队伍
             </button>
-          </div>
+          </template>
         </div>
       </div>
     </div>
@@ -123,28 +134,52 @@
       </div>
     </div>
     <!-- 队伍转让模态框 -->
-    <div v-if="showTransferModal" @close="showTransferModal = false"
-    class="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+    <div
+      v-if="showTransferModal"
+      @close="showTransferModal = false"
+      class="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-gray-500 bg-opacity-50 z-50"
+    >
       <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
         <div class="flex justify-between items-center">
           <h3 class="text-xl font-bold">选择新队长</h3>
-            <button class="text-gray-700 mt-2"
-              @click="showTransferModal = false"
-            >
+          <button class="text-gray-700 mt-2" @click="showTransferModal = false">
             &times;
-            </button>
+          </button>
         </div>
         <div class="overflow-y-auto h-60">
           <ol>
             <li v-for="member in teamInfo.members" :key="member.userId">
-              <input v-if="isCaptain && member.id !== userStore.user?.id" type="radio" :id="member.userId" v-model="selectedCaptainId" :value="member.id" class="mr-2">
-              <label :for="member.userId" v-if="isCaptain && member.id !== userStore.user?.id" class="font-medium text-gray-700">{{ member.name }}</label>
+              <input
+                v-if="isCaptain && member.id !== userStore.user?.id"
+                type="radio"
+                :id="member.userId"
+                v-model="selectedCaptainId"
+                :value="member.id"
+                class="mr-2"
+              />
+              <label
+                :for="member.userId"
+                v-if="isCaptain && member.id !== userStore.user?.id"
+                class="font-medium text-gray-700"
+                >{{ member.name }}</label
+              >
             </li>
           </ol>
         </div>
         <div class="flex justify-end mt-4">
-          <button :disabled="!selectedCaptainId" class="border-2 border-white rounded-md btn btn-primary ml-2" @click="transferCaptaincy">确认转让</button>
-          <button class="border-2 border-white rounded-md btn btn-secondary" @click="showTransferModal = false">取消</button>
+          <button
+            :disabled="!selectedCaptainId"
+            class="border-2 border-white rounded-md btn btn-primary ml-2"
+            @click="transferCaptaincy"
+          >
+            确认转让
+          </button>
+          <button
+            class="border-2 border-white rounded-md btn btn-secondary"
+            @click="showTransferModal = false"
+          >
+            取消
+          </button>
         </div>
       </div>
     </div>
@@ -157,7 +192,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
-import ClipboardJS from 'clipboard'
+import ClipboardJS from "clipboard";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -166,50 +201,48 @@ const newTeamName = ref("");
 const teamInfo = ref<any>(null);
 const isCaptain = ref(false);
 const showCreateTeamModal = ref(false);
-const showTransferModal = ref(false)
-const selectedCaptainId = ref("")
+const showTransferModal = ref(false);
+const selectedCaptainId = ref("");
 // const copyInviteCode = ref(false)
 
 // const sendData = () => {
-//   emit('commit', 
+//   emit('commit',
 //   // userStore.user?.id === teamInfo.value.captain_id
 //     isCaptain.value
 //   )
 //   console.log("send value is "+isCaptain.value)
 // }
 
-
-
-const copyToClipboard = async(text: string) => {
+const copyToClipboard = async (text: string) => {
   // 使用原生api
   try {
     if (!text) {
-      alert('邀请码为空，无法复制。')
+      alert("邀请码为空，无法复制。");
     } else {
       await navigator.clipboard.writeText(text);
-      alert('邀请码已复制到剪贴板！')
+      alert("邀请码已复制到剪贴板！");
     }
   } catch (err) {
-    console.error('复制失败:', err);
-    alert('复制邀请码失败，请手动复制。');
+    console.error("复制失败:", err);
+    alert("复制邀请码失败，请手动复制。");
   }
-}
+};
 /**@deprecated */
-const oldCopyToClipboard = async(text: string) => {
+const oldCopyToClipboard = async (text: string) => {
   try {
-      if (!text) { 
-        alert('邀请码为空，无法复制。')
-      } else {
-        await new ClipboardJS('.btn', {
-        text: () => text
+    if (!text) {
+      alert("邀请码为空，无法复制。");
+    } else {
+      await new ClipboardJS(".btn", {
+        text: () => text,
       });
-      alert('邀请码已复制到剪贴板！')
+      alert("邀请码已复制到剪贴板！");
     }
   } catch (err) {
-    console.error('复制失败:', err)
-    alert('复制邀请码失败，请手动复制。')
+    console.error("复制失败:", err);
+    alert("复制邀请码失败，请手动复制。");
   }
-}
+};
 
 const fetchTeamInfo = async () => {
   try {
@@ -220,15 +253,15 @@ const fetchTeamInfo = async () => {
         userStore.user.team_id = teamInfo.value.id;
       }
       isCaptain.value = teamInfo.value.captain_id === userStore.user?.id;
-      console.log(isCaptain.value)
+      console.log(isCaptain.value);
     } else {
-      if(res.data.msg === "用户不在任何队伍中" && userStore.user) {
+      if (res.data.msg === "用户不在任何队伍中" && userStore.user) {
         // 只要让这里不再显示任何信息，由于此时没有报错，用户可以再次使用当前页面重新加入队伍
-        userStore.user.team_id = null
+        userStore.user.team_id = null;
       } else {
         alert(res.data.msg);
         // 暂时试试返回用户界面看是否还有其它问题产生
-        router.push("/user")
+        router.push("/user");
       }
     }
   } catch (error) {
@@ -239,20 +272,20 @@ const fetchTeamInfo = async () => {
 
 const joinTeam = async () => {
   try {
-    const res = await axios.post("/api/user/join_team", { 
-      invite_code: inviteCode.value 
-    })
+    const res = await axios.post("/api/user/join_team", {
+      invite_code: inviteCode.value,
+    });
     if (res.status === 200 && res.data.code === 0) {
-      alert("成功加入队伍")
-      await fetchTeamInfo()
+      alert("成功加入队伍");
+      await fetchTeamInfo();
     } else {
-      alert(res.data.msg)
+      alert(res.data.msg);
     }
   } catch (error) {
     console.error(error);
-    alert("加入队伍失败，请稍后重试。")
+    alert("加入队伍失败，请稍后重试。");
   }
-}
+};
 
 const leaveTeam = async () => {
   try {
@@ -340,31 +373,31 @@ const generateInviteCode = async () => {
 };
 
 // 新增队伍转让功能
-const transferCaptaincy = async() => {
+const transferCaptaincy = async () => {
   try {
-    const res = await axios.post('api/user/transfer_captain', {
-      new_captain_id: selectedCaptainId.value
-    })
-    if(res.status === 200 && res.data.code === 0) {
-      alert("转让队伍成功")
-      await fetchTeamInfo()
-      router.replace('/user/team')
+    const res = await axios.post("api/user/transfer_captain", {
+      new_captain_id: selectedCaptainId.value,
+    });
+    if (res.status === 200 && res.data.code === 0) {
+      alert("转让队伍成功");
+      await fetchTeamInfo();
+      router.replace("/user/team");
     } else {
-      alert(res.data.msg)
-      router.replace('/user/team')
+      alert(res.data.msg);
+      router.replace("/user/team");
     }
-    showTransferModal.value = false
+    showTransferModal.value = false;
   } catch (error) {
-    console.error(error)
-    alert("转让队伍失败，请稍后重试。")
+    console.error(error);
+    alert("转让队伍失败，请稍后重试。");
   }
-}
+};
 
 onMounted(async () => {
-  await fetchTeamInfo()
-  console.log("end value" + isCaptain.value)
-  console.log(userStore.user?.id === teamInfo.value.captain_id)
-  console.log(userStore.user?.id)
+  await fetchTeamInfo();
+  console.log("end value" + isCaptain.value);
+  console.log(userStore.user?.id === teamInfo.value.captain_id);
+  console.log(userStore.user?.id);
 });
 </script>
 

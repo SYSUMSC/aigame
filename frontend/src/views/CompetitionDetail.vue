@@ -1,44 +1,56 @@
 <template>
   <main class="min-h-screen py-6 flex flex-col justify-center items-center">
     <div class="container mx-auto">
-      <div class="card shadow-lg rounded-lg border-0">
-        <div class="card-body p-6">
-          <header>
-            <h1 class="text-2xl font-bold mb-6 text-center text-primary">比赛详情</h1>
-          </header>
-          <main>
-            <h1 class="mb-3 fs-4">{{ competition?.name }}</h1>
-            <p>开始时间: {{ competition?.start_time }}</p>
-            <p>结束时间: {{ competition?.end_time }}</p>
-            <p>描述: {{ competition?.description }}</p>
-            <br></br>
-            <h3>赛题列表:</h3>
+      <div class="card">
+        <header>
+          <h1 class="text-2xl font-bold mb-6 text-center text-primary">
+            比赛详情
+          </h1>
+        </header>
+        <main>
+          <h1 class="mb-3 fs-4">{{ competition?.name }}</h1>
+          <p>开始时间: {{ competition?.start_time }}</p>
+          <p>结束时间: {{ competition?.end_time }}</p>
+          <p>描述: {{ competition?.description }}</p>
+          <br /><br />
+          <h3>赛题列表:</h3>
 
-            <select v-model="filters.difficulty" class="mb-2">
-            
-              <option value="all">全部难度</option>
-              <option value="1">旅行</option>
-              <option value="2">经典</option>
-              <option value="3">专家</option>
-              <option value="4">大师</option>
-            </select>
-            <select v-model="filters.problem_type_id">
-              <option value="all"  >全部类型</option>
-              <option v-for="type in problemTypes" :key="type.id" :value="type.id">
-                {{ type.name }}
-              </option>
-            </select>
-            <button @click="fetchProblems(route.params.id as number)" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">筛选</button>
-            <ul>
-              <li v-for="problem in problems" :key="problem.id">
-                {{ problem.name }}--难度: {{ difficultyLevels[problem.difficulty] }}--类型：{{ problemTypes[problem.problem_type_id-1].name }}
-              </li>
-            </ul>
-          </main>
-          <footer class="mb-4">
-            
-          </footer>
-        </div>
+          <select v-model="filters.difficulty" class="mb-2">
+            <option value="all">全部难度</option>
+            <option value="1">旅行</option>
+            <option value="2">经典</option>
+            <option value="3">专家</option>
+            <option value="4">大师</option>
+          </select>
+          <select v-model="filters.problem_type_id">
+            <option value="all">全部类型</option>
+            <option
+              v-for="type in problemTypes"
+              :key="type.id"
+              :value="type.id"
+            >
+              {{ type.name }}
+            </option>
+          </select>
+          <button
+            @click="fetchProblems(Number(route.params.id))"
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+          >
+            筛选
+          </button>
+          <ul>
+            <li v-for="problem in problems" :key="problem.id">
+              {{ problem.name }}--难度:
+              {{
+                difficultyLevels[problem.difficulty as 1 | 2 | 3 | 4] ||
+                "未知难度"
+              }}--类型：{{
+                problemTypes[problem.problem_type_id - 1]?.name || "未知类型"
+              }}
+            </li>
+          </ul>
+        </main>
+        <footer class="mb-4"></footer>
       </div>
     </div>
   </main>
@@ -48,7 +60,7 @@
 import { onMounted, ref, watchEffect } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
-//定义单个比赛类型
+
 type Competition = {
   id: number;
   name: string;
@@ -64,32 +76,27 @@ type Competition = {
   }>;
 };
 
-// 定义单个问题类型
 type ProblemType = {
   id: number;
   name: string;
   description?: string;
 };
 
-// 定义问题类型列表
 type ProblemTypes = Array<ProblemType>;
 
-// 定义难度等级
 const difficultyLevels = {
-  1: '旅行',
-  2: '经典',
-  3: '专家',
-  4: '大师',
-}; 
+  1: "旅行",
+  2: "经典",
+  3: "专家",
+  4: "大师",
+};
+
 const route = useRoute();
 const competition = ref<Competition | null>(null);
-const problems = ref([]); // 用于存储赛题列表
-const filters = ref({ difficulty: "all", problem_type_id: "all" }); // 筛选条件
-const problemTypes = ref<ProblemTypes>([]); // 用于存储问题类型列表
+const problems = ref<Competition["problems"]>([]);
+const filters = ref({ difficulty: "all", problem_type_id: "all" });
+const problemTypes = ref<ProblemTypes>([]);
 
-
-
-// 获取比赛详情
 const fetchCompetitionDetail = async (competitionId: number) => {
   try {
     const res = await axios.get(`/api/user/competition/${competitionId}`);
@@ -103,18 +110,22 @@ const fetchCompetitionDetail = async (competitionId: number) => {
   }
 };
 
-// 获取赛题列表
 const fetchProblems = async (competitionId: number) => {
   try {
-    const params = {};
-    if (filters.value.difficulty !== 'all' && filters.value.difficulty !== null) {
+    let params: { difficulty: string; problem_type_id: string } = {
+      difficulty: "",
+      problem_type_id: "",
+    };
+    if (filters.value.difficulty !== "all") {
       params.difficulty = filters.value.difficulty;
     }
-    if (filters.value.problem_type_id !== 'all' && filters.value.problem_type_id !== null) {
+    if (filters.value.problem_type_id !== "all") {
       params.problem_type_id = filters.value.problem_type_id;
     }
-    const res = await axios.get(`/api/user/competition/${competitionId}/problems`, { params });
-    console.log(res.data); // 打印返回的数据，用于调试
+    const res = await axios.get(
+      `/api/user/competition/${competitionId}/problems`,
+      { params }
+    );
     if (res.status === 200 && res.data.code === 0) {
       problems.value = res.data.data;
     } else {
@@ -125,11 +136,9 @@ const fetchProblems = async (competitionId: number) => {
   }
 };
 
-// 获取问题类型列表
 const fetchProblemTypes = async () => {
   try {
     const res = await axios.get("/api/user/problem_types");
-    console.log(res.data); // 打印返回的数据，用于调试
     if (res.status === 200 && res.data.code === 0) {
       problemTypes.value = res.data.data;
     } else {
@@ -140,16 +149,16 @@ const fetchProblemTypes = async () => {
   }
 };
 
-// 获取比赛详情和赛题列表
 onMounted(() => {
-  fetchCompetitionDetail(route.params.id as number);
-  fetchProblems(route.params.id as number);
-  fetchProblemTypes(); // 获取问题类型列表，后来增加
+  const competitionId = Number(route.params.id);
+  fetchCompetitionDetail(competitionId);
+  fetchProblems(competitionId);
+  fetchProblemTypes();
 });
 
-// 监听路由变化（选用）
 watchEffect(() => {
-  fetchCompetitionDetail(route.params.id as number);
-  fetchProblems(route.params.id as number);
+  const competitionId = Number(route.params.id);
+  fetchCompetitionDetail(competitionId);
+  fetchProblems(competitionId);
 });
 </script>
