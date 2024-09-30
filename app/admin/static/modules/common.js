@@ -13,16 +13,16 @@ layui.define(function (exports) {
   //公共业务的逻辑处理可以写在此处，切换任何页面都会执行
   //……
 
-  // 检查token的函数
-  function checkToken() {
-    var token = layui.data(setter.tableName).access_token
-    if (!token && location.pathname !== "/admin/login") {
-      //判断是不是登录页面，如果不是则跳转
-      location.href = "/admin/login";
-    }
-  }
+  // 检查token的函数 现在改成session了暂时不需要
+  // function checkToken() {
+  //   var token = layui.data(setter.tableName).access_token
+  //   if (!token && location.pathname !== "/admin/login") {
+  //     //判断是不是登录页面，如果不是则跳转
+  //     location.href = "/admin/login";
+  //   }
+  // }
 
-  checkToken();
+  // checkToken();
 
   //退出
   admin.events.logout = function () {
