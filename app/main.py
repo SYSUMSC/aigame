@@ -28,10 +28,10 @@ app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_ADMIN_STR
         {"name": "User", "description": "前台api"},
     ], lifespan=lifespan)
 
-app.add_middleware(AdminAuthMiddleware)
-app.add_middleware(UserAuthMiddleware)
 # session中间件，用于admin api和admin 前端
 app.add_middleware(SessionMiddleware, secret_key='aigame')
+app.add_middleware(AdminAuthMiddleware)
+app.add_middleware(UserAuthMiddleware)
 
 
 @app.exception_handler(StarletteHTTPException)
