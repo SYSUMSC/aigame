@@ -397,9 +397,6 @@ const transferCaptaincy = async () => {
 
 onMounted(async () => {
   await fetchTeamInfo();
-  console.log("end value" + isCaptain.value);
-  console.log(userStore.user?.id === teamInfo.value.captain_id);
-  console.log(userStore.user?.id);
 });
 </script>
 
