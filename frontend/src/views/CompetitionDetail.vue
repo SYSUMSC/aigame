@@ -12,14 +12,14 @@
           <h3>赛题列表:</h3>
 
           <select v-model="filters.difficulty" class="mb-2">
-            <option value="all">全部难度</option>
+            <option value="null">全部难度</option>
             <option value="1">旅行</option>
             <option value="2">经典</option>
             <option value="3">专家</option>
             <option value="4">大师</option>
           </select>
           <select v-model="filters.problem_type_id">
-            <option value="all">全部类型</option>
+            <option value="null">全部类型</option>
             <option
               v-for="type in problemTypes"
               :key="type.id"
@@ -89,12 +89,22 @@ const difficultyLevels = {
 const route = useRoute();
 const competition = ref<Competition | null>(null);
 const problems = ref<Competition["problems"]>([]);
-const filters = ref({ difficulty: "all", problem_type_id: "all" });
+const filters = ref({ difficulty: "null", problem_type_id: "null" });
 const problemTypes = ref<ProblemTypes>([]);
 
+// 获取比赛详情
 const fetchCompetitionDetail = async (competitionId: number) => {
   try {
-    const res = await axios.get(`/api/user/competition/${competitionId}`);
+    const config = {
+      headers: { 
+        'Content-Type': 'application/json' 
+      }
+    };
+    const res = await axios.post(
+      `/api/user/competition/${competitionId}`,
+      {},
+      config
+    );
     if (res.status === 200 && res.data.code === 0) {
       competition.value = res.data.data;
     } else {
@@ -105,21 +115,28 @@ const fetchCompetitionDetail = async (competitionId: number) => {
   }
 };
 
+// 获取赛题列表
 const fetchProblems = async (competitionId: number) => {
   try {
-    let params: { difficulty: string; problem_type_id: string } = {
-      difficulty: "",
-      problem_type_id: "",
+    const config = {
+      headers: { 
+        'Content-Type': 'application/json' 
+      }
     };
-    if (filters.value.difficulty !== "all") {
-      params.difficulty = filters.value.difficulty;
+    
+    // 构建请求体，仅包含非 "null" 值的字段
+    const filtersToSend = {};
+    if (filters.value.difficulty !== "null") {
+      filtersToSend.difficulty = Number(filters.value.difficulty); // 确保转换为数字
     }
-    if (filters.value.problem_type_id !== "all") {
-      params.problem_type_id = filters.value.problem_type_id;
+    if (filters.value.problem_type_id !== "null") {
+      filtersToSend.problem_type_id = Number(filters.value.problem_type_id); // 确保转换为数字
     }
-    const res = await axios.get(
+
+    const res = await axios.post(
       `/api/user/competition/${competitionId}/problems`,
-      { params }
+      filtersToSend,
+      config
     );
     if (res.status === 200 && res.data.code === 0) {
       problems.value = res.data.data;
@@ -131,9 +148,19 @@ const fetchProblems = async (competitionId: number) => {
   }
 };
 
+// 获取问题类型列表
 const fetchProblemTypes = async () => {
   try {
-    const res = await axios.get("/api/user/problem_types");
+    const config = {
+      headers: { 
+        'Content-Type': 'application/json' 
+      }
+    };
+    const res = await axios.post(
+      "/api/user/problem_types",
+      {},
+      config
+    );
     if (res.status === 200 && res.data.code === 0) {
       problemTypes.value = res.data.data;
     } else {
