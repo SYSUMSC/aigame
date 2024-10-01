@@ -219,7 +219,7 @@ onMounted(() => {
           <h1 class="mb-3 fs-4">{{ problem?.name }}</h1>
           <p>难度: {{ difficultyLevels[problem?.difficulty as 1 | 2 | 3 | 4] || "未知难度" }}</p>
           <p>类型: {{ problemType?.name || "未知类型" }}</p>
-          <p>描述: {{ problem?.description || "无描述" }}</p>
+          <p>描述: {{ problemType?.description || "无描述" }}</p>
           <p>分数: {{ problem?.score || "未评分" }}</p>
 
           <!-- 文件上传表单 -->
@@ -252,6 +252,7 @@ type Problem = {
 type ProblemType = {
   id: number;
   name: string;
+  description:string;
 };
 
 const route = useRoute();

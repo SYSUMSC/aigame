@@ -2658,3 +2658,39 @@ FROM config
 WHERE config.k = ?
 2024-10-01 15:31:18,738 - INFO - [cached since 0.002923s ago] ('admin_pwd',)
 2024-10-01 15:31:18,739 - INFO - COMMIT
+2024-10-01 15:31:26,698 - INFO - BEGIN (implicit)
+2024-10-01 15:31:26,700 - INFO - PRAGMA main.table_info("config")
+2024-10-01 15:31:26,700 - INFO - [raw sql] ()
+2024-10-01 15:31:26,701 - INFO - PRAGMA main.table_info("user")
+2024-10-01 15:31:26,702 - INFO - [raw sql] ()
+2024-10-01 15:31:26,703 - INFO - PRAGMA main.table_info("team")
+2024-10-01 15:31:26,703 - INFO - [raw sql] ()
+2024-10-01 15:31:26,704 - INFO - PRAGMA main.table_info("competition")
+2024-10-01 15:31:26,704 - INFO - [raw sql] ()
+2024-10-01 15:31:26,705 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-01 15:31:26,705 - INFO - [raw sql] ()
+2024-10-01 15:31:26,706 - INFO - PRAGMA main.table_info("problem")
+2024-10-01 15:31:26,706 - INFO - [raw sql] ()
+2024-10-01 15:31:26,706 - INFO - PRAGMA main.table_info("submission")
+2024-10-01 15:31:26,707 - INFO - [raw sql] ()
+2024-10-01 15:31:26,708 - INFO - PRAGMA main.table_info("participation")
+2024-10-01 15:31:26,709 - INFO - [raw sql] ()
+2024-10-01 15:31:26,710 - INFO - COMMIT
+2024-10-01 15:31:26,712 - INFO - BEGIN (implicit)
+2024-10-01 15:31:26,722 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-01 15:31:26,723 - INFO - [generated in 0.00075s] ('admin_user',)
+2024-10-01 15:31:26,725 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-01 15:31:26,725 - INFO - [cached since 0.003445s ago] ('admin_pwd',)
+2024-10-01 15:31:26,726 - INFO - COMMIT
+2024-10-01 15:32:33,436 - INFO - BEGIN (implicit)
+2024-10-01 15:32:33,437 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition
+2024-10-01 15:32:33,437 - INFO - [generated in 0.00057s] ()
+2024-10-01 15:32:33,441 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+2024-10-01 15:32:33,442 - INFO - [generated in 0.00078s] ()
+2024-10-01 15:32:33,482 - INFO - ROLLBACK
