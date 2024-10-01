@@ -706,3 +706,390 @@ FROM user
 WHERE user.username = ?
 2024-10-01 14:26:09,967 - INFO - [cached since 2327s ago] ('user1',)
 2024-10-01 14:26:09,969 - INFO - ROLLBACK
+2024-10-01 15:00:16,769 - INFO - BEGIN (implicit)
+2024-10-01 15:00:16,770 - INFO - PRAGMA main.table_info("config")
+2024-10-01 15:00:16,770 - INFO - [raw sql] ()
+2024-10-01 15:00:16,772 - INFO - PRAGMA main.table_info("user")
+2024-10-01 15:00:16,772 - INFO - [raw sql] ()
+2024-10-01 15:00:16,774 - INFO - PRAGMA main.table_info("team")
+2024-10-01 15:00:16,774 - INFO - [raw sql] ()
+2024-10-01 15:00:16,774 - INFO - PRAGMA main.table_info("competition")
+2024-10-01 15:00:16,775 - INFO - [raw sql] ()
+2024-10-01 15:00:16,775 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-01 15:00:16,776 - INFO - [raw sql] ()
+2024-10-01 15:00:16,776 - INFO - PRAGMA main.table_info("problem")
+2024-10-01 15:00:16,777 - INFO - [raw sql] ()
+2024-10-01 15:00:16,777 - INFO - PRAGMA main.table_info("submission")
+2024-10-01 15:00:16,778 - INFO - [raw sql] ()
+2024-10-01 15:00:16,778 - INFO - PRAGMA main.table_info("participation")
+2024-10-01 15:00:16,778 - INFO - [raw sql] ()
+2024-10-01 15:00:16,780 - INFO - COMMIT
+2024-10-01 15:00:16,782 - INFO - BEGIN (implicit)
+2024-10-01 15:00:16,790 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-01 15:00:16,790 - INFO - [generated in 0.00075s] ('admin_user',)
+2024-10-01 15:00:16,793 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-01 15:00:16,793 - INFO - [cached since 0.003373s ago] ('admin_pwd',)
+2024-10-01 15:00:16,794 - INFO - COMMIT
+2024-10-01 15:00:21,428 - INFO - BEGIN (implicit)
+2024-10-01 15:00:21,429 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:00:21,430 - INFO - [generated in 0.00115s] ('wow',)
+2024-10-01 15:00:21,433 - INFO - ROLLBACK
+2024-10-01 15:00:21,451 - INFO - BEGIN (implicit)
+2024-10-01 15:00:21,453 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition
+2024-10-01 15:00:21,453 - INFO - [generated in 0.00067s] ()
+2024-10-01 15:00:21,457 - INFO - ROLLBACK
+2024-10-01 15:00:21,470 - INFO - BEGIN (implicit)
+2024-10-01 15:00:21,472 - INFO - SELECT participation.id, participation.user_id, participation.competition_id, participation.team_id, participation.score, participation.join_time, participation.update_time 
+FROM participation 
+WHERE participation.team_id = ?
+2024-10-01 15:00:21,473 - INFO - [generated in 0.00099s] (1,)
+2024-10-01 15:00:21,476 - INFO - ROLLBACK
+2024-10-01 15:00:21,485 - INFO - BEGIN (implicit)
+2024-10-01 15:00:21,486 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:00:21,487 - INFO - [cached since 0.05718s ago] ('wow',)
+2024-10-01 15:00:21,491 - INFO - SELECT team.id, team.name, team.captain_id, team.status, team.invite_code 
+FROM team 
+WHERE team.id = ?
+2024-10-01 15:00:21,492 - INFO - [generated in 0.00076s] (1,)
+2024-10-01 15:00:21,495 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.team_id = ?
+2024-10-01 15:00:21,496 - INFO - [generated in 0.00091s] (1,)
+2024-10-01 15:00:21,498 - INFO - ROLLBACK
+2024-10-01 15:00:25,854 - INFO - BEGIN (implicit)
+2024-10-01 15:00:25,856 - INFO - SELECT participation.id, participation.user_id, participation.competition_id, participation.team_id, participation.score, participation.join_time, participation.update_time 
+FROM participation 
+WHERE participation.user_id = ? AND participation.competition_id = ?
+2024-10-01 15:00:25,857 - INFO - [generated in 0.00066s] (1, 1)
+2024-10-01 15:00:25,861 - INFO - INSERT INTO participation (user_id, competition_id, team_id, score, join_time, update_time) VALUES (?, ?, ?, ?, ?, ?)
+2024-10-01 15:00:25,861 - INFO - [generated in 0.00080s] (1, 1, 1, None, '2024-10-01 07:00:25.859550', '2024-10-01 07:00:25.859550')
+2024-10-01 15:00:25,864 - INFO - COMMIT
+2024-10-01 15:00:25,872 - INFO - BEGIN (implicit)
+2024-10-01 15:00:25,875 - INFO - SELECT participation.id, participation.user_id, participation.competition_id, participation.team_id, participation.score, participation.join_time, participation.update_time 
+FROM participation 
+WHERE participation.id = ?
+2024-10-01 15:00:25,876 - INFO - [generated in 0.00096s] (1,)
+2024-10-01 15:00:25,879 - INFO - ROLLBACK
+2024-10-01 15:00:36,117 - INFO - BEGIN (implicit)
+2024-10-01 15:00:36,118 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:00:36,118 - INFO - [cached since 14.69s ago] ('wow',)
+2024-10-01 15:00:36,120 - INFO - ROLLBACK
+2024-10-01 15:00:36,159 - INFO - BEGIN (implicit)
+2024-10-01 15:00:36,162 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition 
+WHERE competition.id = ?
+2024-10-01 15:00:36,162 - INFO - [generated in 0.00104s] (1,)
+2024-10-01 15:00:36,166 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:00:36,167 - INFO - [generated in 0.00084s] (1,)
+2024-10-01 15:00:36,169 - INFO - ROLLBACK
+2024-10-01 15:00:36,178 - INFO - BEGIN (implicit)
+2024-10-01 15:00:36,179 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:00:36,180 - INFO - [cached since 0.0134s ago] (1,)
+2024-10-01 15:00:36,183 - INFO - ROLLBACK
+2024-10-01 15:00:36,189 - INFO - BEGIN (implicit)
+2024-10-01 15:00:36,190 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition 
+WHERE competition.id = ?
+2024-10-01 15:00:36,191 - INFO - [cached since 0.02887s ago] (1,)
+2024-10-01 15:00:36,193 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:00:36,194 - INFO - [cached since 0.02707s ago] (1,)
+2024-10-01 15:00:36,196 - INFO - ROLLBACK
+2024-10-01 15:00:36,203 - INFO - BEGIN (implicit)
+2024-10-01 15:00:36,204 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:00:36,205 - INFO - [cached since 0.03812s ago] (1,)
+2024-10-01 15:00:36,207 - INFO - ROLLBACK
+2024-10-01 15:00:36,213 - INFO - BEGIN (implicit)
+2024-10-01 15:00:36,216 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+2024-10-01 15:00:36,216 - INFO - [generated in 0.00041s] ()
+2024-10-01 15:00:36,217 - INFO - ROLLBACK
+2024-10-01 15:00:44,574 - INFO - BEGIN (implicit)
+2024-10-01 15:00:44,575 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:00:44,576 - INFO - [generated in 0.00052s] ()
+2024-10-01 15:00:44,786 - INFO - ROLLBACK
+2024-10-01 15:00:44,792 - INFO - BEGIN (implicit)
+2024-10-01 15:00:44,794 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT problemtype.id AS id, problemtype.name AS name, problemtype.description AS description 
+FROM problemtype) AS anon_1
+2024-10-01 15:00:44,795 - INFO - [generated in 0.00049s] ()
+2024-10-01 15:00:44,797 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+ LIMIT ? OFFSET ?
+2024-10-01 15:00:44,797 - INFO - [generated in 0.00053s] (10, 0)
+2024-10-01 15:00:44,799 - INFO - ROLLBACK
+2024-10-01 15:00:48,912 - INFO - BEGIN (implicit)
+2024-10-01 15:00:48,912 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:00:48,913 - INFO - [cached since 4.337s ago] ()
+2024-10-01 15:00:49,099 - INFO - ROLLBACK
+2024-10-01 15:00:49,103 - INFO - BEGIN (implicit)
+2024-10-01 15:00:49,105 - INFO - INSERT INTO problemtype (name, description) VALUES (?, ?)
+2024-10-01 15:00:49,105 - INFO - [generated in 0.00044s] ('asd', 'asd')
+2024-10-01 15:00:49,113 - INFO - COMMIT
+2024-10-01 15:00:49,124 - INFO - BEGIN (implicit)
+2024-10-01 15:00:49,125 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype 
+WHERE problemtype.id = ?
+2024-10-01 15:00:49,125 - INFO - [generated in 0.00036s] (1,)
+2024-10-01 15:00:49,126 - INFO - ROLLBACK
+2024-10-01 15:00:49,137 - INFO - BEGIN (implicit)
+2024-10-01 15:00:49,138 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:00:49,138 - INFO - [cached since 4.563s ago] ()
+2024-10-01 15:00:49,325 - INFO - ROLLBACK
+2024-10-01 15:00:49,328 - INFO - BEGIN (implicit)
+2024-10-01 15:00:49,329 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT problemtype.id AS id, problemtype.name AS name, problemtype.description AS description 
+FROM problemtype) AS anon_1
+2024-10-01 15:00:49,329 - INFO - [cached since 4.535s ago] ()
+2024-10-01 15:00:49,331 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+ LIMIT ? OFFSET ?
+2024-10-01 15:00:49,331 - INFO - [generated in 0.00042s] (10, 0)
+2024-10-01 15:00:49,333 - INFO - ROLLBACK
+2024-10-01 15:00:51,259 - INFO - BEGIN (implicit)
+2024-10-01 15:00:51,259 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:00:51,260 - INFO - [cached since 6.684s ago] ()
+2024-10-01 15:00:51,524 - INFO - ROLLBACK
+2024-10-01 15:00:51,531 - INFO - BEGIN (implicit)
+2024-10-01 15:00:51,532 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT problem.id AS id, problem.name AS name, problem.problem_type_id AS problem_type_id, problem.content AS content, problem.score AS score, problem.difficulty AS difficulty, problem.port AS port, problem.status AS status, problem.competition_id AS competition_id 
+FROM problem) AS anon_1
+2024-10-01 15:00:51,533 - INFO - [generated in 0.00093s] ()
+2024-10-01 15:00:51,536 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem
+ LIMIT ? OFFSET ?
+2024-10-01 15:00:51,536 - INFO - [generated in 0.00068s] (10, 0)
+2024-10-01 15:00:51,538 - INFO - ROLLBACK
+2024-10-01 15:00:52,154 - INFO - BEGIN (implicit)
+2024-10-01 15:00:52,155 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition
+2024-10-01 15:00:52,155 - INFO - [cached since 30.7s ago] ()
+2024-10-01 15:00:52,158 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+2024-10-01 15:00:52,158 - INFO - [cached since 15.94s ago] ()
+2024-10-01 15:00:52,170 - INFO - ROLLBACK
+2024-10-01 15:00:59,577 - INFO - BEGIN (implicit)
+2024-10-01 15:00:59,578 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:00:59,578 - INFO - [cached since 15s ago] ()
+2024-10-01 15:00:59,841 - INFO - ROLLBACK
+2024-10-01 15:00:59,849 - INFO - BEGIN (implicit)
+2024-10-01 15:00:59,851 - INFO - INSERT INTO problem (name, problem_type_id, content, score, difficulty, port, status, competition_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+2024-10-01 15:00:59,851 - INFO - [generated in 0.00057s] ('asd', 1, 'asd', 133, 4, 13, 1, 1)
+2024-10-01 15:00:59,855 - INFO - COMMIT
+2024-10-01 15:00:59,862 - INFO - BEGIN (implicit)
+2024-10-01 15:00:59,863 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.id = ?
+2024-10-01 15:00:59,864 - INFO - [generated in 0.00073s] (1,)
+2024-10-01 15:00:59,866 - INFO - ROLLBACK
+2024-10-01 15:00:59,878 - INFO - BEGIN (implicit)
+2024-10-01 15:00:59,878 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:00:59,879 - INFO - [cached since 15.3s ago] ()
+2024-10-01 15:01:00,143 - INFO - ROLLBACK
+2024-10-01 15:01:00,148 - INFO - BEGIN (implicit)
+2024-10-01 15:01:00,148 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT problem.id AS id, problem.name AS name, problem.problem_type_id AS problem_type_id, problem.content AS content, problem.score AS score, problem.difficulty AS difficulty, problem.port AS port, problem.status AS status, problem.competition_id AS competition_id 
+FROM problem) AS anon_1
+2024-10-01 15:01:00,149 - INFO - [cached since 8.617s ago] ()
+2024-10-01 15:01:00,152 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem
+ LIMIT ? OFFSET ?
+2024-10-01 15:01:00,152 - INFO - [generated in 0.00065s] (10, 0)
+2024-10-01 15:01:00,154 - INFO - ROLLBACK
+2024-10-01 15:01:01,508 - INFO - BEGIN (implicit)
+2024-10-01 15:01:01,509 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition
+2024-10-01 15:01:01,509 - INFO - [cached since 40.06s ago] ()
+2024-10-01 15:01:01,511 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+2024-10-01 15:01:01,511 - INFO - [cached since 25.3s ago] ()
+2024-10-01 15:01:01,514 - INFO - ROLLBACK
+2024-10-01 15:01:07,671 - INFO - BEGIN (implicit)
+2024-10-01 15:01:07,671 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:01:07,671 - INFO - [cached since 23.1s ago] ()
+2024-10-01 15:01:07,924 - INFO - ROLLBACK
+2024-10-01 15:01:07,929 - INFO - BEGIN (implicit)
+2024-10-01 15:01:07,929 - INFO - INSERT INTO problem (name, problem_type_id, content, score, difficulty, port, status, competition_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+2024-10-01 15:01:07,930 - INFO - [cached since 8.08s ago] ('asd', 1, 'asd', 12, 3, 12, 1, 1)
+2024-10-01 15:01:07,936 - INFO - COMMIT
+2024-10-01 15:01:07,942 - INFO - BEGIN (implicit)
+2024-10-01 15:01:07,943 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.id = ?
+2024-10-01 15:01:07,944 - INFO - [cached since 8.08s ago] (2,)
+2024-10-01 15:01:07,946 - INFO - ROLLBACK
+2024-10-01 15:01:07,957 - INFO - BEGIN (implicit)
+2024-10-01 15:01:07,958 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-01 15:01:07,958 - INFO - [cached since 23.38s ago] ()
+2024-10-01 15:01:08,205 - INFO - ROLLBACK
+2024-10-01 15:01:08,210 - INFO - BEGIN (implicit)
+2024-10-01 15:01:08,211 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT problem.id AS id, problem.name AS name, problem.problem_type_id AS problem_type_id, problem.content AS content, problem.score AS score, problem.difficulty AS difficulty, problem.port AS port, problem.status AS status, problem.competition_id AS competition_id 
+FROM problem) AS anon_1
+2024-10-01 15:01:08,212 - INFO - [cached since 16.68s ago] ()
+2024-10-01 15:01:08,214 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem
+ LIMIT ? OFFSET ?
+2024-10-01 15:01:08,214 - INFO - [cached since 8.062s ago] (10, 0)
+2024-10-01 15:01:08,216 - INFO - ROLLBACK
+2024-10-01 15:01:14,346 - INFO - BEGIN (implicit)
+2024-10-01 15:01:14,346 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:14,347 - INFO - [cached since 52.92s ago] ('wow',)
+2024-10-01 15:01:14,349 - INFO - ROLLBACK
+2024-10-01 15:01:15,653 - INFO - BEGIN (implicit)
+2024-10-01 15:01:15,654 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:15,654 - INFO - [cached since 54.22s ago] ('wow',)
+2024-10-01 15:01:15,656 - INFO - ROLLBACK
+2024-10-01 15:01:16,172 - INFO - BEGIN (implicit)
+2024-10-01 15:01:16,172 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:16,173 - INFO - [cached since 54.74s ago] ('wow',)
+2024-10-01 15:01:16,174 - INFO - ROLLBACK
+2024-10-01 15:01:16,580 - INFO - BEGIN (implicit)
+2024-10-01 15:01:16,581 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:16,581 - INFO - [cached since 55.15s ago] ('wow',)
+2024-10-01 15:01:16,583 - INFO - ROLLBACK
+2024-10-01 15:01:16,930 - INFO - BEGIN (implicit)
+2024-10-01 15:01:16,931 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:16,932 - INFO - [cached since 55.5s ago] ('wow',)
+2024-10-01 15:01:16,934 - INFO - ROLLBACK
+2024-10-01 15:01:17,257 - INFO - BEGIN (implicit)
+2024-10-01 15:01:17,257 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:17,258 - INFO - [cached since 55.83s ago] ('wow',)
+2024-10-01 15:01:17,259 - INFO - ROLLBACK
+2024-10-01 15:01:17,972 - INFO - BEGIN (implicit)
+2024-10-01 15:01:17,973 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:17,973 - INFO - [cached since 56.54s ago] ('wow',)
+2024-10-01 15:01:17,976 - INFO - ROLLBACK
+2024-10-01 15:01:20,741 - INFO - BEGIN (implicit)
+2024-10-01 15:01:20,741 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:01:20,742 - INFO - [cached since 59.31s ago] ('wow',)
+2024-10-01 15:01:20,744 - INFO - ROLLBACK
+2024-10-01 15:02:04,309 - INFO - BEGIN (implicit)
+2024-10-01 15:02:04,309 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:02:04,310 - INFO - [cached since 102.9s ago] ('wow',)
+2024-10-01 15:02:04,312 - INFO - ROLLBACK
+2024-10-01 15:02:04,335 - INFO - BEGIN (implicit)
+2024-10-01 15:02:04,337 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition 
+WHERE competition.id = ?
+2024-10-01 15:02:04,337 - INFO - [cached since 88.18s ago] (1,)
+2024-10-01 15:02:04,339 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:02:04,340 - INFO - [cached since 88.17s ago] (1,)
+2024-10-01 15:02:04,341 - INFO - ROLLBACK
+2024-10-01 15:02:04,348 - INFO - BEGIN (implicit)
+2024-10-01 15:02:04,348 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:02:04,349 - INFO - [cached since 88.18s ago] (1,)
+2024-10-01 15:02:04,352 - INFO - ROLLBACK
+2024-10-01 15:02:04,357 - INFO - BEGIN (implicit)
+2024-10-01 15:02:04,359 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition 
+WHERE competition.id = ?
+2024-10-01 15:02:04,360 - INFO - [cached since 88.2s ago] (1,)
+2024-10-01 15:02:04,362 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:02:04,363 - INFO - [cached since 88.2s ago] (1,)
+2024-10-01 15:02:04,365 - INFO - ROLLBACK
+2024-10-01 15:02:04,374 - INFO - BEGIN (implicit)
+2024-10-01 15:02:04,374 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.competition_id = ?
+2024-10-01 15:02:04,375 - INFO - [cached since 88.21s ago] (1,)
+2024-10-01 15:02:04,378 - INFO - ROLLBACK
+2024-10-01 15:02:04,385 - INFO - BEGIN (implicit)
+2024-10-01 15:02:04,386 - INFO - SELECT problemtype.id, problemtype.name, problemtype.description 
+FROM problemtype
+2024-10-01 15:02:04,386 - INFO - [cached since 88.17s ago] ()
+2024-10-01 15:02:04,389 - INFO - ROLLBACK
+2024-10-01 15:02:09,403 - INFO - BEGIN (implicit)
+2024-10-01 15:02:09,404 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:02:09,405 - INFO - [cached since 108s ago] ('wow',)
+2024-10-01 15:02:09,407 - INFO - ROLLBACK
+2024-10-01 15:02:31,814 - INFO - BEGIN (implicit)
+2024-10-01 15:02:31,814 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:02:31,815 - INFO - [cached since 130.4s ago] ('wow',)
+2024-10-01 15:02:31,817 - INFO - ROLLBACK
+2024-10-01 15:02:31,940 - INFO - Start fetching problem detail
+2024-10-01 15:02:31,940 - INFO - Received problem_id: 1
+2024-10-01 15:02:31,943 - INFO - BEGIN (implicit)
+2024-10-01 15:02:31,945 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.id = ?
+2024-10-01 15:02:31,946 - INFO - [generated in 0.00102s] (1,)
+2024-10-01 15:02:31,951 - INFO - SELECT problemtype.id AS problemtype_id, problemtype.name AS problemtype_name, problemtype.description AS problemtype_description 
+FROM problemtype 
+WHERE problemtype.id = ?
+2024-10-01 15:02:31,952 - INFO - [generated in 0.00109s] (1,)
+2024-10-01 15:02:31,953 - ERROR - Exception occurred when fetching problem detail: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2024-10-01 15:02:31,953 - INFO - ROLLBACK
+2024-10-01 15:04:24,436 - INFO - BEGIN (implicit)
+2024-10-01 15:04:24,437 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-01 15:04:24,437 - INFO - [cached since 243s ago] ('wow',)
+2024-10-01 15:04:24,439 - INFO - ROLLBACK
+2024-10-01 15:04:24,461 - INFO - Start fetching problem detail
+2024-10-01 15:04:24,461 - INFO - Received problem_id: 1
+2024-10-01 15:04:24,463 - INFO - BEGIN (implicit)
+2024-10-01 15:04:24,465 - INFO - SELECT problem.id, problem.name, problem.problem_type_id, problem.content, problem.score, problem.difficulty, problem.port, problem.status, problem.competition_id 
+FROM problem 
+WHERE problem.id = ?
+2024-10-01 15:04:24,465 - INFO - [cached since 112.5s ago] (1,)
+2024-10-01 15:04:24,468 - INFO - SELECT problemtype.id AS problemtype_id, problemtype.name AS problemtype_name, problemtype.description AS problemtype_description 
+FROM problemtype 
+WHERE problemtype.id = ?
+2024-10-01 15:04:24,469 - INFO - [cached since 112.5s ago] (1,)
+2024-10-01 15:04:24,469 - ERROR - Exception occurred when fetching problem detail: greenlet_spawn has not been called; can't call await_only() here. Was IO attempted in an unexpected place? (Background on this error at: https://sqlalche.me/e/20/xd2s)
+2024-10-01 15:04:24,470 - INFO - ROLLBACK

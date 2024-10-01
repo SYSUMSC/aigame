@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watchEffect } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 type Competition = {
   id: number;
