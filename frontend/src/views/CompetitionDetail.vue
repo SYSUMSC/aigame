@@ -36,13 +36,10 @@
           </button>
           <ul>
             <li v-for="problem in problems" :key="problem.id">
-              {{ problem.name }}--难度:
-              {{
-                difficultyLevels[problem.difficulty as 1 | 2 | 3 | 4] ||
-                "未知难度"
-              }}--类型：{{
-                problemTypes[problem.problem_type_id - 1]?.name || "未知类型"
-              }}
+              {{ problem.name }} -- 难度: {{ difficultyLevels[problem.difficulty as 1 | 2 | 3 | 4] || "未知难度" }} -- 类型：{{ problemTypes[problem.problem_type_id - 1]?.name || "未知类型" }}
+              <button @click="viewProblemDetail(problem.id)" class="bg-green-500 text-white font-bold py-1 px-3 ml-4 rounded hover:bg-green-700">
+                查看详情
+              </button>
             </li>
           </ul>
         </div>
@@ -169,6 +166,14 @@ const fetchProblemTypes = async () => {
   } catch (error) {
     console.error("An error occurred:", error);
   }
+};
+
+// 创建路由实例
+const router = useRouter();
+
+// 定义跳转到赛题详情页面的函数
+const viewProblemDetail = (problemId: number) => {
+  router.push({ name: 'ProblemDetail', params: { id: problemId } });
 };
 
 onMounted(() => {
