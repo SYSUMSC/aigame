@@ -9,6 +9,7 @@ import CompetitionCenter from "../views/CompetitionCenter.vue";
 import CompetitionDetail from "../views/CompetitionDetail.vue";
 import { useUserStore } from "../stores/user";
 import Column from "../views/Column.vue";
+import ProblemDetail from "../views/ProblemDetail.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,7 +57,14 @@ const routes: Array<RouteRecordRaw> = [
     name: 'CompetitionDetail',
     component: CompetitionDetail,
     meta: { requiresAuth: true },
-    props: true  // 使得可以通过路由传递参数到组件
+    props: true 
+  },
+  {
+    path: '/problem/:id',
+    name: 'ProblemDetail',
+    component: ProblemDetail,
+    meta: { requiresAuth: true },
+    props: true 
   }
 ];
 

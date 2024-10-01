@@ -1,5 +1,6 @@
 from typing import Optional, Union
 from sqlmodel import Field, SQLModel, Relationship
+from .problem_type import ProblemType
 
 class Problem(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
