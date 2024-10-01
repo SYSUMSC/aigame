@@ -214,12 +214,13 @@ async def get_problem_detail(
     # 记录日志
     logging.info("Start fetching problem detail")
     logging.info(f"Received problem_id: {problem_id}")  # 记录接收到的 problem_id
-
+    print(problem_id)
     try:
         # 获取赛题详情
         statement = select(Problem).where(Problem.id == problem_id)
         result = await session.execute(statement)  # 确保使用 await
         problem_db = result.scalar_one_or_none()
+        await session.refresh(problem_db,["problem_type"]) # 等待加载关联对象
 
         if not problem_db:
             return ResponseModel(code=1, msg="赛题未找到")
