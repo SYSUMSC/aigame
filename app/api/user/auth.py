@@ -28,10 +28,10 @@ def getRandCode(n):
     return ''.join([str(random.randint(0, 9)) for i in range(n)])
 
 def send_email(subject, body, to_email):
-    smtp_server = "smtp.qq.com"
-    smtp_port = 465
-    smtp_user = "wateringtop@qq.com"
-    smtp_password = "szboqfpgvpwmbjad"
+    smtp_server = "smtp.example.com" # 邮箱的smtp服务器地址
+    smtp_port = 465 # 端口号
+    smtp_user = "example@example.com" # 发送邮件的邮箱
+    smtp_password = "pwd" # 发送邮件的邮箱的授权码
 
     msg = MIMEMultipart()
     msg['From'] = smtp_user
