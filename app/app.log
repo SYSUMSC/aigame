@@ -2694,3 +2694,2614 @@ FROM competition
 FROM problemtype
 2024-10-01 15:32:33,442 - INFO - [generated in 0.00078s] ()
 2024-10-01 15:32:33,482 - INFO - ROLLBACK
+2024-10-05 14:21:15,630 - INFO - BEGIN (implicit)
+2024-10-05 14:21:15,630 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:21:15,630 - INFO - [raw sql] ()
+2024-10-05 14:21:15,630 - INFO - PRAGMA temp.table_info("config")
+2024-10-05 14:21:15,630 - INFO - [raw sql] ()
+2024-10-05 14:21:15,639 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:21:15,639 - INFO - [raw sql] ()
+2024-10-05 14:21:15,639 - INFO - PRAGMA temp.table_info("user")
+2024-10-05 14:21:15,640 - INFO - [raw sql] ()
+2024-10-05 14:21:15,641 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:21:15,641 - INFO - [raw sql] ()
+2024-10-05 14:21:15,642 - INFO - PRAGMA temp.table_info("team")
+2024-10-05 14:21:15,642 - INFO - [raw sql] ()
+2024-10-05 14:21:15,643 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:21:15,643 - INFO - [raw sql] ()
+2024-10-05 14:21:15,644 - INFO - PRAGMA temp.table_info("competition")
+2024-10-05 14:21:15,644 - INFO - [raw sql] ()
+2024-10-05 14:21:15,645 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:21:15,645 - INFO - [raw sql] ()
+2024-10-05 14:21:15,646 - INFO - PRAGMA temp.table_info("problemtype")
+2024-10-05 14:21:15,646 - INFO - [raw sql] ()
+2024-10-05 14:21:15,647 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:21:15,647 - INFO - [raw sql] ()
+2024-10-05 14:21:15,647 - INFO - PRAGMA temp.table_info("problem")
+2024-10-05 14:21:15,648 - INFO - [raw sql] ()
+2024-10-05 14:21:15,649 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:21:15,649 - INFO - [raw sql] ()
+2024-10-05 14:21:15,650 - INFO - PRAGMA temp.table_info("submission")
+2024-10-05 14:21:15,650 - INFO - [raw sql] ()
+2024-10-05 14:21:15,651 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:21:15,651 - INFO - [raw sql] ()
+2024-10-05 14:21:15,652 - INFO - PRAGMA temp.table_info("participation")
+2024-10-05 14:21:15,652 - INFO - [raw sql] ()
+2024-10-05 14:21:15,654 - INFO - 
+CREATE TABLE config (
+	k VARCHAR NOT NULL, 
+	v VARCHAR, 
+	PRIMARY KEY (k)
+)
+
+
+2024-10-05 14:21:15,656 - INFO - [no key 0.00173s] ()
+2024-10-05 14:21:15,670 - INFO - 
+CREATE TABLE user (
+	id INTEGER NOT NULL, 
+	username VARCHAR NOT NULL, 
+	email VARCHAR NOT NULL, 
+	name VARCHAR NOT NULL, 
+	student_id VARCHAR NOT NULL, 
+	password VARCHAR NOT NULL, 
+	is_active BOOLEAN NOT NULL, 
+	team_id INTEGER, 
+	PRIMARY KEY (id), 
+	UNIQUE (username), 
+	UNIQUE (email), 
+	UNIQUE (student_id), 
+	FOREIGN KEY(team_id) REFERENCES team (id)
+)
+
+
+2024-10-05 14:21:15,671 - INFO - [no key 0.00163s] ()
+2024-10-05 14:21:15,682 - INFO - 
+CREATE TABLE team (
+	id INTEGER NOT NULL, 
+	name VARCHAR, 
+	captain_id INTEGER, 
+	status VARCHAR, 
+	invite_code VARCHAR, 
+	PRIMARY KEY (id), 
+	UNIQUE (name), 
+	FOREIGN KEY(captain_id) REFERENCES user (id)
+)
+
+
+2024-10-05 14:21:15,683 - INFO - [no key 0.00113s] ()
+2024-10-05 14:21:15,692 - INFO - 
+CREATE TABLE competition (
+	id INTEGER NOT NULL, 
+	name VARCHAR NOT NULL, 
+	start_time DATETIME NOT NULL, 
+	end_time DATETIME NOT NULL, 
+	status INTEGER NOT NULL, 
+	description VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2024-10-05 14:21:15,694 - INFO - [no key 0.00123s] ()
+2024-10-05 14:21:15,704 - INFO - 
+CREATE TABLE problemtype (
+	id INTEGER NOT NULL, 
+	name VARCHAR NOT NULL, 
+	description VARCHAR, 
+	PRIMARY KEY (id)
+)
+
+
+2024-10-05 14:21:15,705 - INFO - [no key 0.00123s] ()
+2024-10-05 14:21:15,714 - INFO - 
+CREATE TABLE problem (
+	id INTEGER NOT NULL, 
+	name VARCHAR NOT NULL, 
+	problem_type_id INTEGER NOT NULL, 
+	content VARCHAR NOT NULL, 
+	score INTEGER NOT NULL, 
+	difficulty INTEGER NOT NULL, 
+	port INTEGER NOT NULL, 
+	status INTEGER NOT NULL, 
+	competition_id INTEGER NOT NULL, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(problem_type_id) REFERENCES problemtype (id), 
+	UNIQUE (port), 
+	FOREIGN KEY(competition_id) REFERENCES competition (id)
+)
+
+
+2024-10-05 14:21:15,716 - INFO - [no key 0.00143s] ()
+2024-10-05 14:21:15,727 - INFO - 
+CREATE TABLE participation (
+	id INTEGER NOT NULL, 
+	user_id INTEGER NOT NULL, 
+	competition_id INTEGER NOT NULL, 
+	team_id INTEGER, 
+	score INTEGER, 
+	join_time DATETIME NOT NULL, 
+	update_time DATETIME NOT NULL, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(user_id) REFERENCES user (id), 
+	FOREIGN KEY(competition_id) REFERENCES competition (id), 
+	FOREIGN KEY(team_id) REFERENCES team (id)
+)
+
+
+2024-10-05 14:21:15,729 - INFO - [no key 0.00191s] ()
+2024-10-05 14:21:15,737 - INFO - 
+CREATE TABLE submission (
+	id INTEGER NOT NULL, 
+	user_id INTEGER NOT NULL, 
+	team_id INTEGER NOT NULL, 
+	problem_id INTEGER NOT NULL, 
+	competition_id INTEGER NOT NULL, 
+	submission_content VARCHAR NOT NULL, 
+	score INTEGER NOT NULL, 
+	status INTEGER NOT NULL, 
+	submit_time DATETIME NOT NULL, 
+	PRIMARY KEY (id), 
+	FOREIGN KEY(user_id) REFERENCES user (id), 
+	FOREIGN KEY(team_id) REFERENCES team (id), 
+	FOREIGN KEY(problem_id) REFERENCES problem (id), 
+	FOREIGN KEY(competition_id) REFERENCES competition (id)
+)
+
+
+2024-10-05 14:21:15,740 - INFO - [no key 0.00128s] ()
+2024-10-05 14:21:15,748 - INFO - COMMIT
+2024-10-05 14:21:15,751 - INFO - BEGIN (implicit)
+2024-10-05 14:21:15,758 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:21:15,758 - INFO - [generated in 0.00056s] ('admin_user',)
+2024-10-05 14:21:15,760 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:21:15,761 - INFO - [cached since 0.003001s ago] ('admin_pwd',)
+2024-10-05 14:21:15,995 - INFO - INSERT INTO config (k, v) VALUES (?, ?)
+2024-10-05 14:21:16,010 - INFO - [generated in 0.00076s] [('admin_user', 'admin'), ('admin_pwd', '$2b$12$fTlbFqNPirUK2Yo3.FNC.OnH5zIMuwXUvnjE5HQyMpCF1KTRDOc..')]
+2024-10-05 14:21:16,013 - INFO - COMMIT
+2024-10-05 14:22:29,791 - INFO - BEGIN (implicit)
+2024-10-05 14:22:29,798 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:22:29,798 - INFO - [generated in 0.00055s] ('qwe',)
+2024-10-05 14:22:29,800 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:22:29,801 - INFO - [generated in 0.00056s] ('qwe@qq.com',)
+2024-10-05 14:22:29,802 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:22:29,802 - INFO - [generated in 0.00047s] ('qwe',)
+2024-10-05 14:22:29,987 - INFO - INSERT INTO user (username, email, name, student_id, password, is_active, team_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+2024-10-05 14:22:29,987 - INFO - [generated in 0.00071s] ('qwe', 'qwe@qq.com', 'qwe', 'qwe', '$2b$12$xAcpu1ek3dmU59haZKTwGe5xrAsfiCUZqM53znh1j6Rlnpri7wIIu', 1, None)
+2024-10-05 14:22:29,989 - INFO - COMMIT
+2024-10-05 14:22:30,000 - INFO - BEGIN (implicit)
+2024-10-05 14:22:30,002 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 14:22:30,002 - INFO - [generated in 0.00059s] (1,)
+2024-10-05 14:22:30,004 - INFO - ROLLBACK
+2024-10-05 14:22:34,300 - INFO - BEGIN (implicit)
+2024-10-05 14:22:34,301 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:22:34,301 - INFO - [cached since 4.503s ago] ('qwe',)
+2024-10-05 14:22:34,472 - INFO - ROLLBACK
+2024-10-05 14:22:34,505 - INFO - BEGIN (implicit)
+2024-10-05 14:22:34,505 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:22:34,505 - INFO - [generated in 0.00052s] ('qwe',)
+2024-10-05 14:22:34,507 - INFO - ROLLBACK
+2024-10-05 14:22:34,519 - INFO - BEGIN (implicit)
+2024-10-05 14:22:34,519 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:22:34,520 - INFO - [cached since 0.01483s ago] ('qwe',)
+2024-10-05 14:22:34,522 - INFO - ROLLBACK
+2024-10-05 14:22:34,553 - INFO - BEGIN (implicit)
+2024-10-05 14:22:34,553 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:22:34,553 - INFO - [cached since 0.04831s ago] ('qwe',)
+2024-10-05 14:22:34,557 - INFO - ROLLBACK
+2024-10-05 14:23:36,585 - INFO - BEGIN (implicit)
+2024-10-05 14:23:36,586 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:23:36,586 - INFO - [raw sql] ()
+2024-10-05 14:23:36,588 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:23:36,588 - INFO - [raw sql] ()
+2024-10-05 14:23:36,589 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:23:36,589 - INFO - [raw sql] ()
+2024-10-05 14:23:36,590 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:23:36,590 - INFO - [raw sql] ()
+2024-10-05 14:23:36,591 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:23:36,591 - INFO - [raw sql] ()
+2024-10-05 14:23:36,592 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:23:36,593 - INFO - [raw sql] ()
+2024-10-05 14:23:36,593 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:23:36,594 - INFO - [raw sql] ()
+2024-10-05 14:23:36,595 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:23:36,595 - INFO - [raw sql] ()
+2024-10-05 14:23:36,596 - INFO - COMMIT
+2024-10-05 14:23:36,598 - INFO - BEGIN (implicit)
+2024-10-05 14:23:36,605 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:23:36,606 - INFO - [generated in 0.00068s] ('admin_user',)
+2024-10-05 14:23:36,607 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:23:36,607 - INFO - [cached since 0.002877s ago] ('admin_pwd',)
+2024-10-05 14:23:36,608 - INFO - COMMIT
+2024-10-05 14:23:44,543 - INFO - BEGIN (implicit)
+2024-10-05 14:23:44,543 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:23:44,543 - INFO - [raw sql] ()
+2024-10-05 14:23:44,543 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:23:44,543 - INFO - [raw sql] ()
+2024-10-05 14:23:44,551 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:23:44,551 - INFO - [raw sql] ()
+2024-10-05 14:23:44,551 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:23:44,552 - INFO - [raw sql] ()
+2024-10-05 14:23:44,552 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:23:44,552 - INFO - [raw sql] ()
+2024-10-05 14:23:44,553 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:23:44,553 - INFO - [raw sql] ()
+2024-10-05 14:23:44,554 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:23:44,554 - INFO - [raw sql] ()
+2024-10-05 14:23:44,555 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:23:44,555 - INFO - [raw sql] ()
+2024-10-05 14:23:44,556 - INFO - COMMIT
+2024-10-05 14:23:44,558 - INFO - BEGIN (implicit)
+2024-10-05 14:23:44,565 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:23:44,565 - INFO - [generated in 0.00054s] ('admin_user',)
+2024-10-05 14:23:44,568 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:23:44,568 - INFO - [cached since 0.00317s ago] ('admin_pwd',)
+2024-10-05 14:23:44,569 - INFO - COMMIT
+2024-10-05 14:24:24,202 - INFO - BEGIN (implicit)
+2024-10-05 14:24:24,202 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:24:24,202 - INFO - [raw sql] ()
+2024-10-05 14:24:24,202 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:24:24,202 - INFO - [raw sql] ()
+2024-10-05 14:24:24,210 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:24:24,210 - INFO - [raw sql] ()
+2024-10-05 14:24:24,211 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:24:24,212 - INFO - [raw sql] ()
+2024-10-05 14:24:24,212 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:24:24,212 - INFO - [raw sql] ()
+2024-10-05 14:24:24,213 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:24:24,213 - INFO - [raw sql] ()
+2024-10-05 14:24:24,214 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:24:24,214 - INFO - [raw sql] ()
+2024-10-05 14:24:24,214 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:24:24,214 - INFO - [raw sql] ()
+2024-10-05 14:24:24,214 - INFO - COMMIT
+2024-10-05 14:24:24,220 - INFO - BEGIN (implicit)
+2024-10-05 14:24:24,228 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:24:24,228 - INFO - [generated in 0.00064s] ('admin_user',)
+2024-10-05 14:24:24,230 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:24:24,231 - INFO - [cached since 0.002913s ago] ('admin_pwd',)
+2024-10-05 14:24:24,232 - INFO - COMMIT
+2024-10-05 14:24:35,694 - INFO - BEGIN (implicit)
+2024-10-05 14:24:35,696 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:24:35,696 - INFO - [raw sql] ()
+2024-10-05 14:24:35,697 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:24:35,698 - INFO - [raw sql] ()
+2024-10-05 14:24:35,699 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:24:35,699 - INFO - [raw sql] ()
+2024-10-05 14:24:35,700 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:24:35,700 - INFO - [raw sql] ()
+2024-10-05 14:24:35,700 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:24:35,702 - INFO - [raw sql] ()
+2024-10-05 14:24:35,703 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:24:35,703 - INFO - [raw sql] ()
+2024-10-05 14:24:35,704 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:24:35,704 - INFO - [raw sql] ()
+2024-10-05 14:24:35,705 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:24:35,706 - INFO - [raw sql] ()
+2024-10-05 14:24:35,706 - INFO - COMMIT
+2024-10-05 14:24:35,709 - INFO - BEGIN (implicit)
+2024-10-05 14:24:35,717 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:24:35,719 - INFO - [generated in 0.00071s] ('admin_user',)
+2024-10-05 14:24:35,721 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:24:35,721 - INFO - [cached since 0.003985s ago] ('admin_pwd',)
+2024-10-05 14:24:35,722 - INFO - COMMIT
+2024-10-05 14:25:18,603 - INFO - BEGIN (implicit)
+2024-10-05 14:25:18,603 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:25:18,603 - INFO - [raw sql] ()
+2024-10-05 14:25:18,603 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:25:18,603 - INFO - [raw sql] ()
+2024-10-05 14:25:18,611 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:25:18,612 - INFO - [raw sql] ()
+2024-10-05 14:25:18,612 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:25:18,613 - INFO - [raw sql] ()
+2024-10-05 14:25:18,613 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:25:18,614 - INFO - [raw sql] ()
+2024-10-05 14:25:18,614 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:25:18,615 - INFO - [raw sql] ()
+2024-10-05 14:25:18,616 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:25:18,616 - INFO - [raw sql] ()
+2024-10-05 14:25:18,616 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:25:18,616 - INFO - [raw sql] ()
+2024-10-05 14:25:18,616 - INFO - COMMIT
+2024-10-05 14:25:18,620 - INFO - BEGIN (implicit)
+2024-10-05 14:25:18,628 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:25:18,630 - INFO - [generated in 0.00071s] ('admin_user',)
+2024-10-05 14:25:18,633 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:25:18,633 - INFO - [cached since 0.003865s ago] ('admin_pwd',)
+2024-10-05 14:25:18,633 - INFO - COMMIT
+2024-10-05 14:25:24,287 - INFO - BEGIN (implicit)
+2024-10-05 14:25:24,287 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:25:24,287 - INFO - [raw sql] ()
+2024-10-05 14:25:24,291 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:25:24,292 - INFO - [raw sql] ()
+2024-10-05 14:25:24,292 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:25:24,292 - INFO - [raw sql] ()
+2024-10-05 14:25:24,293 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:25:24,293 - INFO - [raw sql] ()
+2024-10-05 14:25:24,294 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:25:24,294 - INFO - [raw sql] ()
+2024-10-05 14:25:24,295 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:25:24,295 - INFO - [raw sql] ()
+2024-10-05 14:25:24,296 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:25:24,296 - INFO - [raw sql] ()
+2024-10-05 14:25:24,297 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:25:24,297 - INFO - [raw sql] ()
+2024-10-05 14:25:24,298 - INFO - COMMIT
+2024-10-05 14:25:24,302 - INFO - BEGIN (implicit)
+2024-10-05 14:25:24,309 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:25:24,309 - INFO - [generated in 0.00061s] ('admin_user',)
+2024-10-05 14:25:24,311 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:25:24,312 - INFO - [cached since 0.002862s ago] ('admin_pwd',)
+2024-10-05 14:25:24,313 - INFO - COMMIT
+2024-10-05 14:28:06,494 - INFO - BEGIN (implicit)
+2024-10-05 14:28:06,494 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:28:06,494 - INFO - [raw sql] ()
+2024-10-05 14:28:06,498 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:28:06,498 - INFO - [raw sql] ()
+2024-10-05 14:28:06,500 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:28:06,500 - INFO - [raw sql] ()
+2024-10-05 14:28:06,500 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:28:06,500 - INFO - [raw sql] ()
+2024-10-05 14:28:06,501 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:28:06,502 - INFO - [raw sql] ()
+2024-10-05 14:28:06,502 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:28:06,503 - INFO - [raw sql] ()
+2024-10-05 14:28:06,503 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:28:06,503 - INFO - [raw sql] ()
+2024-10-05 14:28:06,504 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:28:06,504 - INFO - [raw sql] ()
+2024-10-05 14:28:06,505 - INFO - COMMIT
+2024-10-05 14:28:06,508 - INFO - BEGIN (implicit)
+2024-10-05 14:28:06,515 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:06,516 - INFO - [generated in 0.00055s] ('admin_user',)
+2024-10-05 14:28:06,518 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:06,518 - INFO - [cached since 0.003327s ago] ('admin_pwd',)
+2024-10-05 14:28:06,519 - INFO - COMMIT
+2024-10-05 14:28:10,517 - INFO - BEGIN (implicit)
+2024-10-05 14:28:10,517 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:28:10,517 - INFO - [raw sql] ()
+2024-10-05 14:28:10,520 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:28:10,520 - INFO - [raw sql] ()
+2024-10-05 14:28:10,522 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:28:10,522 - INFO - [raw sql] ()
+2024-10-05 14:28:10,523 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:28:10,523 - INFO - [raw sql] ()
+2024-10-05 14:28:10,524 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:28:10,524 - INFO - [raw sql] ()
+2024-10-05 14:28:10,525 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:28:10,525 - INFO - [raw sql] ()
+2024-10-05 14:28:10,526 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:28:10,526 - INFO - [raw sql] ()
+2024-10-05 14:28:10,527 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:28:10,527 - INFO - [raw sql] ()
+2024-10-05 14:28:10,528 - INFO - COMMIT
+2024-10-05 14:28:10,530 - INFO - BEGIN (implicit)
+2024-10-05 14:28:10,537 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:10,538 - INFO - [generated in 0.00055s] ('admin_user',)
+2024-10-05 14:28:10,541 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:10,541 - INFO - [cached since 0.003192s ago] ('admin_pwd',)
+2024-10-05 14:28:10,542 - INFO - COMMIT
+2024-10-05 14:28:29,645 - INFO - BEGIN (implicit)
+2024-10-05 14:28:29,646 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:28:29,646 - INFO - [raw sql] ()
+2024-10-05 14:28:29,648 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:28:29,648 - INFO - [raw sql] ()
+2024-10-05 14:28:29,649 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:28:29,649 - INFO - [raw sql] ()
+2024-10-05 14:28:29,650 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:28:29,650 - INFO - [raw sql] ()
+2024-10-05 14:28:29,651 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:28:29,651 - INFO - [raw sql] ()
+2024-10-05 14:28:29,652 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:28:29,652 - INFO - [raw sql] ()
+2024-10-05 14:28:29,653 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:28:29,653 - INFO - [raw sql] ()
+2024-10-05 14:28:29,654 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:28:29,654 - INFO - [raw sql] ()
+2024-10-05 14:28:29,655 - INFO - COMMIT
+2024-10-05 14:28:29,657 - INFO - BEGIN (implicit)
+2024-10-05 14:28:29,665 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:29,666 - INFO - [generated in 0.00065s] ('admin_user',)
+2024-10-05 14:28:29,668 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:29,668 - INFO - [cached since 0.003363s ago] ('admin_pwd',)
+2024-10-05 14:28:29,669 - INFO - COMMIT
+2024-10-05 14:28:31,493 - INFO - BEGIN (implicit)
+2024-10-05 14:28:31,493 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:28:31,494 - INFO - [raw sql] ()
+2024-10-05 14:28:31,495 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:28:31,495 - INFO - [raw sql] ()
+2024-10-05 14:28:31,496 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:28:31,497 - INFO - [raw sql] ()
+2024-10-05 14:28:31,497 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:28:31,498 - INFO - [raw sql] ()
+2024-10-05 14:28:31,498 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:28:31,498 - INFO - [raw sql] ()
+2024-10-05 14:28:31,499 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:28:31,499 - INFO - [raw sql] ()
+2024-10-05 14:28:31,500 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:28:31,500 - INFO - [raw sql] ()
+2024-10-05 14:28:31,501 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:28:31,501 - INFO - [raw sql] ()
+2024-10-05 14:28:31,502 - INFO - COMMIT
+2024-10-05 14:28:31,505 - INFO - BEGIN (implicit)
+2024-10-05 14:28:31,512 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:31,513 - INFO - [generated in 0.00062s] ('admin_user',)
+2024-10-05 14:28:31,514 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:31,515 - INFO - [cached since 0.003198s ago] ('admin_pwd',)
+2024-10-05 14:28:31,516 - INFO - COMMIT
+2024-10-05 14:28:38,913 - INFO - BEGIN (implicit)
+2024-10-05 14:28:38,913 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:28:38,914 - INFO - [raw sql] ()
+2024-10-05 14:28:38,916 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:28:38,916 - INFO - [raw sql] ()
+2024-10-05 14:28:38,917 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:28:38,917 - INFO - [raw sql] ()
+2024-10-05 14:28:38,918 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:28:38,918 - INFO - [raw sql] ()
+2024-10-05 14:28:38,919 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:28:38,919 - INFO - [raw sql] ()
+2024-10-05 14:28:38,920 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:28:38,921 - INFO - [raw sql] ()
+2024-10-05 14:28:38,921 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:28:38,922 - INFO - [raw sql] ()
+2024-10-05 14:28:38,922 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:28:38,922 - INFO - [raw sql] ()
+2024-10-05 14:28:38,923 - INFO - COMMIT
+2024-10-05 14:28:38,926 - INFO - BEGIN (implicit)
+2024-10-05 14:28:38,934 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:38,934 - INFO - [generated in 0.00062s] ('admin_user',)
+2024-10-05 14:28:38,934 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:28:38,934 - INFO - [cached since 0.002966s ago] ('admin_pwd',)
+2024-10-05 14:28:38,934 - INFO - COMMIT
+2024-10-05 14:28:56,162 - INFO - BEGIN (implicit)
+2024-10-05 14:28:56,166 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:28:56,167 - INFO - [generated in 0.00075s] ('asd',)
+2024-10-05 14:28:56,169 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:28:56,170 - INFO - [generated in 0.00057s] ('3407602045@qq.com',)
+2024-10-05 14:28:56,172 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:28:56,172 - INFO - [generated in 0.00061s] ('asd',)
+2024-10-05 14:29:26,229 - INFO - ROLLBACK
+2024-10-05 14:29:26,239 - INFO - BEGIN (implicit)
+2024-10-05 14:29:26,239 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:29:26,245 - INFO - [cached since 30.08s ago] ('asd',)
+2024-10-05 14:29:26,247 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:29:26,247 - INFO - [cached since 30.08s ago] ('3407602045@qq.com',)
+2024-10-05 14:29:26,249 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:29:26,249 - INFO - [cached since 30.08s ago] ('asd',)
+2024-10-05 14:29:56,277 - INFO - ROLLBACK
+2024-10-05 14:31:02,290 - INFO - BEGIN (implicit)
+2024-10-05 14:31:02,292 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:31:02,293 - INFO - [raw sql] ()
+2024-10-05 14:31:02,294 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:31:02,294 - INFO - [raw sql] ()
+2024-10-05 14:31:02,295 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:31:02,295 - INFO - [raw sql] ()
+2024-10-05 14:31:02,296 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:31:02,297 - INFO - [raw sql] ()
+2024-10-05 14:31:02,298 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:31:02,298 - INFO - [raw sql] ()
+2024-10-05 14:31:02,299 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:31:02,299 - INFO - [raw sql] ()
+2024-10-05 14:31:02,300 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:31:02,300 - INFO - [raw sql] ()
+2024-10-05 14:31:02,301 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:31:02,301 - INFO - [raw sql] ()
+2024-10-05 14:31:02,302 - INFO - COMMIT
+2024-10-05 14:31:02,306 - INFO - BEGIN (implicit)
+2024-10-05 14:31:02,314 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:31:02,316 - INFO - [generated in 0.00062s] ('admin_user',)
+2024-10-05 14:31:02,318 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:31:02,318 - INFO - [cached since 0.002734s ago] ('admin_pwd',)
+2024-10-05 14:31:02,318 - INFO - COMMIT
+2024-10-05 14:31:12,621 - INFO - BEGIN (implicit)
+2024-10-05 14:31:12,624 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:31:12,625 - INFO - [generated in 0.00055s] ('asd',)
+2024-10-05 14:31:12,627 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:31:12,628 - INFO - [generated in 0.00076s] ('3407602045@qq.com',)
+2024-10-05 14:31:12,630 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:31:12,630 - INFO - [generated in 0.00049s] ('asd',)
+2024-10-05 14:31:18,885 - INFO - INSERT INTO user (username, email, name, student_id, password, is_active, team_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+2024-10-05 14:31:18,885 - INFO - [generated in 0.00092s] ('asd', '3407602045@qq.com', 'asd', 'asd', '$2b$12$1S0K/1OSTo6z6DaQ.gcr3u9EygnzOtmFxmNpI762Ag/Rl6nNoWUWC', 1, None)
+2024-10-05 14:31:18,885 - INFO - COMMIT
+2024-10-05 14:31:18,899 - INFO - BEGIN (implicit)
+2024-10-05 14:31:18,899 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 14:31:18,899 - INFO - [generated in 0.00066s] (2,)
+2024-10-05 14:31:18,899 - INFO - ROLLBACK
+2024-10-05 14:34:56,299 - INFO - BEGIN (implicit)
+2024-10-05 14:34:56,299 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:34:56,299 - INFO - [raw sql] ()
+2024-10-05 14:34:56,303 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:34:56,304 - INFO - [raw sql] ()
+2024-10-05 14:34:56,304 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:34:56,304 - INFO - [raw sql] ()
+2024-10-05 14:34:56,306 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:34:56,306 - INFO - [raw sql] ()
+2024-10-05 14:34:56,306 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:34:56,306 - INFO - [raw sql] ()
+2024-10-05 14:34:56,308 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:34:56,308 - INFO - [raw sql] ()
+2024-10-05 14:34:56,308 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:34:56,308 - INFO - [raw sql] ()
+2024-10-05 14:34:56,311 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:34:56,311 - INFO - [raw sql] ()
+2024-10-05 14:34:56,311 - INFO - COMMIT
+2024-10-05 14:34:56,311 - INFO - BEGIN (implicit)
+2024-10-05 14:34:56,323 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:34:56,323 - INFO - [generated in 0.00074s] ('admin_user',)
+2024-10-05 14:34:56,327 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:34:56,327 - INFO - [cached since 0.003095s ago] ('admin_pwd',)
+2024-10-05 14:34:56,329 - INFO - COMMIT
+2024-10-05 14:34:58,209 - INFO - BEGIN (implicit)
+2024-10-05 14:34:58,210 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:34:58,210 - INFO - [raw sql] ()
+2024-10-05 14:34:58,211 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:34:58,211 - INFO - [raw sql] ()
+2024-10-05 14:34:58,212 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:34:58,212 - INFO - [raw sql] ()
+2024-10-05 14:34:58,214 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:34:58,214 - INFO - [raw sql] ()
+2024-10-05 14:34:58,215 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:34:58,215 - INFO - [raw sql] ()
+2024-10-05 14:34:58,216 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:34:58,216 - INFO - [raw sql] ()
+2024-10-05 14:34:58,217 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:34:58,217 - INFO - [raw sql] ()
+2024-10-05 14:34:58,218 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:34:58,218 - INFO - [raw sql] ()
+2024-10-05 14:34:58,219 - INFO - COMMIT
+2024-10-05 14:34:58,221 - INFO - BEGIN (implicit)
+2024-10-05 14:34:58,229 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:34:58,230 - INFO - [generated in 0.00070s] ('admin_user',)
+2024-10-05 14:34:58,232 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:34:58,232 - INFO - [cached since 0.003238s ago] ('admin_pwd',)
+2024-10-05 14:34:58,233 - INFO - COMMIT
+2024-10-05 14:35:08,606 - INFO - BEGIN (implicit)
+2024-10-05 14:35:08,606 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:35:08,606 - INFO - [raw sql] ()
+2024-10-05 14:35:08,606 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:35:08,606 - INFO - [raw sql] ()
+2024-10-05 14:35:08,606 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:35:08,606 - INFO - [raw sql] ()
+2024-10-05 14:35:08,614 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:35:08,614 - INFO - [raw sql] ()
+2024-10-05 14:35:08,614 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:35:08,614 - INFO - [raw sql] ()
+2024-10-05 14:35:08,615 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:35:08,616 - INFO - [raw sql] ()
+2024-10-05 14:35:08,616 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:35:08,617 - INFO - [raw sql] ()
+2024-10-05 14:35:08,618 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:35:08,618 - INFO - [raw sql] ()
+2024-10-05 14:35:08,619 - INFO - COMMIT
+2024-10-05 14:35:08,622 - INFO - BEGIN (implicit)
+2024-10-05 14:35:08,629 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:08,630 - INFO - [generated in 0.00086s] ('admin_user',)
+2024-10-05 14:35:08,632 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:08,632 - INFO - [cached since 0.003533s ago] ('admin_pwd',)
+2024-10-05 14:35:08,632 - INFO - COMMIT
+2024-10-05 14:35:18,709 - INFO - BEGIN (implicit)
+2024-10-05 14:35:18,709 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:35:18,709 - INFO - [raw sql] ()
+2024-10-05 14:35:18,709 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:35:18,709 - INFO - [raw sql] ()
+2024-10-05 14:35:18,713 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:35:18,713 - INFO - [raw sql] ()
+2024-10-05 14:35:18,714 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:35:18,714 - INFO - [raw sql] ()
+2024-10-05 14:35:18,715 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:35:18,715 - INFO - [raw sql] ()
+2024-10-05 14:35:18,716 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:35:18,716 - INFO - [raw sql] ()
+2024-10-05 14:35:18,717 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:35:18,717 - INFO - [raw sql] ()
+2024-10-05 14:35:18,718 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:35:18,719 - INFO - [raw sql] ()
+2024-10-05 14:35:18,719 - INFO - COMMIT
+2024-10-05 14:35:18,722 - INFO - BEGIN (implicit)
+2024-10-05 14:35:18,729 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:18,730 - INFO - [generated in 0.00065s] ('admin_user',)
+2024-10-05 14:35:18,731 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:18,733 - INFO - [cached since 0.003063s ago] ('admin_pwd',)
+2024-10-05 14:35:18,733 - INFO - COMMIT
+2024-10-05 14:35:35,563 - INFO - BEGIN (implicit)
+2024-10-05 14:35:35,563 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:35:35,563 - INFO - [raw sql] ()
+2024-10-05 14:35:35,563 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:35:35,563 - INFO - [raw sql] ()
+2024-10-05 14:35:35,570 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:35:35,570 - INFO - [raw sql] ()
+2024-10-05 14:35:35,571 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:35:35,571 - INFO - [raw sql] ()
+2024-10-05 14:35:35,572 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:35:35,572 - INFO - [raw sql] ()
+2024-10-05 14:35:35,573 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:35:35,573 - INFO - [raw sql] ()
+2024-10-05 14:35:35,574 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:35:35,574 - INFO - [raw sql] ()
+2024-10-05 14:35:35,575 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:35:35,575 - INFO - [raw sql] ()
+2024-10-05 14:35:35,576 - INFO - COMMIT
+2024-10-05 14:35:35,579 - INFO - BEGIN (implicit)
+2024-10-05 14:35:35,586 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:35,586 - INFO - [generated in 0.00065s] ('admin_user',)
+2024-10-05 14:35:35,589 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:35,589 - INFO - [cached since 0.003481s ago] ('admin_pwd',)
+2024-10-05 14:35:35,589 - INFO - COMMIT
+2024-10-05 14:35:40,554 - INFO - BEGIN (implicit)
+2024-10-05 14:35:40,554 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:35:40,554 - INFO - [raw sql] ()
+2024-10-05 14:35:40,557 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:35:40,557 - INFO - [raw sql] ()
+2024-10-05 14:35:40,558 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:35:40,558 - INFO - [raw sql] ()
+2024-10-05 14:35:40,559 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:35:40,560 - INFO - [raw sql] ()
+2024-10-05 14:35:40,560 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:35:40,560 - INFO - [raw sql] ()
+2024-10-05 14:35:40,562 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:35:40,562 - INFO - [raw sql] ()
+2024-10-05 14:35:40,562 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:35:40,563 - INFO - [raw sql] ()
+2024-10-05 14:35:40,563 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:35:40,564 - INFO - [raw sql] ()
+2024-10-05 14:35:40,564 - INFO - COMMIT
+2024-10-05 14:35:40,566 - INFO - BEGIN (implicit)
+2024-10-05 14:35:40,574 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:40,575 - INFO - [generated in 0.00058s] ('admin_user',)
+2024-10-05 14:35:40,577 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:40,578 - INFO - [cached since 0.003663s ago] ('admin_pwd',)
+2024-10-05 14:35:40,579 - INFO - COMMIT
+2024-10-05 14:35:42,866 - INFO - BEGIN (implicit)
+2024-10-05 14:35:42,867 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:35:42,867 - INFO - [raw sql] ()
+2024-10-05 14:35:42,868 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:35:42,868 - INFO - [raw sql] ()
+2024-10-05 14:35:42,868 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:35:42,870 - INFO - [raw sql] ()
+2024-10-05 14:35:42,871 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:35:42,871 - INFO - [raw sql] ()
+2024-10-05 14:35:42,872 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:35:42,872 - INFO - [raw sql] ()
+2024-10-05 14:35:42,873 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:35:42,873 - INFO - [raw sql] ()
+2024-10-05 14:35:42,873 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:35:42,874 - INFO - [raw sql] ()
+2024-10-05 14:35:42,874 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:35:42,874 - INFO - [raw sql] ()
+2024-10-05 14:35:42,876 - INFO - COMMIT
+2024-10-05 14:35:42,879 - INFO - BEGIN (implicit)
+2024-10-05 14:35:42,880 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:42,880 - INFO - [generated in 0.00067s] ('admin_user',)
+2024-10-05 14:35:42,889 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:42,889 - INFO - [cached since 0.00337s ago] ('admin_pwd',)
+2024-10-05 14:35:42,889 - INFO - COMMIT
+2024-10-05 14:35:45,423 - INFO - BEGIN (implicit)
+2024-10-05 14:35:45,423 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:35:45,423 - INFO - [raw sql] ()
+2024-10-05 14:35:45,423 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:35:45,423 - INFO - [raw sql] ()
+2024-10-05 14:35:45,435 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:35:45,435 - INFO - [raw sql] ()
+2024-10-05 14:35:45,436 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:35:45,436 - INFO - [raw sql] ()
+2024-10-05 14:35:45,437 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:35:45,437 - INFO - [raw sql] ()
+2024-10-05 14:35:45,438 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:35:45,438 - INFO - [raw sql] ()
+2024-10-05 14:35:45,439 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:35:45,439 - INFO - [raw sql] ()
+2024-10-05 14:35:45,439 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:35:45,440 - INFO - [raw sql] ()
+2024-10-05 14:35:45,442 - INFO - COMMIT
+2024-10-05 14:35:45,445 - INFO - BEGIN (implicit)
+2024-10-05 14:35:45,451 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:45,452 - INFO - [generated in 0.00068s] ('admin_user',)
+2024-10-05 14:35:45,454 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:35:45,454 - INFO - [cached since 0.00346s ago] ('admin_pwd',)
+2024-10-05 14:35:45,456 - INFO - COMMIT
+2024-10-05 14:36:09,128 - INFO - BEGIN (implicit)
+2024-10-05 14:36:09,130 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:09,130 - INFO - [raw sql] ()
+2024-10-05 14:36:09,130 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:09,131 - INFO - [raw sql] ()
+2024-10-05 14:36:09,131 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:09,131 - INFO - [raw sql] ()
+2024-10-05 14:36:09,133 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:09,133 - INFO - [raw sql] ()
+2024-10-05 14:36:09,134 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:09,134 - INFO - [raw sql] ()
+2024-10-05 14:36:09,134 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:09,135 - INFO - [raw sql] ()
+2024-10-05 14:36:09,135 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:09,136 - INFO - [raw sql] ()
+2024-10-05 14:36:09,137 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:09,138 - INFO - [raw sql] ()
+2024-10-05 14:36:09,138 - INFO - COMMIT
+2024-10-05 14:36:09,139 - INFO - BEGIN (implicit)
+2024-10-05 14:36:09,147 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:09,148 - INFO - [generated in 0.00052s] ('admin_user',)
+2024-10-05 14:36:09,149 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:09,149 - INFO - [cached since 0.002719s ago] ('admin_pwd',)
+2024-10-05 14:36:09,151 - INFO - COMMIT
+2024-10-05 14:36:16,632 - INFO - BEGIN (implicit)
+2024-10-05 14:36:16,633 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:16,633 - INFO - [raw sql] ()
+2024-10-05 14:36:16,634 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:16,634 - INFO - [raw sql] ()
+2024-10-05 14:36:16,636 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:16,636 - INFO - [raw sql] ()
+2024-10-05 14:36:16,637 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:16,637 - INFO - [raw sql] ()
+2024-10-05 14:36:16,638 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:16,638 - INFO - [raw sql] ()
+2024-10-05 14:36:16,639 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:16,639 - INFO - [raw sql] ()
+2024-10-05 14:36:16,640 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:16,640 - INFO - [raw sql] ()
+2024-10-05 14:36:16,641 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:16,641 - INFO - [raw sql] ()
+2024-10-05 14:36:16,643 - INFO - COMMIT
+2024-10-05 14:36:16,645 - INFO - BEGIN (implicit)
+2024-10-05 14:36:16,653 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:16,653 - INFO - [generated in 0.00057s] ('admin_user',)
+2024-10-05 14:36:16,656 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:16,656 - INFO - [cached since 0.003325s ago] ('admin_pwd',)
+2024-10-05 14:36:16,657 - INFO - COMMIT
+2024-10-05 14:36:18,849 - INFO - BEGIN (implicit)
+2024-10-05 14:36:18,850 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:18,850 - INFO - [raw sql] ()
+2024-10-05 14:36:18,851 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:18,852 - INFO - [raw sql] ()
+2024-10-05 14:36:18,852 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:18,853 - INFO - [raw sql] ()
+2024-10-05 14:36:18,854 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:18,854 - INFO - [raw sql] ()
+2024-10-05 14:36:18,855 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:18,855 - INFO - [raw sql] ()
+2024-10-05 14:36:18,856 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:18,856 - INFO - [raw sql] ()
+2024-10-05 14:36:18,857 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:18,857 - INFO - [raw sql] ()
+2024-10-05 14:36:18,857 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:18,858 - INFO - [raw sql] ()
+2024-10-05 14:36:18,859 - INFO - COMMIT
+2024-10-05 14:36:18,861 - INFO - BEGIN (implicit)
+2024-10-05 14:36:18,869 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:18,869 - INFO - [generated in 0.00061s] ('admin_user',)
+2024-10-05 14:36:18,871 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:18,871 - INFO - [cached since 0.003373s ago] ('admin_pwd',)
+2024-10-05 14:36:18,872 - INFO - COMMIT
+2024-10-05 14:36:23,041 - INFO - BEGIN (implicit)
+2024-10-05 14:36:23,041 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:23,041 - INFO - [raw sql] ()
+2024-10-05 14:36:23,041 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:23,041 - INFO - [raw sql] ()
+2024-10-05 14:36:23,041 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:23,054 - INFO - [raw sql] ()
+2024-10-05 14:36:23,054 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:23,054 - INFO - [raw sql] ()
+2024-10-05 14:36:23,056 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:23,057 - INFO - [raw sql] ()
+2024-10-05 14:36:23,057 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:23,057 - INFO - [raw sql] ()
+2024-10-05 14:36:23,058 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:23,059 - INFO - [raw sql] ()
+2024-10-05 14:36:23,059 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:23,059 - INFO - [raw sql] ()
+2024-10-05 14:36:23,060 - INFO - COMMIT
+2024-10-05 14:36:23,063 - INFO - BEGIN (implicit)
+2024-10-05 14:36:23,069 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:23,069 - INFO - [generated in 0.00054s] ('admin_user',)
+2024-10-05 14:36:23,072 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:23,073 - INFO - [cached since 0.002831s ago] ('admin_pwd',)
+2024-10-05 14:36:23,074 - INFO - COMMIT
+2024-10-05 14:36:33,076 - INFO - BEGIN (implicit)
+2024-10-05 14:36:33,077 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:33,077 - INFO - [raw sql] ()
+2024-10-05 14:36:33,078 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:33,078 - INFO - [raw sql] ()
+2024-10-05 14:36:33,079 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:33,080 - INFO - [raw sql] ()
+2024-10-05 14:36:33,081 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:33,081 - INFO - [raw sql] ()
+2024-10-05 14:36:33,081 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:33,081 - INFO - [raw sql] ()
+2024-10-05 14:36:33,082 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:33,082 - INFO - [raw sql] ()
+2024-10-05 14:36:33,083 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:33,083 - INFO - [raw sql] ()
+2024-10-05 14:36:33,085 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:33,085 - INFO - [raw sql] ()
+2024-10-05 14:36:33,086 - INFO - COMMIT
+2024-10-05 14:36:33,088 - INFO - BEGIN (implicit)
+2024-10-05 14:36:33,095 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:33,095 - INFO - [generated in 0.00064s] ('admin_user',)
+2024-10-05 14:36:33,099 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:33,099 - INFO - [cached since 0.003789s ago] ('admin_pwd',)
+2024-10-05 14:36:33,101 - INFO - COMMIT
+2024-10-05 14:36:35,305 - INFO - BEGIN (implicit)
+2024-10-05 14:36:35,305 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:35,305 - INFO - [raw sql] ()
+2024-10-05 14:36:35,309 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:35,309 - INFO - [raw sql] ()
+2024-10-05 14:36:35,311 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:35,311 - INFO - [raw sql] ()
+2024-10-05 14:36:35,312 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:35,312 - INFO - [raw sql] ()
+2024-10-05 14:36:35,312 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:35,312 - INFO - [raw sql] ()
+2024-10-05 14:36:35,312 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:35,313 - INFO - [raw sql] ()
+2024-10-05 14:36:35,313 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:35,313 - INFO - [raw sql] ()
+2024-10-05 14:36:35,315 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:35,315 - INFO - [raw sql] ()
+2024-10-05 14:36:35,316 - INFO - COMMIT
+2024-10-05 14:36:35,318 - INFO - BEGIN (implicit)
+2024-10-05 14:36:35,325 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:35,326 - INFO - [generated in 0.00070s] ('admin_user',)
+2024-10-05 14:36:35,326 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:35,326 - INFO - [cached since 0.003213s ago] ('admin_pwd',)
+2024-10-05 14:36:35,329 - INFO - COMMIT
+2024-10-05 14:36:39,000 - INFO - BEGIN (implicit)
+2024-10-05 14:36:39,001 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:39,001 - INFO - [raw sql] ()
+2024-10-05 14:36:39,002 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:39,002 - INFO - [raw sql] ()
+2024-10-05 14:36:39,003 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:39,003 - INFO - [raw sql] ()
+2024-10-05 14:36:39,004 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:39,004 - INFO - [raw sql] ()
+2024-10-05 14:36:39,005 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:39,005 - INFO - [raw sql] ()
+2024-10-05 14:36:39,006 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:39,006 - INFO - [raw sql] ()
+2024-10-05 14:36:39,007 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:39,007 - INFO - [raw sql] ()
+2024-10-05 14:36:39,008 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:39,008 - INFO - [raw sql] ()
+2024-10-05 14:36:39,008 - INFO - COMMIT
+2024-10-05 14:36:39,011 - INFO - BEGIN (implicit)
+2024-10-05 14:36:39,018 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:39,018 - INFO - [generated in 0.00060s] ('admin_user',)
+2024-10-05 14:36:39,021 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:39,021 - INFO - [cached since 0.002788s ago] ('admin_pwd',)
+2024-10-05 14:36:39,022 - INFO - COMMIT
+2024-10-05 14:36:40,739 - INFO - BEGIN (implicit)
+2024-10-05 14:36:40,740 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:40,740 - INFO - [raw sql] ()
+2024-10-05 14:36:40,741 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:40,741 - INFO - [raw sql] ()
+2024-10-05 14:36:40,743 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:40,743 - INFO - [raw sql] ()
+2024-10-05 14:36:40,743 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:40,744 - INFO - [raw sql] ()
+2024-10-05 14:36:40,744 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:40,744 - INFO - [raw sql] ()
+2024-10-05 14:36:40,745 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:40,745 - INFO - [raw sql] ()
+2024-10-05 14:36:40,746 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:40,746 - INFO - [raw sql] ()
+2024-10-05 14:36:40,747 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:40,747 - INFO - [raw sql] ()
+2024-10-05 14:36:40,748 - INFO - COMMIT
+2024-10-05 14:36:40,752 - INFO - BEGIN (implicit)
+2024-10-05 14:36:40,759 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:40,760 - INFO - [generated in 0.00069s] ('admin_user',)
+2024-10-05 14:36:40,761 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:40,761 - INFO - [cached since 0.003183s ago] ('admin_pwd',)
+2024-10-05 14:36:40,761 - INFO - COMMIT
+2024-10-05 14:36:44,614 - INFO - BEGIN (implicit)
+2024-10-05 14:36:44,615 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:44,615 - INFO - [raw sql] ()
+2024-10-05 14:36:44,616 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:44,616 - INFO - [raw sql] ()
+2024-10-05 14:36:44,617 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:44,617 - INFO - [raw sql] ()
+2024-10-05 14:36:44,618 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:44,618 - INFO - [raw sql] ()
+2024-10-05 14:36:44,619 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:44,620 - INFO - [raw sql] ()
+2024-10-05 14:36:44,620 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:44,620 - INFO - [raw sql] ()
+2024-10-05 14:36:44,621 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:44,621 - INFO - [raw sql] ()
+2024-10-05 14:36:44,622 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:44,622 - INFO - [raw sql] ()
+2024-10-05 14:36:44,623 - INFO - COMMIT
+2024-10-05 14:36:44,625 - INFO - BEGIN (implicit)
+2024-10-05 14:36:44,632 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:44,633 - INFO - [generated in 0.00054s] ('admin_user',)
+2024-10-05 14:36:44,635 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:44,635 - INFO - [cached since 0.002814s ago] ('admin_pwd',)
+2024-10-05 14:36:44,636 - INFO - COMMIT
+2024-10-05 14:36:54,498 - INFO - BEGIN (implicit)
+2024-10-05 14:36:54,499 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:36:54,499 - INFO - [raw sql] ()
+2024-10-05 14:36:54,500 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:36:54,501 - INFO - [raw sql] ()
+2024-10-05 14:36:54,503 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:36:54,503 - INFO - [raw sql] ()
+2024-10-05 14:36:54,504 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:36:54,504 - INFO - [raw sql] ()
+2024-10-05 14:36:54,506 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:36:54,506 - INFO - [raw sql] ()
+2024-10-05 14:36:54,506 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:36:54,506 - INFO - [raw sql] ()
+2024-10-05 14:36:54,507 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:36:54,507 - INFO - [raw sql] ()
+2024-10-05 14:36:54,509 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:36:54,509 - INFO - [raw sql] ()
+2024-10-05 14:36:54,509 - INFO - COMMIT
+2024-10-05 14:36:54,513 - INFO - BEGIN (implicit)
+2024-10-05 14:36:54,520 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:54,521 - INFO - [generated in 0.00082s] ('admin_user',)
+2024-10-05 14:36:54,524 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:36:54,524 - INFO - [cached since 0.003873s ago] ('admin_pwd',)
+2024-10-05 14:36:54,525 - INFO - COMMIT
+2024-10-05 14:37:30,514 - INFO - BEGIN (implicit)
+2024-10-05 14:37:30,515 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:37:30,515 - INFO - [raw sql] ()
+2024-10-05 14:37:30,517 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:37:30,517 - INFO - [raw sql] ()
+2024-10-05 14:37:30,518 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:37:30,518 - INFO - [raw sql] ()
+2024-10-05 14:37:30,519 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:37:30,519 - INFO - [raw sql] ()
+2024-10-05 14:37:30,520 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:37:30,520 - INFO - [raw sql] ()
+2024-10-05 14:37:30,521 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:37:30,521 - INFO - [raw sql] ()
+2024-10-05 14:37:30,522 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:37:30,522 - INFO - [raw sql] ()
+2024-10-05 14:37:30,522 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:37:30,522 - INFO - [raw sql] ()
+2024-10-05 14:37:30,523 - INFO - COMMIT
+2024-10-05 14:37:30,526 - INFO - BEGIN (implicit)
+2024-10-05 14:37:30,534 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:30,536 - INFO - [generated in 0.00073s] ('admin_user',)
+2024-10-05 14:37:30,537 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:30,538 - INFO - [cached since 0.003055s ago] ('admin_pwd',)
+2024-10-05 14:37:30,538 - INFO - COMMIT
+2024-10-05 14:37:43,437 - INFO - BEGIN (implicit)
+2024-10-05 14:37:43,437 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:37:43,437 - INFO - [raw sql] ()
+2024-10-05 14:37:43,439 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:37:43,439 - INFO - [raw sql] ()
+2024-10-05 14:37:43,441 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:37:43,441 - INFO - [raw sql] ()
+2024-10-05 14:37:43,441 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:37:43,442 - INFO - [raw sql] ()
+2024-10-05 14:37:43,442 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:37:43,443 - INFO - [raw sql] ()
+2024-10-05 14:37:43,444 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:37:43,444 - INFO - [raw sql] ()
+2024-10-05 14:37:43,445 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:37:43,445 - INFO - [raw sql] ()
+2024-10-05 14:37:43,447 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:37:43,447 - INFO - [raw sql] ()
+2024-10-05 14:37:43,447 - INFO - COMMIT
+2024-10-05 14:37:43,450 - INFO - BEGIN (implicit)
+2024-10-05 14:37:43,457 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:43,458 - INFO - [generated in 0.00062s] ('admin_user',)
+2024-10-05 14:37:43,461 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:43,461 - INFO - [cached since 0.00358s ago] ('admin_pwd',)
+2024-10-05 14:37:43,463 - INFO - COMMIT
+2024-10-05 14:37:50,745 - INFO - BEGIN (implicit)
+2024-10-05 14:37:50,746 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:37:50,746 - INFO - [raw sql] ()
+2024-10-05 14:37:50,748 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:37:50,748 - INFO - [raw sql] ()
+2024-10-05 14:37:50,748 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:37:50,749 - INFO - [raw sql] ()
+2024-10-05 14:37:50,749 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:37:50,750 - INFO - [raw sql] ()
+2024-10-05 14:37:50,751 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:37:50,751 - INFO - [raw sql] ()
+2024-10-05 14:37:50,752 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:37:50,752 - INFO - [raw sql] ()
+2024-10-05 14:37:50,753 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:37:50,753 - INFO - [raw sql] ()
+2024-10-05 14:37:50,754 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:37:50,755 - INFO - [raw sql] ()
+2024-10-05 14:37:50,756 - INFO - COMMIT
+2024-10-05 14:37:50,759 - INFO - BEGIN (implicit)
+2024-10-05 14:37:50,766 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:50,766 - INFO - [generated in 0.00113s] ('admin_user',)
+2024-10-05 14:37:50,773 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:50,773 - INFO - [cached since 0.005033s ago] ('admin_pwd',)
+2024-10-05 14:37:50,774 - INFO - COMMIT
+2024-10-05 14:37:54,142 - INFO - BEGIN (implicit)
+2024-10-05 14:37:54,142 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:37:54,142 - INFO - [raw sql] ()
+2024-10-05 14:37:54,142 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:37:54,142 - INFO - [raw sql] ()
+2024-10-05 14:37:54,157 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:37:54,157 - INFO - [raw sql] ()
+2024-10-05 14:37:54,158 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:37:54,158 - INFO - [raw sql] ()
+2024-10-05 14:37:54,159 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:37:54,159 - INFO - [raw sql] ()
+2024-10-05 14:37:54,160 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:37:54,160 - INFO - [raw sql] ()
+2024-10-05 14:37:54,161 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:37:54,161 - INFO - [raw sql] ()
+2024-10-05 14:37:54,162 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:37:54,162 - INFO - [raw sql] ()
+2024-10-05 14:37:54,162 - INFO - COMMIT
+2024-10-05 14:37:54,165 - INFO - BEGIN (implicit)
+2024-10-05 14:37:54,172 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:54,172 - INFO - [generated in 0.00060s] ('admin_user',)
+2024-10-05 14:37:54,172 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:54,172 - INFO - [cached since 0.00311s ago] ('admin_pwd',)
+2024-10-05 14:37:54,172 - INFO - COMMIT
+2024-10-05 14:37:58,107 - INFO - BEGIN (implicit)
+2024-10-05 14:37:58,107 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:37:58,107 - INFO - [raw sql] ()
+2024-10-05 14:37:58,109 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:37:58,109 - INFO - [raw sql] ()
+2024-10-05 14:37:58,111 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:37:58,111 - INFO - [raw sql] ()
+2024-10-05 14:37:58,112 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:37:58,112 - INFO - [raw sql] ()
+2024-10-05 14:37:58,112 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:37:58,113 - INFO - [raw sql] ()
+2024-10-05 14:37:58,113 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:37:58,114 - INFO - [raw sql] ()
+2024-10-05 14:37:58,114 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:37:58,115 - INFO - [raw sql] ()
+2024-10-05 14:37:58,115 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:37:58,115 - INFO - [raw sql] ()
+2024-10-05 14:37:58,116 - INFO - COMMIT
+2024-10-05 14:37:58,118 - INFO - BEGIN (implicit)
+2024-10-05 14:37:58,126 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:58,127 - INFO - [generated in 0.00055s] ('admin_user',)
+2024-10-05 14:37:58,128 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:37:58,129 - INFO - [cached since 0.00295s ago] ('admin_pwd',)
+2024-10-05 14:37:58,130 - INFO - COMMIT
+2024-10-05 14:38:00,404 - INFO - BEGIN (implicit)
+2024-10-05 14:38:00,416 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:38:00,416 - INFO - [raw sql] ()
+2024-10-05 14:38:00,417 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:38:00,417 - INFO - [raw sql] ()
+2024-10-05 14:38:00,418 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:38:00,418 - INFO - [raw sql] ()
+2024-10-05 14:38:00,419 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:38:00,419 - INFO - [raw sql] ()
+2024-10-05 14:38:00,420 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:38:00,420 - INFO - [raw sql] ()
+2024-10-05 14:38:00,421 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:38:00,421 - INFO - [raw sql] ()
+2024-10-05 14:38:00,422 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:38:00,422 - INFO - [raw sql] ()
+2024-10-05 14:38:00,422 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:38:00,423 - INFO - [raw sql] ()
+2024-10-05 14:38:00,423 - INFO - COMMIT
+2024-10-05 14:38:00,426 - INFO - BEGIN (implicit)
+2024-10-05 14:38:00,433 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:00,433 - INFO - [generated in 0.00058s] ('admin_user',)
+2024-10-05 14:38:00,437 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:00,437 - INFO - [cached since 0.003717s ago] ('admin_pwd',)
+2024-10-05 14:38:00,438 - INFO - COMMIT
+2024-10-05 14:38:15,775 - INFO - BEGIN (implicit)
+2024-10-05 14:38:15,775 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:38:15,775 - INFO - [raw sql] ()
+2024-10-05 14:38:15,775 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:38:15,775 - INFO - [raw sql] ()
+2024-10-05 14:38:15,786 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:38:15,786 - INFO - [raw sql] ()
+2024-10-05 14:38:15,787 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:38:15,787 - INFO - [raw sql] ()
+2024-10-05 14:38:15,788 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:38:15,788 - INFO - [raw sql] ()
+2024-10-05 14:38:15,789 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:38:15,789 - INFO - [raw sql] ()
+2024-10-05 14:38:15,790 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:38:15,790 - INFO - [raw sql] ()
+2024-10-05 14:38:15,791 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:38:15,791 - INFO - [raw sql] ()
+2024-10-05 14:38:15,792 - INFO - COMMIT
+2024-10-05 14:38:15,792 - INFO - BEGIN (implicit)
+2024-10-05 14:38:15,803 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:15,803 - INFO - [generated in 0.00061s] ('admin_user',)
+2024-10-05 14:38:15,803 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:15,803 - INFO - [cached since 0.003022s ago] ('admin_pwd',)
+2024-10-05 14:38:15,803 - INFO - COMMIT
+2024-10-05 14:38:20,446 - INFO - BEGIN (implicit)
+2024-10-05 14:38:20,446 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:38:20,447 - INFO - [raw sql] ()
+2024-10-05 14:38:20,449 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:38:20,449 - INFO - [raw sql] ()
+2024-10-05 14:38:20,450 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:38:20,450 - INFO - [raw sql] ()
+2024-10-05 14:38:20,451 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:38:20,451 - INFO - [raw sql] ()
+2024-10-05 14:38:20,452 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:38:20,452 - INFO - [raw sql] ()
+2024-10-05 14:38:20,453 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:38:20,453 - INFO - [raw sql] ()
+2024-10-05 14:38:20,453 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:38:20,454 - INFO - [raw sql] ()
+2024-10-05 14:38:20,454 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:38:20,454 - INFO - [raw sql] ()
+2024-10-05 14:38:20,456 - INFO - COMMIT
+2024-10-05 14:38:20,458 - INFO - BEGIN (implicit)
+2024-10-05 14:38:20,464 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:20,465 - INFO - [generated in 0.00074s] ('admin_user',)
+2024-10-05 14:38:20,467 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:20,468 - INFO - [cached since 0.003218s ago] ('admin_pwd',)
+2024-10-05 14:38:20,469 - INFO - COMMIT
+2024-10-05 14:38:22,302 - INFO - BEGIN (implicit)
+2024-10-05 14:38:22,302 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:38:22,303 - INFO - [raw sql] ()
+2024-10-05 14:38:22,304 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:38:22,305 - INFO - [raw sql] ()
+2024-10-05 14:38:22,305 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:38:22,305 - INFO - [raw sql] ()
+2024-10-05 14:38:22,306 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:38:22,306 - INFO - [raw sql] ()
+2024-10-05 14:38:22,307 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:38:22,307 - INFO - [raw sql] ()
+2024-10-05 14:38:22,308 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:38:22,308 - INFO - [raw sql] ()
+2024-10-05 14:38:22,309 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:38:22,310 - INFO - [raw sql] ()
+2024-10-05 14:38:22,310 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:38:22,311 - INFO - [raw sql] ()
+2024-10-05 14:38:22,311 - INFO - COMMIT
+2024-10-05 14:38:22,313 - INFO - BEGIN (implicit)
+2024-10-05 14:38:22,321 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:22,321 - INFO - [generated in 0.00071s] ('admin_user',)
+2024-10-05 14:38:22,324 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:22,324 - INFO - [cached since 0.003268s ago] ('admin_pwd',)
+2024-10-05 14:38:22,324 - INFO - COMMIT
+2024-10-05 14:38:27,232 - INFO - BEGIN (implicit)
+2024-10-05 14:38:27,232 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:38:27,232 - INFO - [raw sql] ()
+2024-10-05 14:38:27,234 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:38:27,234 - INFO - [raw sql] ()
+2024-10-05 14:38:27,234 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:38:27,235 - INFO - [raw sql] ()
+2024-10-05 14:38:27,235 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:38:27,236 - INFO - [raw sql] ()
+2024-10-05 14:38:27,237 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:38:27,237 - INFO - [raw sql] ()
+2024-10-05 14:38:27,238 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:38:27,238 - INFO - [raw sql] ()
+2024-10-05 14:38:27,239 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:38:27,239 - INFO - [raw sql] ()
+2024-10-05 14:38:27,240 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:38:27,240 - INFO - [raw sql] ()
+2024-10-05 14:38:27,241 - INFO - COMMIT
+2024-10-05 14:38:27,244 - INFO - BEGIN (implicit)
+2024-10-05 14:38:27,251 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:27,251 - INFO - [generated in 0.00062s] ('admin_user',)
+2024-10-05 14:38:27,254 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:27,254 - INFO - [cached since 0.002862s ago] ('admin_pwd',)
+2024-10-05 14:38:27,255 - INFO - COMMIT
+2024-10-05 14:38:30,060 - INFO - BEGIN (implicit)
+2024-10-05 14:38:30,060 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:38:30,063 - INFO - [raw sql] ()
+2024-10-05 14:38:30,064 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:38:30,064 - INFO - [raw sql] ()
+2024-10-05 14:38:30,065 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:38:30,065 - INFO - [raw sql] ()
+2024-10-05 14:38:30,066 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:38:30,066 - INFO - [raw sql] ()
+2024-10-05 14:38:30,067 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:38:30,067 - INFO - [raw sql] ()
+2024-10-05 14:38:30,067 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:38:30,068 - INFO - [raw sql] ()
+2024-10-05 14:38:30,068 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:38:30,068 - INFO - [raw sql] ()
+2024-10-05 14:38:30,069 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:38:30,069 - INFO - [raw sql] ()
+2024-10-05 14:38:30,070 - INFO - COMMIT
+2024-10-05 14:38:30,073 - INFO - BEGIN (implicit)
+2024-10-05 14:38:30,081 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:30,081 - INFO - [generated in 0.00079s] ('admin_user',)
+2024-10-05 14:38:30,081 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:30,081 - INFO - [cached since 0.00296s ago] ('admin_pwd',)
+2024-10-05 14:38:30,081 - INFO - COMMIT
+2024-10-05 14:38:43,360 - INFO - BEGIN (implicit)
+2024-10-05 14:38:43,360 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:43,361 - INFO - [cached since 13.28s ago] ('admin_user',)
+2024-10-05 14:38:43,368 - INFO - ROLLBACK
+2024-10-05 14:38:54,526 - INFO - BEGIN (implicit)
+2024-10-05 14:38:54,526 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-05 14:38:54,526 - INFO - [generated in 0.00043s] ()
+2024-10-05 14:38:54,813 - INFO - ROLLBACK
+2024-10-05 14:38:56,056 - INFO - BEGIN (implicit)
+2024-10-05 14:38:56,057 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:38:56,057 - INFO - [cached since 25.98s ago] ('admin_user',)
+2024-10-05 14:38:56,059 - INFO - ROLLBACK
+2024-10-05 14:38:58,731 - INFO - BEGIN (implicit)
+2024-10-05 14:38:58,732 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-05 14:38:58,732 - INFO - [cached since 4.206s ago] ()
+2024-10-05 14:38:59,000 - INFO - ROLLBACK
+2024-10-05 14:38:59,007 - INFO - BEGIN (implicit)
+2024-10-05 14:38:59,007 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT user.id AS id, user.username AS username, user.email AS email, user.name AS name, user.student_id AS student_id, user.password AS password, user.is_active AS is_active, user.team_id AS team_id 
+FROM user) AS anon_1
+2024-10-05 14:38:59,007 - INFO - [generated in 0.00092s] ()
+2024-10-05 14:38:59,015 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user
+ LIMIT ? OFFSET ?
+2024-10-05 14:38:59,015 - INFO - [generated in 0.00082s] (10, 0)
+2024-10-05 14:38:59,015 - INFO - ROLLBACK
+2024-10-05 14:39:01,805 - INFO - BEGIN (implicit)
+2024-10-05 14:39:01,805 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-05 14:39:01,806 - INFO - [cached since 7.279s ago] ()
+2024-10-05 14:39:02,069 - INFO - ROLLBACK
+2024-10-05 14:39:02,070 - INFO - BEGIN (implicit)
+2024-10-05 14:39:02,070 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 14:39:02,070 - INFO - [generated in 0.00061s] (1,)
+2024-10-05 14:39:02,079 - INFO - DELETE FROM user WHERE user.id = ?
+2024-10-05 14:39:02,080 - INFO - [generated in 0.00086s] (1,)
+2024-10-05 14:39:02,082 - INFO - COMMIT
+2024-10-05 14:39:02,113 - INFO - BEGIN (implicit)
+2024-10-05 14:39:02,113 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-05 14:39:02,113 - INFO - [cached since 7.587s ago] ()
+2024-10-05 14:39:02,380 - INFO - ROLLBACK
+2024-10-05 14:39:02,388 - INFO - BEGIN (implicit)
+2024-10-05 14:39:02,388 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT user.id AS id, user.username AS username, user.email AS email, user.name AS name, user.student_id AS student_id, user.password AS password, user.is_active AS is_active, user.team_id AS team_id 
+FROM user) AS anon_1
+2024-10-05 14:39:02,390 - INFO - [cached since 3.378s ago] ()
+2024-10-05 14:39:02,390 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user
+ LIMIT ? OFFSET ?
+2024-10-05 14:39:02,390 - INFO - [generated in 0.00073s] (10, 0)
+2024-10-05 14:39:02,395 - INFO - ROLLBACK
+2024-10-05 14:39:03,923 - INFO - BEGIN (implicit)
+2024-10-05 14:39:03,923 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-05 14:39:03,923 - INFO - [cached since 9.398s ago] ()
+2024-10-05 14:39:04,182 - INFO - ROLLBACK
+2024-10-05 14:39:04,190 - INFO - BEGIN (implicit)
+2024-10-05 14:39:04,190 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 14:39:04,190 - INFO - [cached since 2.118s ago] (2,)
+2024-10-05 14:39:04,190 - INFO - DELETE FROM user WHERE user.id = ?
+2024-10-05 14:39:04,190 - INFO - [cached since 2.115s ago] (2,)
+2024-10-05 14:39:04,190 - INFO - COMMIT
+2024-10-05 14:39:04,226 - INFO - BEGIN (implicit)
+2024-10-05 14:39:04,226 - INFO - SELECT config.k, config.v 
+FROM config
+2024-10-05 14:39:04,226 - INFO - [cached since 9.7s ago] ()
+2024-10-05 14:39:04,483 - INFO - ROLLBACK
+2024-10-05 14:39:04,489 - INFO - BEGIN (implicit)
+2024-10-05 14:39:04,490 - INFO - SELECT count(*) AS count_1 
+FROM (SELECT user.id AS id, user.username AS username, user.email AS email, user.name AS name, user.student_id AS student_id, user.password AS password, user.is_active AS is_active, user.team_id AS team_id 
+FROM user) AS anon_1
+2024-10-05 14:39:04,490 - INFO - [cached since 5.48s ago] ()
+2024-10-05 14:39:04,493 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user
+ LIMIT ? OFFSET ?
+2024-10-05 14:39:04,493 - INFO - [cached since 2.102s ago] (10, 0)
+2024-10-05 14:39:04,493 - INFO - ROLLBACK
+2024-10-05 14:39:18,890 - INFO - BEGIN (implicit)
+2024-10-05 14:39:18,894 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:39:18,896 - INFO - [generated in 0.00083s] ('asd',)
+2024-10-05 14:39:18,896 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:39:18,896 - INFO - [generated in 0.00065s] ('3407602045@qq.com',)
+2024-10-05 14:39:18,896 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:39:18,902 - INFO - [generated in 0.00074s] ('asd',)
+2024-10-05 14:39:18,903 - INFO - ROLLBACK
+2024-10-05 14:40:10,213 - INFO - BEGIN (implicit)
+2024-10-05 14:40:10,213 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:40:10,213 - INFO - [raw sql] ()
+2024-10-05 14:40:10,217 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:40:10,217 - INFO - [raw sql] ()
+2024-10-05 14:40:10,218 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:40:10,218 - INFO - [raw sql] ()
+2024-10-05 14:40:10,219 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:40:10,219 - INFO - [raw sql] ()
+2024-10-05 14:40:10,220 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:40:10,220 - INFO - [raw sql] ()
+2024-10-05 14:40:10,222 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:40:10,222 - INFO - [raw sql] ()
+2024-10-05 14:40:10,223 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:40:10,224 - INFO - [raw sql] ()
+2024-10-05 14:40:10,224 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:40:10,225 - INFO - [raw sql] ()
+2024-10-05 14:40:10,226 - INFO - COMMIT
+2024-10-05 14:40:10,229 - INFO - BEGIN (implicit)
+2024-10-05 14:40:10,236 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:40:10,237 - INFO - [generated in 0.00080s] ('admin_user',)
+2024-10-05 14:40:10,239 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:40:10,241 - INFO - [cached since 0.003813s ago] ('admin_pwd',)
+2024-10-05 14:40:10,242 - INFO - COMMIT
+2024-10-05 14:40:11,846 - INFO - BEGIN (implicit)
+2024-10-05 14:40:11,851 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:40:11,851 - INFO - [generated in 0.00058s] ('asd',)
+2024-10-05 14:40:11,853 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:40:11,854 - INFO - [generated in 0.00045s] ('3407602045@qq.com',)
+2024-10-05 14:40:11,855 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:40:11,855 - INFO - [generated in 0.00035s] ('asd',)
+2024-10-05 14:40:11,857 - INFO - ROLLBACK
+2024-10-05 14:41:17,106 - INFO - BEGIN (implicit)
+2024-10-05 14:41:17,106 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:41:17,106 - INFO - [raw sql] ()
+2024-10-05 14:41:17,108 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:41:17,108 - INFO - [raw sql] ()
+2024-10-05 14:41:17,110 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:41:17,110 - INFO - [raw sql] ()
+2024-10-05 14:41:17,111 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:41:17,111 - INFO - [raw sql] ()
+2024-10-05 14:41:17,112 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:41:17,112 - INFO - [raw sql] ()
+2024-10-05 14:41:17,113 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:41:17,113 - INFO - [raw sql] ()
+2024-10-05 14:41:17,114 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:41:17,114 - INFO - [raw sql] ()
+2024-10-05 14:41:17,115 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:41:17,115 - INFO - [raw sql] ()
+2024-10-05 14:41:17,115 - INFO - COMMIT
+2024-10-05 14:41:17,120 - INFO - BEGIN (implicit)
+2024-10-05 14:41:17,131 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:41:17,131 - INFO - [generated in 0.00076s] ('admin_user',)
+2024-10-05 14:41:17,131 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:41:17,131 - INFO - [cached since 0.004093s ago] ('admin_pwd',)
+2024-10-05 14:41:17,137 - INFO - COMMIT
+2024-10-05 14:41:19,117 - INFO - BEGIN (implicit)
+2024-10-05 14:41:19,126 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:41:19,126 - INFO - [generated in 0.00081s] ('asd',)
+2024-10-05 14:41:19,129 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:41:19,130 - INFO - [generated in 0.00065s] ('3407602045@qq.com',)
+2024-10-05 14:41:19,132 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:41:19,132 - INFO - [generated in 0.00056s] ('asd',)
+2024-10-05 14:41:19,134 - INFO - ROLLBACK
+2024-10-05 14:43:03,447 - INFO - BEGIN (implicit)
+2024-10-05 14:43:03,447 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:43:03,447 - INFO - [raw sql] ()
+2024-10-05 14:43:03,447 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:43:03,451 - INFO - [raw sql] ()
+2024-10-05 14:43:03,452 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:43:03,452 - INFO - [raw sql] ()
+2024-10-05 14:43:03,452 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:43:03,453 - INFO - [raw sql] ()
+2024-10-05 14:43:03,454 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:43:03,454 - INFO - [raw sql] ()
+2024-10-05 14:43:03,455 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:43:03,455 - INFO - [raw sql] ()
+2024-10-05 14:43:03,456 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:43:03,456 - INFO - [raw sql] ()
+2024-10-05 14:43:03,458 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:43:03,458 - INFO - [raw sql] ()
+2024-10-05 14:43:03,458 - INFO - COMMIT
+2024-10-05 14:43:03,461 - INFO - BEGIN (implicit)
+2024-10-05 14:43:03,468 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:43:03,469 - INFO - [generated in 0.00062s] ('admin_user',)
+2024-10-05 14:43:03,472 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:43:03,472 - INFO - [cached since 0.003173s ago] ('admin_pwd',)
+2024-10-05 14:43:03,473 - INFO - COMMIT
+2024-10-05 14:43:04,640 - INFO - BEGIN (implicit)
+2024-10-05 14:43:04,643 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:43:04,643 - INFO - [generated in 0.00048s] ('asd',)
+2024-10-05 14:43:04,646 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:43:04,646 - INFO - [generated in 0.00043s] ('3407602045@qq.com',)
+2024-10-05 14:43:04,647 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:43:04,648 - INFO - [generated in 0.00052s] ('asd',)
+2024-10-05 14:43:10,535 - INFO - ROLLBACK
+2024-10-05 14:47:46,269 - INFO - BEGIN (implicit)
+2024-10-05 14:47:46,270 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:47:46,270 - INFO - [raw sql] ()
+2024-10-05 14:47:46,272 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:47:46,272 - INFO - [raw sql] ()
+2024-10-05 14:47:46,274 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:47:46,274 - INFO - [raw sql] ()
+2024-10-05 14:47:46,275 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:47:46,275 - INFO - [raw sql] ()
+2024-10-05 14:47:46,277 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:47:46,277 - INFO - [raw sql] ()
+2024-10-05 14:47:46,278 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:47:46,278 - INFO - [raw sql] ()
+2024-10-05 14:47:46,279 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:47:46,279 - INFO - [raw sql] ()
+2024-10-05 14:47:46,280 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:47:46,281 - INFO - [raw sql] ()
+2024-10-05 14:47:46,282 - INFO - COMMIT
+2024-10-05 14:47:46,284 - INFO - BEGIN (implicit)
+2024-10-05 14:47:46,296 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:47:46,296 - INFO - [generated in 0.00079s] ('admin_user',)
+2024-10-05 14:47:46,296 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:47:46,296 - INFO - [cached since 0.00324s ago] ('admin_pwd',)
+2024-10-05 14:47:46,300 - INFO - COMMIT
+2024-10-05 14:48:28,549 - INFO - BEGIN (implicit)
+2024-10-05 14:48:28,549 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:48:28,549 - INFO - [raw sql] ()
+2024-10-05 14:48:28,557 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:48:28,557 - INFO - [raw sql] ()
+2024-10-05 14:48:28,559 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:48:28,559 - INFO - [raw sql] ()
+2024-10-05 14:48:28,559 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:48:28,559 - INFO - [raw sql] ()
+2024-10-05 14:48:28,560 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:48:28,560 - INFO - [raw sql] ()
+2024-10-05 14:48:28,561 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:48:28,561 - INFO - [raw sql] ()
+2024-10-05 14:48:28,561 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:48:28,561 - INFO - [raw sql] ()
+2024-10-05 14:48:28,563 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:48:28,563 - INFO - [raw sql] ()
+2024-10-05 14:48:28,565 - INFO - COMMIT
+2024-10-05 14:48:28,568 - INFO - BEGIN (implicit)
+2024-10-05 14:48:28,576 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:48:28,576 - INFO - [generated in 0.00065s] ('admin_user',)
+2024-10-05 14:48:28,579 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:48:28,579 - INFO - [cached since 0.003197s ago] ('admin_pwd',)
+2024-10-05 14:48:28,580 - INFO - COMMIT
+2024-10-05 14:49:05,064 - INFO - BEGIN (implicit)
+2024-10-05 14:49:05,064 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:49:05,064 - INFO - [raw sql] ()
+2024-10-05 14:49:05,066 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:49:05,066 - INFO - [raw sql] ()
+2024-10-05 14:49:05,067 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:49:05,068 - INFO - [raw sql] ()
+2024-10-05 14:49:05,069 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:49:05,069 - INFO - [raw sql] ()
+2024-10-05 14:49:05,069 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:49:05,070 - INFO - [raw sql] ()
+2024-10-05 14:49:05,070 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:49:05,070 - INFO - [raw sql] ()
+2024-10-05 14:49:05,072 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:49:05,072 - INFO - [raw sql] ()
+2024-10-05 14:49:05,073 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:49:05,073 - INFO - [raw sql] ()
+2024-10-05 14:49:05,074 - INFO - COMMIT
+2024-10-05 14:49:05,078 - INFO - BEGIN (implicit)
+2024-10-05 14:49:05,086 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:05,087 - INFO - [generated in 0.00065s] ('admin_user',)
+2024-10-05 14:49:05,089 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:05,089 - INFO - [cached since 0.003759s ago] ('admin_pwd',)
+2024-10-05 14:49:05,091 - INFO - COMMIT
+2024-10-05 14:49:07,135 - INFO - BEGIN (implicit)
+2024-10-05 14:49:07,135 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:49:07,135 - INFO - [raw sql] ()
+2024-10-05 14:49:07,135 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:49:07,138 - INFO - [raw sql] ()
+2024-10-05 14:49:07,139 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:49:07,139 - INFO - [raw sql] ()
+2024-10-05 14:49:07,140 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:49:07,140 - INFO - [raw sql] ()
+2024-10-05 14:49:07,140 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:49:07,140 - INFO - [raw sql] ()
+2024-10-05 14:49:07,142 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:49:07,142 - INFO - [raw sql] ()
+2024-10-05 14:49:07,143 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:49:07,144 - INFO - [raw sql] ()
+2024-10-05 14:49:07,144 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:49:07,144 - INFO - [raw sql] ()
+2024-10-05 14:49:07,146 - INFO - COMMIT
+2024-10-05 14:49:07,148 - INFO - BEGIN (implicit)
+2024-10-05 14:49:07,156 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:07,157 - INFO - [generated in 0.00076s] ('admin_user',)
+2024-10-05 14:49:07,159 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:07,160 - INFO - [cached since 0.003721s ago] ('admin_pwd',)
+2024-10-05 14:49:07,160 - INFO - COMMIT
+2024-10-05 14:49:10,718 - INFO - BEGIN (implicit)
+2024-10-05 14:49:10,719 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:49:10,719 - INFO - [raw sql] ()
+2024-10-05 14:49:10,721 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:49:10,721 - INFO - [raw sql] ()
+2024-10-05 14:49:10,722 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:49:10,722 - INFO - [raw sql] ()
+2024-10-05 14:49:10,723 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:49:10,723 - INFO - [raw sql] ()
+2024-10-05 14:49:10,724 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:49:10,724 - INFO - [raw sql] ()
+2024-10-05 14:49:10,725 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:49:10,725 - INFO - [raw sql] ()
+2024-10-05 14:49:10,726 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:49:10,726 - INFO - [raw sql] ()
+2024-10-05 14:49:10,727 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:49:10,728 - INFO - [raw sql] ()
+2024-10-05 14:49:10,729 - INFO - COMMIT
+2024-10-05 14:49:10,731 - INFO - BEGIN (implicit)
+2024-10-05 14:49:10,739 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:10,739 - INFO - [generated in 0.00067s] ('admin_user',)
+2024-10-05 14:49:10,741 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:10,742 - INFO - [cached since 0.003106s ago] ('admin_pwd',)
+2024-10-05 14:49:10,743 - INFO - COMMIT
+2024-10-05 14:49:13,776 - INFO - BEGIN (implicit)
+2024-10-05 14:49:13,776 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:49:13,776 - INFO - [raw sql] ()
+2024-10-05 14:49:13,776 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:49:13,776 - INFO - [raw sql] ()
+2024-10-05 14:49:13,779 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:49:13,779 - INFO - [raw sql] ()
+2024-10-05 14:49:13,780 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:49:13,780 - INFO - [raw sql] ()
+2024-10-05 14:49:13,781 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:49:13,781 - INFO - [raw sql] ()
+2024-10-05 14:49:13,782 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:49:13,782 - INFO - [raw sql] ()
+2024-10-05 14:49:13,784 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:49:13,784 - INFO - [raw sql] ()
+2024-10-05 14:49:13,784 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:49:13,784 - INFO - [raw sql] ()
+2024-10-05 14:49:13,785 - INFO - COMMIT
+2024-10-05 14:49:13,787 - INFO - BEGIN (implicit)
+2024-10-05 14:49:13,794 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:13,794 - INFO - [generated in 0.00064s] ('admin_user',)
+2024-10-05 14:49:13,797 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:13,798 - INFO - [cached since 0.002936s ago] ('admin_pwd',)
+2024-10-05 14:49:13,798 - INFO - COMMIT
+2024-10-05 14:49:19,325 - INFO - BEGIN (implicit)
+2024-10-05 14:49:19,325 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:49:19,325 - INFO - [raw sql] ()
+2024-10-05 14:49:19,331 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:49:19,331 - INFO - [raw sql] ()
+2024-10-05 14:49:19,333 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:49:19,333 - INFO - [raw sql] ()
+2024-10-05 14:49:19,334 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:49:19,334 - INFO - [raw sql] ()
+2024-10-05 14:49:19,335 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:49:19,335 - INFO - [raw sql] ()
+2024-10-05 14:49:19,336 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:49:19,336 - INFO - [raw sql] ()
+2024-10-05 14:49:19,337 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:49:19,337 - INFO - [raw sql] ()
+2024-10-05 14:49:19,337 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:49:19,337 - INFO - [raw sql] ()
+2024-10-05 14:49:19,338 - INFO - COMMIT
+2024-10-05 14:49:19,340 - INFO - BEGIN (implicit)
+2024-10-05 14:49:19,348 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:19,348 - INFO - [generated in 0.00084s] ('admin_user',)
+2024-10-05 14:49:19,348 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:19,348 - INFO - [cached since 0.003207s ago] ('admin_pwd',)
+2024-10-05 14:49:19,348 - INFO - COMMIT
+2024-10-05 14:49:25,699 - INFO - BEGIN (implicit)
+2024-10-05 14:49:25,699 - INFO - PRAGMA main.table_info("config")
+2024-10-05 14:49:25,699 - INFO - [raw sql] ()
+2024-10-05 14:49:25,709 - INFO - PRAGMA main.table_info("user")
+2024-10-05 14:49:25,709 - INFO - [raw sql] ()
+2024-10-05 14:49:25,710 - INFO - PRAGMA main.table_info("team")
+2024-10-05 14:49:25,710 - INFO - [raw sql] ()
+2024-10-05 14:49:25,711 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 14:49:25,711 - INFO - [raw sql] ()
+2024-10-05 14:49:25,711 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 14:49:25,712 - INFO - [raw sql] ()
+2024-10-05 14:49:25,712 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 14:49:25,712 - INFO - [raw sql] ()
+2024-10-05 14:49:25,713 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 14:49:25,713 - INFO - [raw sql] ()
+2024-10-05 14:49:25,714 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 14:49:25,714 - INFO - [raw sql] ()
+2024-10-05 14:49:25,716 - INFO - COMMIT
+2024-10-05 14:49:25,718 - INFO - BEGIN (implicit)
+2024-10-05 14:49:25,725 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:25,725 - INFO - [generated in 0.00063s] ('admin_user',)
+2024-10-05 14:49:25,727 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 14:49:25,727 - INFO - [cached since 0.002883s ago] ('admin_pwd',)
+2024-10-05 14:49:25,729 - INFO - COMMIT
+2024-10-05 14:53:07,782 - INFO - BEGIN (implicit)
+2024-10-05 14:53:07,785 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:53:07,785 - INFO - [generated in 0.00052s] ('asd',)
+2024-10-05 14:53:07,788 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:53:07,789 - INFO - [generated in 0.00061s] ('3407602045@qq.com',)
+2024-10-05 14:53:07,790 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:53:07,791 - INFO - [generated in 0.00047s] ('asd',)
+2024-10-05 14:53:13,699 - INFO - ROLLBACK
+2024-10-05 14:53:27,186 - INFO - BEGIN (implicit)
+2024-10-05 14:53:27,187 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 14:53:27,188 - INFO - [cached since 19.4s ago] ('asd',)
+2024-10-05 14:53:27,190 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 14:53:27,191 - INFO - [cached since 19.4s ago] ('3407602045@qq.com',)
+2024-10-05 14:53:27,194 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 14:53:27,194 - INFO - [cached since 19.4s ago] ('asd',)
+2024-10-05 14:53:32,825 - INFO - ROLLBACK
+2024-10-05 15:03:45,997 - INFO - BEGIN (implicit)
+2024-10-05 15:03:45,997 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:03:45,999 - INFO - [cached since 638.2s ago] ('asd',)
+2024-10-05 15:03:46,002 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:03:46,002 - INFO - [cached since 638.2s ago] ('3407602045@qq.com',)
+2024-10-05 15:03:46,003 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:03:46,004 - INFO - [cached since 638.2s ago] ('asd',)
+2024-10-05 15:03:51,816 - INFO - ROLLBACK
+2024-10-05 15:04:08,807 - INFO - BEGIN (implicit)
+2024-10-05 15:04:08,807 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:04:08,808 - INFO - [cached since 661s ago] ('asd',)
+2024-10-05 15:04:08,808 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:04:08,808 - INFO - [cached since 661s ago] ('3407602045@qq.com',)
+2024-10-05 15:04:08,812 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:04:08,812 - INFO - [cached since 661s ago] ('asd',)
+2024-10-05 15:04:14,729 - INFO - ROLLBACK
+2024-10-05 15:10:43,364 - INFO - BEGIN (implicit)
+2024-10-05 15:10:43,365 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:10:43,365 - INFO - [raw sql] ()
+2024-10-05 15:10:43,366 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:10:43,366 - INFO - [raw sql] ()
+2024-10-05 15:10:43,367 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:10:43,368 - INFO - [raw sql] ()
+2024-10-05 15:10:43,368 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:10:43,369 - INFO - [raw sql] ()
+2024-10-05 15:10:43,369 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:10:43,370 - INFO - [raw sql] ()
+2024-10-05 15:10:43,371 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:10:43,371 - INFO - [raw sql] ()
+2024-10-05 15:10:43,372 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:10:43,372 - INFO - [raw sql] ()
+2024-10-05 15:10:43,373 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:10:43,373 - INFO - [raw sql] ()
+2024-10-05 15:10:43,374 - INFO - COMMIT
+2024-10-05 15:10:43,377 - INFO - BEGIN (implicit)
+2024-10-05 15:10:43,384 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:10:43,384 - INFO - [generated in 0.00057s] ('admin_user',)
+2024-10-05 15:10:43,386 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:10:43,387 - INFO - [cached since 0.003189s ago] ('admin_pwd',)
+2024-10-05 15:10:43,388 - INFO - COMMIT
+2024-10-05 15:12:00,039 - INFO - BEGIN (implicit)
+2024-10-05 15:12:00,043 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:12:00,043 - INFO - [raw sql] ()
+2024-10-05 15:12:00,044 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:12:00,044 - INFO - [raw sql] ()
+2024-10-05 15:12:00,046 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:12:00,046 - INFO - [raw sql] ()
+2024-10-05 15:12:00,047 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:12:00,047 - INFO - [raw sql] ()
+2024-10-05 15:12:00,047 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:12:00,048 - INFO - [raw sql] ()
+2024-10-05 15:12:00,048 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:12:00,048 - INFO - [raw sql] ()
+2024-10-05 15:12:00,049 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:12:00,049 - INFO - [raw sql] ()
+2024-10-05 15:12:00,050 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:12:00,050 - INFO - [raw sql] ()
+2024-10-05 15:12:00,051 - INFO - COMMIT
+2024-10-05 15:12:00,054 - INFO - BEGIN (implicit)
+2024-10-05 15:12:00,061 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:00,061 - INFO - [generated in 0.00054s] ('admin_user',)
+2024-10-05 15:12:00,061 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:00,061 - INFO - [cached since 0.002804s ago] ('admin_pwd',)
+2024-10-05 15:12:00,061 - INFO - COMMIT
+2024-10-05 15:12:05,634 - INFO - BEGIN (implicit)
+2024-10-05 15:12:05,634 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:12:05,634 - INFO - [raw sql] ()
+2024-10-05 15:12:05,639 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:12:05,639 - INFO - [raw sql] ()
+2024-10-05 15:12:05,639 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:12:05,640 - INFO - [raw sql] ()
+2024-10-05 15:12:05,640 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:12:05,640 - INFO - [raw sql] ()
+2024-10-05 15:12:05,641 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:12:05,641 - INFO - [raw sql] ()
+2024-10-05 15:12:05,642 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:12:05,642 - INFO - [raw sql] ()
+2024-10-05 15:12:05,644 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:12:05,644 - INFO - [raw sql] ()
+2024-10-05 15:12:05,644 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:12:05,644 - INFO - [raw sql] ()
+2024-10-05 15:12:05,646 - INFO - COMMIT
+2024-10-05 15:12:05,649 - INFO - BEGIN (implicit)
+2024-10-05 15:12:05,654 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:05,654 - INFO - [generated in 0.00055s] ('admin_user',)
+2024-10-05 15:12:05,660 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:05,661 - INFO - [cached since 0.003262s ago] ('admin_pwd',)
+2024-10-05 15:12:05,662 - INFO - COMMIT
+2024-10-05 15:12:07,658 - INFO - BEGIN (implicit)
+2024-10-05 15:12:07,659 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:12:07,659 - INFO - [raw sql] ()
+2024-10-05 15:12:07,660 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:12:07,660 - INFO - [raw sql] ()
+2024-10-05 15:12:07,661 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:12:07,661 - INFO - [raw sql] ()
+2024-10-05 15:12:07,662 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:12:07,662 - INFO - [raw sql] ()
+2024-10-05 15:12:07,663 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:12:07,665 - INFO - [raw sql] ()
+2024-10-05 15:12:07,666 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:12:07,666 - INFO - [raw sql] ()
+2024-10-05 15:12:07,667 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:12:07,667 - INFO - [raw sql] ()
+2024-10-05 15:12:07,668 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:12:07,668 - INFO - [raw sql] ()
+2024-10-05 15:12:07,669 - INFO - COMMIT
+2024-10-05 15:12:07,671 - INFO - BEGIN (implicit)
+2024-10-05 15:12:07,679 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:07,679 - INFO - [generated in 0.00053s] ('admin_user',)
+2024-10-05 15:12:07,681 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:07,682 - INFO - [cached since 0.00378s ago] ('admin_pwd',)
+2024-10-05 15:12:07,683 - INFO - COMMIT
+2024-10-05 15:12:26,584 - INFO - BEGIN (implicit)
+2024-10-05 15:12:26,585 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:12:26,585 - INFO - [raw sql] ()
+2024-10-05 15:12:26,586 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:12:26,586 - INFO - [raw sql] ()
+2024-10-05 15:12:26,587 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:12:26,587 - INFO - [raw sql] ()
+2024-10-05 15:12:26,589 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:12:26,589 - INFO - [raw sql] ()
+2024-10-05 15:12:26,589 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:12:26,589 - INFO - [raw sql] ()
+2024-10-05 15:12:26,590 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:12:26,590 - INFO - [raw sql] ()
+2024-10-05 15:12:26,591 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:12:26,591 - INFO - [raw sql] ()
+2024-10-05 15:12:26,593 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:12:26,593 - INFO - [raw sql] ()
+2024-10-05 15:12:26,594 - INFO - COMMIT
+2024-10-05 15:12:26,597 - INFO - BEGIN (implicit)
+2024-10-05 15:12:26,605 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:26,605 - INFO - [generated in 0.00054s] ('admin_user',)
+2024-10-05 15:12:26,608 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:26,609 - INFO - [cached since 0.003594s ago] ('admin_pwd',)
+2024-10-05 15:12:26,610 - INFO - COMMIT
+2024-10-05 15:12:30,245 - INFO - BEGIN (implicit)
+2024-10-05 15:12:30,245 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:12:30,245 - INFO - [raw sql] ()
+2024-10-05 15:12:30,248 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:12:30,248 - INFO - [raw sql] ()
+2024-10-05 15:12:30,249 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:12:30,249 - INFO - [raw sql] ()
+2024-10-05 15:12:30,250 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:12:30,250 - INFO - [raw sql] ()
+2024-10-05 15:12:30,251 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:12:30,251 - INFO - [raw sql] ()
+2024-10-05 15:12:30,251 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:12:30,251 - INFO - [raw sql] ()
+2024-10-05 15:12:30,251 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:12:30,251 - INFO - [raw sql] ()
+2024-10-05 15:12:30,251 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:12:30,251 - INFO - [raw sql] ()
+2024-10-05 15:12:30,255 - INFO - COMMIT
+2024-10-05 15:12:30,258 - INFO - BEGIN (implicit)
+2024-10-05 15:12:30,267 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:30,267 - INFO - [generated in 0.00056s] ('admin_user',)
+2024-10-05 15:12:30,269 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:30,270 - INFO - [cached since 0.002877s ago] ('admin_pwd',)
+2024-10-05 15:12:30,270 - INFO - COMMIT
+2024-10-05 15:12:35,534 - INFO - BEGIN (implicit)
+2024-10-05 15:12:35,534 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:12:35,534 - INFO - [raw sql] ()
+2024-10-05 15:12:35,535 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:12:35,535 - INFO - [raw sql] ()
+2024-10-05 15:12:35,535 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:12:35,535 - INFO - [raw sql] ()
+2024-10-05 15:12:35,538 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:12:35,538 - INFO - [raw sql] ()
+2024-10-05 15:12:35,540 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:12:35,540 - INFO - [raw sql] ()
+2024-10-05 15:12:35,541 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:12:35,541 - INFO - [raw sql] ()
+2024-10-05 15:12:35,541 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:12:35,541 - INFO - [raw sql] ()
+2024-10-05 15:12:35,542 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:12:35,542 - INFO - [raw sql] ()
+2024-10-05 15:12:35,543 - INFO - COMMIT
+2024-10-05 15:12:35,546 - INFO - BEGIN (implicit)
+2024-10-05 15:12:35,553 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:35,554 - INFO - [generated in 0.00058s] ('admin_user',)
+2024-10-05 15:12:35,556 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:12:35,556 - INFO - [cached since 0.003471s ago] ('admin_pwd',)
+2024-10-05 15:12:35,558 - INFO - COMMIT
+2024-10-05 15:12:39,285 - INFO - BEGIN (implicit)
+2024-10-05 15:12:39,293 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:12:39,295 - INFO - [generated in 0.00059s] ('asd',)
+2024-10-05 15:12:39,297 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:12:39,297 - INFO - [generated in 0.00041s] ('3407602045@qq.com',)
+2024-10-05 15:12:39,299 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:12:39,299 - INFO - [generated in 0.00039s] ('asd',)
+2024-10-05 15:12:45,462 - INFO - ROLLBACK
+2024-10-05 15:13:15,296 - INFO - BEGIN (implicit)
+2024-10-05 15:13:15,297 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:13:15,297 - INFO - [cached since 36s ago] ('asd',)
+2024-10-05 15:13:15,300 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:13:15,301 - INFO - [cached since 36s ago] ('3407602045@qq.com',)
+2024-10-05 15:13:15,303 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:13:15,304 - INFO - [cached since 36.01s ago] ('asd',)
+2024-10-05 15:13:21,327 - INFO - ROLLBACK
+2024-10-05 15:14:07,438 - INFO - BEGIN (implicit)
+2024-10-05 15:14:07,438 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:14:07,438 - INFO - [raw sql] ()
+2024-10-05 15:14:07,439 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:14:07,439 - INFO - [raw sql] ()
+2024-10-05 15:14:07,441 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:14:07,441 - INFO - [raw sql] ()
+2024-10-05 15:14:07,442 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:14:07,442 - INFO - [raw sql] ()
+2024-10-05 15:14:07,443 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:14:07,443 - INFO - [raw sql] ()
+2024-10-05 15:14:07,444 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:14:07,444 - INFO - [raw sql] ()
+2024-10-05 15:14:07,444 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:14:07,445 - INFO - [raw sql] ()
+2024-10-05 15:14:07,445 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:14:07,445 - INFO - [raw sql] ()
+2024-10-05 15:14:07,447 - INFO - COMMIT
+2024-10-05 15:14:07,450 - INFO - BEGIN (implicit)
+2024-10-05 15:14:07,457 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:14:07,457 - INFO - [generated in 0.00054s] ('admin_user',)
+2024-10-05 15:14:07,460 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:14:07,460 - INFO - [cached since 0.003304s ago] ('admin_pwd',)
+2024-10-05 15:14:07,461 - INFO - COMMIT
+2024-10-05 15:14:18,756 - INFO - BEGIN (implicit)
+2024-10-05 15:14:18,756 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:14:18,756 - INFO - [raw sql] ()
+2024-10-05 15:14:18,759 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:14:18,760 - INFO - [raw sql] ()
+2024-10-05 15:14:18,760 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:14:18,760 - INFO - [raw sql] ()
+2024-10-05 15:14:18,761 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:14:18,762 - INFO - [raw sql] ()
+2024-10-05 15:14:18,762 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:14:18,763 - INFO - [raw sql] ()
+2024-10-05 15:14:18,763 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:14:18,763 - INFO - [raw sql] ()
+2024-10-05 15:14:18,764 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:14:18,764 - INFO - [raw sql] ()
+2024-10-05 15:14:18,765 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:14:18,765 - INFO - [raw sql] ()
+2024-10-05 15:14:18,767 - INFO - COMMIT
+2024-10-05 15:14:18,770 - INFO - BEGIN (implicit)
+2024-10-05 15:14:18,777 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:14:18,777 - INFO - [generated in 0.00058s] ('admin_user',)
+2024-10-05 15:14:18,780 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:14:18,780 - INFO - [cached since 0.002634s ago] ('admin_pwd',)
+2024-10-05 15:14:18,781 - INFO - COMMIT
+2024-10-05 15:14:25,738 - INFO - BEGIN (implicit)
+2024-10-05 15:14:25,740 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:14:25,740 - INFO - [generated in 0.00056s] ('asd',)
+2024-10-05 15:14:25,740 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:14:25,745 - INFO - [generated in 0.00036s] ('3407602045@qq.com',)
+2024-10-05 15:14:25,747 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:14:25,747 - INFO - [generated in 0.00039s] ('asd',)
+2024-10-05 15:14:31,506 - INFO - ROLLBACK
+2024-10-05 15:14:43,040 - INFO - BEGIN (implicit)
+2024-10-05 15:14:43,041 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:14:43,041 - INFO - [cached since 17.3s ago] ('asd',)
+2024-10-05 15:14:43,045 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:14:43,045 - INFO - [cached since 17.3s ago] ('3407602045@qq.com',)
+2024-10-05 15:14:43,047 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:14:43,048 - INFO - [cached since 17.3s ago] ('asd',)
+2024-10-05 15:14:48,682 - INFO - ROLLBACK
+2024-10-05 15:15:03,949 - INFO - BEGIN (implicit)
+2024-10-05 15:15:03,950 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:15:03,950 - INFO - [raw sql] ()
+2024-10-05 15:15:03,952 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:15:03,952 - INFO - [raw sql] ()
+2024-10-05 15:15:03,953 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:15:03,953 - INFO - [raw sql] ()
+2024-10-05 15:15:03,954 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:15:03,954 - INFO - [raw sql] ()
+2024-10-05 15:15:03,954 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:15:03,954 - INFO - [raw sql] ()
+2024-10-05 15:15:03,955 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:15:03,955 - INFO - [raw sql] ()
+2024-10-05 15:15:03,957 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:15:03,957 - INFO - [raw sql] ()
+2024-10-05 15:15:03,957 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:15:03,957 - INFO - [raw sql] ()
+2024-10-05 15:15:03,958 - INFO - COMMIT
+2024-10-05 15:15:03,961 - INFO - BEGIN (implicit)
+2024-10-05 15:15:03,971 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:15:03,971 - INFO - [generated in 0.00063s] ('admin_user',)
+2024-10-05 15:15:03,974 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:15:03,974 - INFO - [cached since 0.00323s ago] ('admin_pwd',)
+2024-10-05 15:15:03,975 - INFO - COMMIT
+2024-10-05 15:17:21,050 - INFO - BEGIN (implicit)
+2024-10-05 15:17:21,052 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:17:21,052 - INFO - [raw sql] ()
+2024-10-05 15:17:21,054 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:17:21,054 - INFO - [raw sql] ()
+2024-10-05 15:17:21,056 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:17:21,056 - INFO - [raw sql] ()
+2024-10-05 15:17:21,057 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:17:21,057 - INFO - [raw sql] ()
+2024-10-05 15:17:21,059 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:17:21,059 - INFO - [raw sql] ()
+2024-10-05 15:17:21,060 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:17:21,060 - INFO - [raw sql] ()
+2024-10-05 15:17:21,061 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:17:21,061 - INFO - [raw sql] ()
+2024-10-05 15:17:21,062 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:17:21,062 - INFO - [raw sql] ()
+2024-10-05 15:17:21,064 - INFO - COMMIT
+2024-10-05 15:17:21,069 - INFO - BEGIN (implicit)
+2024-10-05 15:17:21,077 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:17:21,077 - INFO - [generated in 0.00064s] ('admin_user',)
+2024-10-05 15:17:21,081 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:17:21,082 - INFO - [cached since 0.004648s ago] ('admin_pwd',)
+2024-10-05 15:17:21,083 - INFO - COMMIT
+2024-10-05 15:17:38,720 - INFO - BEGIN (implicit)
+2024-10-05 15:17:38,724 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:17:38,724 - INFO - [generated in 0.00072s] ('asd',)
+2024-10-05 15:17:38,724 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:17:38,724 - INFO - [generated in 0.00061s] ('3407602045@qq.com',)
+2024-10-05 15:17:38,724 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:17:38,724 - INFO - [generated in 0.00065s] ('asd',)
+2024-10-05 15:17:44,609 - INFO - ROLLBACK
+2024-10-05 15:17:54,884 - INFO - BEGIN (implicit)
+2024-10-05 15:17:54,884 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:17:54,885 - INFO - [cached since 16.16s ago] ('asd',)
+2024-10-05 15:17:54,887 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:17:54,888 - INFO - [cached since 16.16s ago] ('3407602045@qq.com',)
+2024-10-05 15:17:54,891 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-05 15:17:54,891 - INFO - [cached since 16.16s ago] ('asd',)
+2024-10-05 15:17:55,181 - INFO - INSERT INTO user (username, email, name, student_id, password, is_active, team_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+2024-10-05 15:17:55,181 - INFO - [generated in 0.00075s] ('asd', '3407602045@qq.com', 'asd', 'asd', '$2b$12$64EuvDu/tRczSGE3zx0Og.wUJJZRUTFgtEQFdSSD/TUTynxT0fqy6', 1, None)
+2024-10-05 15:17:55,196 - INFO - COMMIT
+2024-10-05 15:17:55,196 - INFO - BEGIN (implicit)
+2024-10-05 15:17:55,212 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 15:17:55,213 - INFO - [generated in 0.00057s] (1,)
+2024-10-05 15:17:55,214 - INFO - ROLLBACK
+2024-10-05 15:18:04,487 - INFO - BEGIN (implicit)
+2024-10-05 15:18:04,488 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:18:04,488 - INFO - [cached since 25.76s ago] ('asd',)
+2024-10-05 15:18:04,747 - INFO - ROLLBACK
+2024-10-05 15:18:04,776 - INFO - BEGIN (implicit)
+2024-10-05 15:18:04,777 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:18:04,778 - INFO - [generated in 0.00074s] ('asd',)
+2024-10-05 15:18:04,780 - INFO - ROLLBACK
+2024-10-05 15:18:04,801 - INFO - BEGIN (implicit)
+2024-10-05 15:18:04,801 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:18:04,802 - INFO - [cached since 0.02491s ago] ('asd',)
+2024-10-05 15:18:04,805 - INFO - ROLLBACK
+2024-10-05 15:18:04,853 - INFO - BEGIN (implicit)
+2024-10-05 15:18:04,854 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:18:04,855 - INFO - [cached since 0.07746s ago] ('asd',)
+2024-10-05 15:18:04,858 - INFO - ROLLBACK
+2024-10-05 15:18:21,366 - INFO - BEGIN (implicit)
+2024-10-05 15:18:21,367 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:18:21,367 - INFO - [raw sql] ()
+2024-10-05 15:18:21,369 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:18:21,369 - INFO - [raw sql] ()
+2024-10-05 15:18:21,370 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:18:21,371 - INFO - [raw sql] ()
+2024-10-05 15:18:21,371 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:18:21,371 - INFO - [raw sql] ()
+2024-10-05 15:18:21,373 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:18:21,374 - INFO - [raw sql] ()
+2024-10-05 15:18:21,375 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:18:21,375 - INFO - [raw sql] ()
+2024-10-05 15:18:21,376 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:18:21,377 - INFO - [raw sql] ()
+2024-10-05 15:18:21,378 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:18:21,378 - INFO - [raw sql] ()
+2024-10-05 15:18:21,379 - INFO - COMMIT
+2024-10-05 15:18:21,382 - INFO - BEGIN (implicit)
+2024-10-05 15:18:21,391 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:18:21,392 - INFO - [generated in 0.00077s] ('admin_user',)
+2024-10-05 15:18:21,394 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:18:21,395 - INFO - [cached since 0.003947s ago] ('admin_pwd',)
+2024-10-05 15:18:21,396 - INFO - COMMIT
+2024-10-05 15:18:26,098 - INFO - BEGIN (implicit)
+2024-10-05 15:18:26,098 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:18:26,099 - INFO - [raw sql] ()
+2024-10-05 15:18:26,100 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:18:26,101 - INFO - [raw sql] ()
+2024-10-05 15:18:26,101 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:18:26,102 - INFO - [raw sql] ()
+2024-10-05 15:18:26,102 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:18:26,103 - INFO - [raw sql] ()
+2024-10-05 15:18:26,104 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:18:26,104 - INFO - [raw sql] ()
+2024-10-05 15:18:26,105 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:18:26,105 - INFO - [raw sql] ()
+2024-10-05 15:18:26,106 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:18:26,107 - INFO - [raw sql] ()
+2024-10-05 15:18:26,108 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:18:26,108 - INFO - [raw sql] ()
+2024-10-05 15:18:26,109 - INFO - COMMIT
+2024-10-05 15:18:26,111 - INFO - BEGIN (implicit)
+2024-10-05 15:18:26,118 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:18:26,119 - INFO - [generated in 0.00061s] ('admin_user',)
+2024-10-05 15:18:26,121 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:18:26,122 - INFO - [cached since 0.003536s ago] ('admin_pwd',)
+2024-10-05 15:18:26,123 - INFO - COMMIT
+2024-10-05 15:20:00,237 - INFO - BEGIN (implicit)
+2024-10-05 15:20:00,239 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:20:00,239 - INFO - [raw sql] ()
+2024-10-05 15:20:00,240 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:20:00,240 - INFO - [raw sql] ()
+2024-10-05 15:20:00,241 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:20:00,241 - INFO - [raw sql] ()
+2024-10-05 15:20:00,241 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:20:00,242 - INFO - [raw sql] ()
+2024-10-05 15:20:00,243 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:20:00,243 - INFO - [raw sql] ()
+2024-10-05 15:20:00,244 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:20:00,244 - INFO - [raw sql] ()
+2024-10-05 15:20:00,245 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:20:00,245 - INFO - [raw sql] ()
+2024-10-05 15:20:00,246 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:20:00,246 - INFO - [raw sql] ()
+2024-10-05 15:20:00,247 - INFO - COMMIT
+2024-10-05 15:20:00,252 - INFO - BEGIN (implicit)
+2024-10-05 15:20:00,259 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:20:00,260 - INFO - [generated in 0.00065s] ('admin_user',)
+2024-10-05 15:20:00,261 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:20:00,263 - INFO - [cached since 0.003198s ago] ('admin_pwd',)
+2024-10-05 15:20:00,263 - INFO - COMMIT
+2024-10-05 15:22:24,812 - INFO - BEGIN (implicit)
+2024-10-05 15:22:24,814 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:22:24,815 - INFO - [generated in 0.00068s] ('3407602045@qq.com',)
+2024-10-05 15:22:30,873 - INFO - ROLLBACK
+2024-10-05 15:25:13,051 - INFO - BEGIN (implicit)
+2024-10-05 15:25:13,052 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:25:13,052 - INFO - [raw sql] ()
+2024-10-05 15:25:13,054 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:25:13,054 - INFO - [raw sql] ()
+2024-10-05 15:25:13,055 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:25:13,055 - INFO - [raw sql] ()
+2024-10-05 15:25:13,055 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:25:13,055 - INFO - [raw sql] ()
+2024-10-05 15:25:13,057 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:25:13,057 - INFO - [raw sql] ()
+2024-10-05 15:25:13,059 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:25:13,059 - INFO - [raw sql] ()
+2024-10-05 15:25:13,060 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:25:13,060 - INFO - [raw sql] ()
+2024-10-05 15:25:13,061 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:25:13,061 - INFO - [raw sql] ()
+2024-10-05 15:25:13,062 - INFO - COMMIT
+2024-10-05 15:25:13,066 - INFO - BEGIN (implicit)
+2024-10-05 15:25:13,073 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:25:13,073 - INFO - [generated in 0.00055s] ('admin_user',)
+2024-10-05 15:25:13,076 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:25:13,077 - INFO - [cached since 0.003125s ago] ('admin_pwd',)
+2024-10-05 15:25:13,078 - INFO - COMMIT
+2024-10-05 15:25:14,572 - INFO - BEGIN (implicit)
+2024-10-05 15:25:14,573 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:25:14,573 - INFO - [raw sql] ()
+2024-10-05 15:25:14,574 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:25:14,574 - INFO - [raw sql] ()
+2024-10-05 15:25:14,575 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:25:14,576 - INFO - [raw sql] ()
+2024-10-05 15:25:14,577 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:25:14,577 - INFO - [raw sql] ()
+2024-10-05 15:25:14,578 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:25:14,578 - INFO - [raw sql] ()
+2024-10-05 15:25:14,579 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:25:14,579 - INFO - [raw sql] ()
+2024-10-05 15:25:14,580 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:25:14,580 - INFO - [raw sql] ()
+2024-10-05 15:25:14,580 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:25:14,582 - INFO - [raw sql] ()
+2024-10-05 15:25:14,582 - INFO - COMMIT
+2024-10-05 15:25:14,584 - INFO - BEGIN (implicit)
+2024-10-05 15:25:14,593 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:25:14,593 - INFO - [generated in 0.00071s] ('admin_user',)
+2024-10-05 15:25:14,595 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:25:14,595 - INFO - [cached since 0.003881s ago] ('admin_pwd',)
+2024-10-05 15:25:14,597 - INFO - COMMIT
+2024-10-05 15:25:22,832 - INFO - BEGIN (implicit)
+2024-10-05 15:25:22,832 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:25:22,848 - INFO - [raw sql] ()
+2024-10-05 15:25:22,850 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:25:22,850 - INFO - [raw sql] ()
+2024-10-05 15:25:22,851 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:25:22,851 - INFO - [raw sql] ()
+2024-10-05 15:25:22,852 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:25:22,852 - INFO - [raw sql] ()
+2024-10-05 15:25:22,853 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:25:22,853 - INFO - [raw sql] ()
+2024-10-05 15:25:22,855 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:25:22,855 - INFO - [raw sql] ()
+2024-10-05 15:25:22,855 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:25:22,856 - INFO - [raw sql] ()
+2024-10-05 15:25:22,856 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:25:22,857 - INFO - [raw sql] ()
+2024-10-05 15:25:22,857 - INFO - COMMIT
+2024-10-05 15:25:22,861 - INFO - BEGIN (implicit)
+2024-10-05 15:25:22,868 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:25:22,870 - INFO - [generated in 0.00076s] ('admin_user',)
+2024-10-05 15:25:22,871 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:25:22,872 - INFO - [cached since 0.00325s ago] ('admin_pwd',)
+2024-10-05 15:25:22,873 - INFO - COMMIT
+2024-10-05 15:25:33,606 - INFO - BEGIN (implicit)
+2024-10-05 15:25:33,608 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:25:33,608 - INFO - [generated in 0.00056s] ('3407602045@qq.com',)
+2024-10-05 15:25:39,421 - INFO - ROLLBACK
+2024-10-05 15:26:51,050 - INFO - BEGIN (implicit)
+2024-10-05 15:26:51,050 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:26:51,050 - INFO - [cached since 77.44s ago] ('3407602045@qq.com',)
+2024-10-05 15:26:51,250 - INFO - UPDATE user SET password=? WHERE user.id = ?
+2024-10-05 15:26:51,250 - INFO - [generated in 0.00068s] ('$2b$12$lSSxOgaq7LLn9vEX7Eeyze6ik3gZrZLaAWxVj1J5c8HtKML7RzJ9m', 1)
+2024-10-05 15:26:51,259 - INFO - COMMIT
+2024-10-05 15:26:51,271 - INFO - BEGIN (implicit)
+2024-10-05 15:26:51,272 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 15:26:51,274 - INFO - [generated in 0.00072s] (1,)
+2024-10-05 15:26:51,276 - INFO - ROLLBACK
+2024-10-05 15:27:04,266 - INFO - BEGIN (implicit)
+2024-10-05 15:27:04,268 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:27:04,269 - INFO - [generated in 0.00095s] ('asd',)
+2024-10-05 15:27:04,452 - INFO - ROLLBACK
+2024-10-05 15:27:04,472 - INFO - BEGIN (implicit)
+2024-10-05 15:27:04,473 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:27:04,474 - INFO - [generated in 0.00060s] ('asd',)
+2024-10-05 15:27:04,475 - INFO - ROLLBACK
+2024-10-05 15:27:04,494 - INFO - BEGIN (implicit)
+2024-10-05 15:27:04,494 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:27:04,495 - INFO - [cached since 0.02097s ago] ('asd',)
+2024-10-05 15:27:04,496 - INFO - ROLLBACK
+2024-10-05 15:27:04,532 - INFO - BEGIN (implicit)
+2024-10-05 15:27:04,533 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:27:04,533 - INFO - [cached since 0.05946s ago] ('asd',)
+2024-10-05 15:27:04,536 - INFO - ROLLBACK
+2024-10-05 15:38:34,123 - INFO - BEGIN (implicit)
+2024-10-05 15:38:34,123 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:38:34,124 - INFO - [cached since 780.5s ago] ('3407602045@qq.com',)
+2024-10-05 15:38:40,778 - INFO - ROLLBACK
+2024-10-05 15:40:57,618 - INFO - BEGIN (implicit)
+2024-10-05 15:40:57,618 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:40:57,619 - INFO - [cached since 924s ago] ('3407602045@qq.com',)
+2024-10-05 15:41:03,670 - INFO - ROLLBACK
+2024-10-05 15:41:13,421 - INFO - BEGIN (implicit)
+2024-10-05 15:41:13,422 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-05 15:41:13,422 - INFO - [cached since 939.8s ago] ('3407602045@qq.com',)
+2024-10-05 15:41:13,686 - INFO - UPDATE user SET password=? WHERE user.id = ?
+2024-10-05 15:41:13,686 - INFO - [cached since 862.4s ago] ('$2b$12$pKuoTocxi2lhEm7gHy.7.ufHzJp6BcAvTjVlNvjljNBVPnwJRXRxG', 1)
+2024-10-05 15:41:13,689 - INFO - COMMIT
+2024-10-05 15:41:13,699 - INFO - BEGIN (implicit)
+2024-10-05 15:41:13,700 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-05 15:41:13,701 - INFO - [cached since 862.4s ago] (1,)
+2024-10-05 15:41:13,703 - INFO - ROLLBACK
+2024-10-05 15:41:28,386 - INFO - BEGIN (implicit)
+2024-10-05 15:41:28,386 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:41:28,387 - INFO - [cached since 864.1s ago] ('asd',)
+2024-10-05 15:41:28,650 - INFO - ROLLBACK
+2024-10-05 15:41:28,672 - INFO - BEGIN (implicit)
+2024-10-05 15:41:28,673 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:41:28,674 - INFO - [cached since 864.2s ago] ('asd',)
+2024-10-05 15:41:28,677 - INFO - ROLLBACK
+2024-10-05 15:41:28,696 - INFO - BEGIN (implicit)
+2024-10-05 15:41:28,697 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:41:28,698 - INFO - [cached since 864.2s ago] ('asd',)
+2024-10-05 15:41:28,700 - INFO - ROLLBACK
+2024-10-05 15:41:28,743 - INFO - BEGIN (implicit)
+2024-10-05 15:41:28,743 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-05 15:41:28,744 - INFO - [cached since 864.3s ago] ('asd',)
+2024-10-05 15:41:28,746 - INFO - ROLLBACK
