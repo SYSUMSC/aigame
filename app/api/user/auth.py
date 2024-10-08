@@ -33,15 +33,10 @@ def getRandCode(n):
 def send_email(subject, body, to_email):
     #从环境变量里读取
     load_dotenv()
-    print(os.getenv("SMTP_SERVER"))
-    print(os.getenv("SMTP_PORT"))
-    print(os.getenv("SMTP_USER"))
-    print(os.getenv("SMTP_PASSWORD"))
     smtp_server = os.getenv("SMTP_SERVER")  # 邮箱的smtp服务器地址
     smtp_port = int(os.getenv("SMTP_PORT"))  # 端口号
     smtp_user = os.getenv("SMTP_USER")  # 发送邮件的邮箱
     smtp_password = os.getenv("SMTP_PASSWORD")  # 发送邮件的邮箱的授权码
-
     msg = MIMEMultipart()
     msg['From'] = smtp_user
     msg['To'] = to_email
