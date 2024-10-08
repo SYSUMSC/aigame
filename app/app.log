@@ -5473,3 +5473,512 @@ FROM config
 WHERE config.k = ?
 2024-10-05 15:44:18,847 - INFO - [cached since 0.002983s ago] ('admin_pwd',)
 2024-10-05 15:44:18,848 - INFO - COMMIT
+2024-10-05 15:44:22,672 - INFO - BEGIN (implicit)
+2024-10-05 15:44:22,673 - INFO - PRAGMA main.table_info("config")
+2024-10-05 15:44:22,673 - INFO - [raw sql] ()
+2024-10-05 15:44:22,675 - INFO - PRAGMA main.table_info("user")
+2024-10-05 15:44:22,675 - INFO - [raw sql] ()
+2024-10-05 15:44:22,676 - INFO - PRAGMA main.table_info("team")
+2024-10-05 15:44:22,676 - INFO - [raw sql] ()
+2024-10-05 15:44:22,677 - INFO - PRAGMA main.table_info("competition")
+2024-10-05 15:44:22,677 - INFO - [raw sql] ()
+2024-10-05 15:44:22,678 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-05 15:44:22,678 - INFO - [raw sql] ()
+2024-10-05 15:44:22,679 - INFO - PRAGMA main.table_info("problem")
+2024-10-05 15:44:22,679 - INFO - [raw sql] ()
+2024-10-05 15:44:22,679 - INFO - PRAGMA main.table_info("submission")
+2024-10-05 15:44:22,681 - INFO - [raw sql] ()
+2024-10-05 15:44:22,681 - INFO - PRAGMA main.table_info("participation")
+2024-10-05 15:44:22,682 - INFO - [raw sql] ()
+2024-10-05 15:44:22,683 - INFO - COMMIT
+2024-10-05 15:44:22,686 - INFO - BEGIN (implicit)
+2024-10-05 15:44:22,692 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:44:22,693 - INFO - [generated in 0.00048s] ('admin_user',)
+2024-10-05 15:44:22,694 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-05 15:44:22,694 - INFO - [cached since 0.002541s ago] ('admin_pwd',)
+2024-10-05 15:44:22,696 - INFO - COMMIT
+2024-10-08 14:33:47,793 - INFO - BEGIN (implicit)
+2024-10-08 14:33:47,794 - INFO - PRAGMA main.table_info("config")
+2024-10-08 14:33:47,794 - INFO - [raw sql] ()
+2024-10-08 14:33:47,801 - INFO - PRAGMA main.table_info("user")
+2024-10-08 14:33:47,803 - INFO - [raw sql] ()
+2024-10-08 14:33:47,804 - INFO - PRAGMA main.table_info("team")
+2024-10-08 14:33:47,804 - INFO - [raw sql] ()
+2024-10-08 14:33:47,807 - INFO - PRAGMA main.table_info("competition")
+2024-10-08 14:33:47,809 - INFO - [raw sql] ()
+2024-10-08 14:33:47,810 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-08 14:33:47,810 - INFO - [raw sql] ()
+2024-10-08 14:33:47,814 - INFO - PRAGMA main.table_info("problem")
+2024-10-08 14:33:47,814 - INFO - [raw sql] ()
+2024-10-08 14:33:47,818 - INFO - PRAGMA main.table_info("submission")
+2024-10-08 14:33:47,819 - INFO - [raw sql] ()
+2024-10-08 14:33:47,820 - INFO - PRAGMA main.table_info("participation")
+2024-10-08 14:33:47,820 - INFO - [raw sql] ()
+2024-10-08 14:33:47,824 - INFO - COMMIT
+2024-10-08 14:33:47,829 - INFO - BEGIN (implicit)
+2024-10-08 14:33:47,852 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:33:47,852 - INFO - [generated in 0.00133s] ('admin_user',)
+2024-10-08 14:33:47,856 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:33:47,857 - INFO - [cached since 0.005751s ago] ('admin_pwd',)
+2024-10-08 14:33:47,860 - INFO - COMMIT
+2024-10-08 14:34:13,868 - INFO - BEGIN (implicit)
+2024-10-08 14:34:13,874 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:34:13,876 - INFO - [generated in 0.00136s] ('fgh',)
+2024-10-08 14:34:13,883 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:34:13,883 - INFO - [generated in 0.00141s] ('qstxdy@gmail.com',)
+2024-10-08 14:34:13,889 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:34:13,891 - INFO - [generated in 0.00172s] ('fgh',)
+2024-10-08 14:34:13,898 - INFO - ROLLBACK
+2024-10-08 14:35:33,533 - INFO - BEGIN (implicit)
+2024-10-08 14:35:33,534 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:35:33,536 - INFO - [cached since 79.66s ago] ('fgh',)
+2024-10-08 14:35:33,539 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:35:33,539 - INFO - [cached since 79.66s ago] ('qstxdy@gmail.com',)
+2024-10-08 14:35:33,539 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:35:33,539 - INFO - [cached since 79.66s ago] ('fgh',)
+2024-10-08 14:35:33,550 - INFO - ROLLBACK
+2024-10-08 14:37:03,202 - INFO - BEGIN (implicit)
+2024-10-08 14:37:03,202 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:37:03,204 - INFO - [cached since 169.3s ago] ('asd',)
+2024-10-08 14:37:03,741 - INFO - ROLLBACK
+2024-10-08 14:37:07,128 - INFO - BEGIN (implicit)
+2024-10-08 14:37:07,130 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:37:07,132 - INFO - [cached since 173.3s ago] ('asd',)
+2024-10-08 14:37:07,627 - INFO - ROLLBACK
+2024-10-08 14:37:07,701 - INFO - BEGIN (implicit)
+2024-10-08 14:37:07,702 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:37:07,702 - INFO - [generated in 0.00196s] ('asd',)
+2024-10-08 14:37:07,710 - INFO - ROLLBACK
+2024-10-08 14:37:07,762 - INFO - BEGIN (implicit)
+2024-10-08 14:37:07,764 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:37:07,768 - INFO - [cached since 0.06343s ago] ('asd',)
+2024-10-08 14:37:07,773 - INFO - ROLLBACK
+2024-10-08 14:37:07,863 - INFO - BEGIN (implicit)
+2024-10-08 14:37:07,863 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:37:07,865 - INFO - [cached since 0.161s ago] ('asd',)
+2024-10-08 14:37:07,868 - INFO - ROLLBACK
+2024-10-08 14:37:41,392 - INFO - BEGIN (implicit)
+2024-10-08 14:37:41,395 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:37:41,397 - INFO - [cached since 207.5s ago] ('uio',)
+2024-10-08 14:37:41,400 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:37:41,402 - INFO - [cached since 207.5s ago] ('2322925644@qq.com',)
+2024-10-08 14:37:41,402 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:37:41,402 - INFO - [cached since 207.5s ago] ('uio',)
+2024-10-08 14:37:41,408 - INFO - ROLLBACK
+2024-10-08 14:38:24,875 - INFO - BEGIN (implicit)
+2024-10-08 14:38:24,877 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:38:24,877 - INFO - [cached since 251s ago] ('uio',)
+2024-10-08 14:38:24,887 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:38:24,890 - INFO - [cached since 251s ago] ('qstxdy@gmail.com',)
+2024-10-08 14:38:24,892 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:38:24,898 - INFO - [cached since 251s ago] ('uio',)
+2024-10-08 14:38:24,901 - INFO - ROLLBACK
+2024-10-08 14:38:46,003 - INFO - BEGIN (implicit)
+2024-10-08 14:38:46,003 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:38:46,003 - INFO - [cached since 272.1s ago] ('uio',)
+2024-10-08 14:38:46,016 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:38:46,021 - INFO - [cached since 272.1s ago] ('qstxdy@gmail.com',)
+2024-10-08 14:38:46,025 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:38:46,029 - INFO - [cached since 272.1s ago] ('132',)
+2024-10-08 14:38:46,032 - INFO - ROLLBACK
+2024-10-08 14:40:53,895 - INFO - BEGIN (implicit)
+2024-10-08 14:40:53,896 - INFO - PRAGMA main.table_info("config")
+2024-10-08 14:40:53,897 - INFO - [raw sql] ()
+2024-10-08 14:40:53,898 - INFO - PRAGMA main.table_info("user")
+2024-10-08 14:40:53,898 - INFO - [raw sql] ()
+2024-10-08 14:40:53,901 - INFO - PRAGMA main.table_info("team")
+2024-10-08 14:40:53,902 - INFO - [raw sql] ()
+2024-10-08 14:40:53,903 - INFO - PRAGMA main.table_info("competition")
+2024-10-08 14:40:53,904 - INFO - [raw sql] ()
+2024-10-08 14:40:53,904 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-08 14:40:53,906 - INFO - [raw sql] ()
+2024-10-08 14:40:53,907 - INFO - PRAGMA main.table_info("problem")
+2024-10-08 14:40:53,907 - INFO - [raw sql] ()
+2024-10-08 14:40:53,909 - INFO - PRAGMA main.table_info("submission")
+2024-10-08 14:40:53,911 - INFO - [raw sql] ()
+2024-10-08 14:40:53,912 - INFO - PRAGMA main.table_info("participation")
+2024-10-08 14:40:53,913 - INFO - [raw sql] ()
+2024-10-08 14:40:53,914 - INFO - COMMIT
+2024-10-08 14:40:53,920 - INFO - BEGIN (implicit)
+2024-10-08 14:40:53,940 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:40:53,940 - INFO - [generated in 0.00224s] ('admin_user',)
+2024-10-08 14:40:53,947 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:40:53,947 - INFO - [cached since 0.007964s ago] ('admin_pwd',)
+2024-10-08 14:40:53,950 - INFO - COMMIT
+2024-10-08 14:41:16,284 - INFO - BEGIN (implicit)
+2024-10-08 14:41:16,287 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:41:16,287 - INFO - [generated in 0.00231s] ('uio',)
+2024-10-08 14:41:16,299 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:41:16,302 - INFO - [generated in 0.00227s] ('qstxdy@gmail.com',)
+2024-10-08 14:41:16,306 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:41:16,306 - INFO - [generated in 0.00180s] ('132',)
+2024-10-08 14:41:16,314 - INFO - ROLLBACK
+2024-10-08 14:42:07,789 - INFO - BEGIN (implicit)
+2024-10-08 14:42:07,789 - INFO - PRAGMA main.table_info("config")
+2024-10-08 14:42:07,792 - INFO - [raw sql] ()
+2024-10-08 14:42:07,794 - INFO - PRAGMA main.table_info("user")
+2024-10-08 14:42:07,794 - INFO - [raw sql] ()
+2024-10-08 14:42:07,796 - INFO - PRAGMA main.table_info("team")
+2024-10-08 14:42:07,797 - INFO - [raw sql] ()
+2024-10-08 14:42:07,799 - INFO - PRAGMA main.table_info("competition")
+2024-10-08 14:42:07,799 - INFO - [raw sql] ()
+2024-10-08 14:42:07,802 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-08 14:42:07,802 - INFO - [raw sql] ()
+2024-10-08 14:42:07,804 - INFO - PRAGMA main.table_info("problem")
+2024-10-08 14:42:07,804 - INFO - [raw sql] ()
+2024-10-08 14:42:07,806 - INFO - PRAGMA main.table_info("submission")
+2024-10-08 14:42:07,806 - INFO - [raw sql] ()
+2024-10-08 14:42:07,808 - INFO - PRAGMA main.table_info("participation")
+2024-10-08 14:42:07,810 - INFO - [raw sql] ()
+2024-10-08 14:42:07,810 - INFO - COMMIT
+2024-10-08 14:42:07,812 - INFO - BEGIN (implicit)
+2024-10-08 14:42:07,831 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:42:07,831 - INFO - [generated in 0.00105s] ('admin_user',)
+2024-10-08 14:42:07,835 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:42:07,835 - INFO - [cached since 0.004897s ago] ('admin_pwd',)
+2024-10-08 14:42:07,838 - INFO - COMMIT
+2024-10-08 14:42:12,698 - INFO - BEGIN (implicit)
+2024-10-08 14:42:12,698 - INFO - PRAGMA main.table_info("config")
+2024-10-08 14:42:12,700 - INFO - [raw sql] ()
+2024-10-08 14:42:12,702 - INFO - PRAGMA main.table_info("user")
+2024-10-08 14:42:12,703 - INFO - [raw sql] ()
+2024-10-08 14:42:12,704 - INFO - PRAGMA main.table_info("team")
+2024-10-08 14:42:12,706 - INFO - [raw sql] ()
+2024-10-08 14:42:12,706 - INFO - PRAGMA main.table_info("competition")
+2024-10-08 14:42:12,708 - INFO - [raw sql] ()
+2024-10-08 14:42:12,708 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-08 14:42:12,709 - INFO - [raw sql] ()
+2024-10-08 14:42:12,710 - INFO - PRAGMA main.table_info("problem")
+2024-10-08 14:42:12,710 - INFO - [raw sql] ()
+2024-10-08 14:42:12,710 - INFO - PRAGMA main.table_info("submission")
+2024-10-08 14:42:12,710 - INFO - [raw sql] ()
+2024-10-08 14:42:12,710 - INFO - PRAGMA main.table_info("participation")
+2024-10-08 14:42:12,710 - INFO - [raw sql] ()
+2024-10-08 14:42:12,719 - INFO - COMMIT
+2024-10-08 14:42:12,724 - INFO - BEGIN (implicit)
+2024-10-08 14:42:12,738 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:42:12,738 - INFO - [generated in 0.00112s] ('admin_user',)
+2024-10-08 14:42:12,743 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:42:12,744 - INFO - [cached since 0.00544s ago] ('admin_pwd',)
+2024-10-08 14:42:12,744 - INFO - COMMIT
+2024-10-08 14:42:12,789 - INFO - BEGIN (implicit)
+2024-10-08 14:42:12,791 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:42:12,795 - INFO - [generated in 0.00141s] ('uio',)
+2024-10-08 14:42:12,798 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:42:12,798 - INFO - [generated in 0.00108s] ('qstxdy@gmail.com',)
+2024-10-08 14:42:12,803 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:42:12,804 - INFO - [generated in 0.00094s] ('132',)
+2024-10-08 14:42:12,808 - INFO - ROLLBACK
+2024-10-08 14:43:31,020 - INFO - BEGIN (implicit)
+2024-10-08 14:43:31,022 - INFO - PRAGMA main.table_info("config")
+2024-10-08 14:43:31,022 - INFO - [raw sql] ()
+2024-10-08 14:43:31,025 - INFO - PRAGMA main.table_info("user")
+2024-10-08 14:43:31,026 - INFO - [raw sql] ()
+2024-10-08 14:43:31,027 - INFO - PRAGMA main.table_info("team")
+2024-10-08 14:43:31,027 - INFO - [raw sql] ()
+2024-10-08 14:43:31,029 - INFO - PRAGMA main.table_info("competition")
+2024-10-08 14:43:31,029 - INFO - [raw sql] ()
+2024-10-08 14:43:31,032 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-08 14:43:31,032 - INFO - [raw sql] ()
+2024-10-08 14:43:31,032 - INFO - PRAGMA main.table_info("problem")
+2024-10-08 14:43:31,036 - INFO - [raw sql] ()
+2024-10-08 14:43:31,036 - INFO - PRAGMA main.table_info("submission")
+2024-10-08 14:43:31,036 - INFO - [raw sql] ()
+2024-10-08 14:43:31,040 - INFO - PRAGMA main.table_info("participation")
+2024-10-08 14:43:31,040 - INFO - [raw sql] ()
+2024-10-08 14:43:31,043 - INFO - COMMIT
+2024-10-08 14:43:31,050 - INFO - BEGIN (implicit)
+2024-10-08 14:43:31,066 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:43:31,066 - INFO - [generated in 0.00128s] ('admin_user',)
+2024-10-08 14:43:31,073 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:43:31,075 - INFO - [cached since 0.007782s ago] ('admin_pwd',)
+2024-10-08 14:43:31,076 - INFO - COMMIT
+2024-10-08 14:44:42,896 - INFO - BEGIN (implicit)
+2024-10-08 14:44:42,899 - INFO - PRAGMA main.table_info("config")
+2024-10-08 14:44:42,899 - INFO - [raw sql] ()
+2024-10-08 14:44:42,901 - INFO - PRAGMA main.table_info("user")
+2024-10-08 14:44:42,904 - INFO - [raw sql] ()
+2024-10-08 14:44:42,905 - INFO - PRAGMA main.table_info("team")
+2024-10-08 14:44:42,905 - INFO - [raw sql] ()
+2024-10-08 14:44:42,907 - INFO - PRAGMA main.table_info("competition")
+2024-10-08 14:44:42,907 - INFO - [raw sql] ()
+2024-10-08 14:44:42,908 - INFO - PRAGMA main.table_info("problemtype")
+2024-10-08 14:44:42,908 - INFO - [raw sql] ()
+2024-10-08 14:44:42,911 - INFO - PRAGMA main.table_info("problem")
+2024-10-08 14:44:42,911 - INFO - [raw sql] ()
+2024-10-08 14:44:42,914 - INFO - PRAGMA main.table_info("submission")
+2024-10-08 14:44:42,914 - INFO - [raw sql] ()
+2024-10-08 14:44:42,915 - INFO - PRAGMA main.table_info("participation")
+2024-10-08 14:44:42,915 - INFO - [raw sql] ()
+2024-10-08 14:44:42,918 - INFO - COMMIT
+2024-10-08 14:44:42,920 - INFO - BEGIN (implicit)
+2024-10-08 14:44:42,938 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:44:42,938 - INFO - [generated in 0.00102s] ('admin_user',)
+2024-10-08 14:44:42,941 - INFO - SELECT config.k, config.v 
+FROM config 
+WHERE config.k = ?
+2024-10-08 14:44:42,941 - INFO - [cached since 0.005108s ago] ('admin_pwd',)
+2024-10-08 14:44:42,944 - INFO - COMMIT
+2024-10-08 14:44:48,979 - INFO - BEGIN (implicit)
+2024-10-08 14:44:48,980 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:44:48,985 - INFO - [generated in 0.00321s] ('uio',)
+2024-10-08 14:44:48,987 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:44:48,987 - INFO - [generated in 0.00120s] ('qstxdy@gmail.com',)
+2024-10-08 14:44:48,996 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:44:48,996 - INFO - [generated in 0.00115s] ('132',)
+2024-10-08 14:44:55,021 - INFO - ROLLBACK
+2024-10-08 14:45:54,332 - INFO - BEGIN (implicit)
+2024-10-08 14:45:54,332 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:45:54,332 - INFO - [cached since 65.36s ago] ('uio',)
+2024-10-08 14:45:54,342 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:45:54,342 - INFO - [cached since 65.35s ago] ('qstxdy@gmail.com',)
+2024-10-08 14:45:54,347 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:45:54,348 - INFO - [cached since 65.35s ago] ('132',)
+2024-10-08 14:46:00,162 - INFO - ROLLBACK
+2024-10-08 14:46:26,440 - INFO - BEGIN (implicit)
+2024-10-08 14:46:26,447 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:46:26,449 - INFO - [cached since 97.47s ago] ('uio',)
+2024-10-08 14:46:26,452 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:46:26,454 - INFO - [cached since 97.46s ago] ('qstxdy@gmail.com',)
+2024-10-08 14:46:26,458 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:46:26,459 - INFO - [cached since 97.46s ago] ('132',)
+2024-10-08 14:46:26,850 - INFO - INSERT INTO user (username, email, name, student_id, password, is_active, team_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+2024-10-08 14:46:26,850 - INFO - [generated in 0.00117s] ('uio', 'qstxdy@gmail.com', 'uio', '132', '$2b$12$LibaWcc5YRhHEeDRvOOxeOJhZdqjsbZ7Xwryy/ZTPD2f3WwSDk8V6', 1, None)
+2024-10-08 14:46:26,874 - INFO - COMMIT
+2024-10-08 14:46:26,887 - INFO - BEGIN (implicit)
+2024-10-08 14:46:26,890 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-08 14:46:26,891 - INFO - [generated in 0.00105s] (2,)
+2024-10-08 14:46:26,893 - INFO - ROLLBACK
+2024-10-08 14:50:53,511 - INFO - BEGIN (implicit)
+2024-10-08 14:50:53,511 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:50:53,511 - INFO - [cached since 364.5s ago] ('555',)
+2024-10-08 14:50:53,520 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:50:53,520 - INFO - [cached since 364.5s ago] ('2322925644@qq.com',)
+2024-10-08 14:50:53,526 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:50:53,526 - INFO - [cached since 364.5s ago] ('555',)
+2024-10-08 14:50:59,623 - INFO - ROLLBACK
+2024-10-08 14:51:27,439 - INFO - BEGIN (implicit)
+2024-10-08 14:51:27,439 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:51:27,439 - INFO - [cached since 398.5s ago] ('555',)
+2024-10-08 14:51:27,451 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:51:27,455 - INFO - [cached since 398.5s ago] ('2322925644@qq.com',)
+2024-10-08 14:51:27,455 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:51:27,459 - INFO - [cached since 398.5s ago] ('555',)
+2024-10-08 14:51:33,357 - INFO - ROLLBACK
+2024-10-08 14:52:21,150 - INFO - BEGIN (implicit)
+2024-10-08 14:52:21,152 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:21,154 - INFO - [cached since 452.2s ago] ('555',)
+2024-10-08 14:52:21,156 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:52:21,159 - INFO - [cached since 452.2s ago] ('2322925644@qq.com',)
+2024-10-08 14:52:21,161 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:52:21,161 - INFO - [cached since 452.2s ago] ('555',)
+2024-10-08 14:52:21,169 - INFO - ROLLBACK
+2024-10-08 14:52:37,843 - INFO - BEGIN (implicit)
+2024-10-08 14:52:37,843 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:37,843 - INFO - [cached since 468.9s ago] ('555',)
+2024-10-08 14:52:37,858 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.email = ?
+2024-10-08 14:52:37,861 - INFO - [cached since 468.9s ago] ('2322925644@qq.com',)
+2024-10-08 14:52:37,861 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.student_id = ?
+2024-10-08 14:52:37,861 - INFO - [cached since 468.9s ago] ('555',)
+2024-10-08 14:52:38,337 - INFO - INSERT INTO user (username, email, name, student_id, password, is_active, team_id) VALUES (?, ?, ?, ?, ?, ?, ?)
+2024-10-08 14:52:38,337 - INFO - [cached since 371.5s ago] ('555', '2322925644@qq.com', '555', '555', '$2b$12$fWzJLxsmwqn3gKOXd5Tty.h66d6bN2jUCFbcRLIY0pmgaDaQqU6eC', 1, None)
+2024-10-08 14:52:38,341 - INFO - COMMIT
+2024-10-08 14:52:38,353 - INFO - BEGIN (implicit)
+2024-10-08 14:52:38,353 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.id = ?
+2024-10-08 14:52:38,353 - INFO - [cached since 371.5s ago] (3,)
+2024-10-08 14:52:38,361 - INFO - ROLLBACK
+2024-10-08 14:52:52,339 - INFO - BEGIN (implicit)
+2024-10-08 14:52:52,339 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:52,339 - INFO - [cached since 483.4s ago] ('555',)
+2024-10-08 14:52:52,816 - INFO - ROLLBACK
+2024-10-08 14:52:52,855 - INFO - BEGIN (implicit)
+2024-10-08 14:52:52,859 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:52,860 - INFO - [generated in 0.00131s] ('555',)
+2024-10-08 14:52:52,865 - INFO - ROLLBACK
+2024-10-08 14:52:52,904 - INFO - BEGIN (implicit)
+2024-10-08 14:52:52,906 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:52,907 - INFO - [cached since 0.04781s ago] ('555',)
+2024-10-08 14:52:52,912 - INFO - ROLLBACK
+2024-10-08 14:52:53,012 - INFO - BEGIN (implicit)
+2024-10-08 14:52:53,014 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:53,014 - INFO - [cached since 0.156s ago] ('555',)
+2024-10-08 14:52:53,018 - INFO - ROLLBACK
+2024-10-08 14:52:56,700 - INFO - BEGIN (implicit)
+2024-10-08 14:52:56,702 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:56,702 - INFO - [cached since 3.843s ago] ('555',)
+2024-10-08 14:52:56,707 - INFO - ROLLBACK
+2024-10-08 14:52:57,553 - INFO - BEGIN (implicit)
+2024-10-08 14:52:57,553 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:57,557 - INFO - [cached since 4.699s ago] ('555',)
+2024-10-08 14:52:57,564 - INFO - ROLLBACK
+2024-10-08 14:52:57,632 - INFO - BEGIN (implicit)
+2024-10-08 14:52:57,632 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:57,632 - INFO - [cached since 4.775s ago] ('555',)
+2024-10-08 14:52:57,632 - INFO - ROLLBACK
+2024-10-08 14:52:58,063 - INFO - BEGIN (implicit)
+2024-10-08 14:52:58,065 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:58,065 - INFO - [cached since 5.207s ago] ('555',)
+2024-10-08 14:52:58,067 - INFO - ROLLBACK
+2024-10-08 14:52:58,142 - INFO - BEGIN (implicit)
+2024-10-08 14:52:58,145 - INFO - SELECT competition.id, competition.name, competition.start_time, competition.end_time, competition.status, competition.description 
+FROM competition
+2024-10-08 14:52:58,145 - INFO - [generated in 0.00123s] ()
+2024-10-08 14:52:58,152 - INFO - ROLLBACK
+2024-10-08 14:52:58,217 - INFO - BEGIN (implicit)
+2024-10-08 14:52:58,217 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:58,217 - INFO - [cached since 5.361s ago] ('555',)
+2024-10-08 14:52:58,224 - INFO - ROLLBACK
+2024-10-08 14:52:58,654 - INFO - BEGIN (implicit)
+2024-10-08 14:52:58,654 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:58,658 - INFO - [cached since 5.799s ago] ('555',)
+2024-10-08 14:52:58,662 - INFO - ROLLBACK
+2024-10-08 14:52:58,746 - INFO - BEGIN (implicit)
+2024-10-08 14:52:58,746 - INFO - SELECT user.id, user.username, user.email, user.name, user.student_id, user.password, user.is_active, user.team_id 
+FROM user 
+WHERE user.username = ?
+2024-10-08 14:52:58,746 - INFO - [cached since 5.889s ago] ('555',)
+2024-10-08 14:52:58,751 - INFO - ROLLBACK

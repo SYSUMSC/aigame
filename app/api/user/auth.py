@@ -3,6 +3,9 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+import os
+from dotenv import load_dotenv
+
 from starlette.middleware.sessions import SessionMiddleware
 import smtplib
 from email.mime.text import MIMEText
@@ -28,10 +31,16 @@ def getRandCode(n):
     return ''.join([str(random.randint(0, 9)) for i in range(n)])
 
 def send_email(subject, body, to_email):
-    smtp_server = "smtp.example.com" # 邮箱的smtp服务器地址
-    smtp_port = 465 # 端口号
-    smtp_user = "example@example.com" # 发送邮件的邮箱
-    smtp_password = "pwd" # 发送邮件的邮箱的授权码
+    #从环境变量里读取
+    load_dotenv()
+    print(os.getenv("SMTP_SERVER"))
+    print(os.getenv("SMTP_PORT"))
+    print(os.getenv("SMTP_USER"))
+    print(os.getenv("SMTP_PASSWORD"))
+    smtp_server = os.getenv("SMTP_SERVER")  # 邮箱的smtp服务器地址
+    smtp_port = int(os.getenv("SMTP_PORT"))  # 端口号
+    smtp_user = os.getenv("SMTP_USER")  # 发送邮件的邮箱
+    smtp_password = os.getenv("SMTP_PASSWORD")  # 发送邮件的邮箱的授权码
 
     msg = MIMEMultipart()
     msg['From'] = smtp_user
@@ -94,6 +103,7 @@ async def register(
         else:
             # 生成并发送验证码
             verify_code = getRandCode(6)
+            print(verify_code)
             send_email("欢迎注册AI游戏平台", f"验证码是: {verify_code}", user.email)
             
             # 将验证码存入 session

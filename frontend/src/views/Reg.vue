@@ -68,6 +68,12 @@
 								/>
 							</div>
 							<button
+								@click="sendVerifyCode"
+								class="btn btn-primary w-100 mb-3"
+							>
+								发送验证码
+							</button>
+							<button
 								type="submit"
 								class="btn btn-primary w-100"
 							>
@@ -94,7 +100,31 @@ const password = ref('');
 const verify_code = ref('');
 const router = useRouter();
 
+const sendVerifyCode = async () => {
+	// 去除空格
+	email.value = email.value.trim();
+	if (email.value) {
+		try {
+			const res = await axios.post('/api/user/register', {
+				username: username.value,
+				email: email.value,
+				name: name.value,
+				student_id: student_id.value,
+				password: password.value,
+			},{withCredentials:true});
+			alert(res.data.msg);
+		} catch (error) {
+			console.error(error);
+			alert('注册失败，请稍后再试。');
+		}
+	} else {
+		alert('请输入电子邮件。');
+	}
+};
+
 const reg = async () => {
+	// 去除空格
+	verify_code.value = verify_code.value.trim();
 	if (verify_code.value) {
 		const res = await axios.post('/api/user/register', {
 			username: username.value,
@@ -117,22 +147,6 @@ const reg = async () => {
 			} else {
 				alert(res.data.msg);
 			}
-
-	} else {
-		try {
-			await axios.post('/api/user/register', {
-				username: username.value,
-				email: email.value,
-				name: name.value,
-				student_id: student_id.value,
-				password: password.value,
-			},{
-        withCredentials:true
-      });
-		} catch (error) {
-			console.error(error);
-			alert('注册失败，请稍后再试。');
-		}
-	}
+	} 
 };
 </script>
