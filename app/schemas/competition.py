@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlmodel import Field, SQLModel
 
 class Competition(SQLModel, table=True):
+
     id: int | None = Field(default=None, primary_key=True)
     name: str
     start_time: datetime

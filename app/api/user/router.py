@@ -49,13 +49,13 @@ from fastapi import APIRouter, Depends
 
 from core.security import oauth2_scheme_user as oauth2_scheme
 
+from .submission import submission_router
 from .auth import auth_router
 from .info import info_router
 from .team import team_router
 from .competion import competition_router
 from .participation import participation_router
 from .problem import problem_router
-from .submission import submission_router  # 修改为正确的名称
 
 user_router = APIRouter()
 

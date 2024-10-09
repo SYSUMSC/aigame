@@ -1,3 +1,3 @@
-from .config import *
-from .team import *
-from .user import *
+# from .config import *
+# from .team import *
+# from .user import *
