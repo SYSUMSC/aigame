@@ -7,13 +7,39 @@ from app.api.models import ResponseModel
 
 from db.session import get_session
 from schemas.participation import Participation, ParticipationSchema
+from schemas.user import User
+from schemas.team import Team
+
+from core.security import get_current_user
 
 participation_router = APIRouter()
+
+async def get_team_info(current_user:str,session: AsyncSession = Depends(get_session)):
+    try:
+        # 获取当前用户
+        statement = select(User).where(User.username == current_user)
+        result = await session.execute(statement)
+        user_db = result.scalar_one_or_none()
+        if not user_db:
+            return ResponseModel(code=1, msg="用户未找到")
+        # 获取队伍信息
+        if not user_db.team_id:
+            return ResponseModel(code=1, msg="用户不在任何队伍中")
+
+        statement = select(Team).where(Team.id == user_db.team_id)
+        result = await session.execute(statement)
+        team_db = result.scalar_one_or_none()
+        if not team_db:
+            return ResponseModel(code=1, msg="队伍未找到")
+
+        team_info = team_db.model_dump()
+        return team_info["captain_id"] == user_db.id
+    except Exception as e:
+        return False
 
 @participation_router.get("/participation", response_model=ResponseModel, tags=["User"])
 async def get_participation(team_id:int, session: AsyncSession = Depends(get_session)):
     try:
-        # 获取用户参赛信息
         statement = select(Participation).where(Participation.team_id == team_id)
         result = await session.execute(statement)
         participation_list = result.scalars().all()
@@ -22,8 +48,12 @@ async def get_participation(team_id:int, session: AsyncSession = Depends(get_ses
         return ResponseModel(code=1, msg=str(e))
 
 @participation_router.post("/participation", response_model=ResponseModel, tags=["User"])
-async def join_competition(participation: ParticipationSchema, session: AsyncSession = Depends(get_session)):
+async def join_competition(participation: ParticipationSchema,current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
+        # 获取用户参赛信息
+        isCaptain = await get_team_info(current_user,session)
+        if not isCaptain:
+            return ResponseModel(code=1, msg="用户不是队长")
         # 检查用户是否已参加比赛
         existing_participation = await session.execute(select(Participation).where(Participation.user_id == participation.user_id, Participation.competition_id == participation.competition_id))
         if existing_participation.scalar_one_or_none():
