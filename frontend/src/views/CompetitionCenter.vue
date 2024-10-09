@@ -29,7 +29,7 @@
 							<button
 								v-else-if="isCaptain && isJoin(competition.id)"
 								@click="quit(competition.id)"
-								class="btn bg-red-500 hover:bg-red-600 text-white w-24 h-full"
+								class="btn bg-red-500 hover:bg-red-600 text-white w-24 h-full mr-2"
 							>
 								退出
 							</button>
@@ -87,6 +87,8 @@ const join = async (competition_id: number) => {
 	});
 	if (res.status === 200 && res.data.code === 0) {
 		alert('报名成功');
+		//刷新页面
+		window.location.reload();
 	} else {
 		alert(res.data.msg);
 	}
@@ -112,6 +114,7 @@ const quit = async (competition_id: number) => {
 	});
 	if (res.status === 200 && res.data.code === 0) {
 		alert('退出成功');
+		window.location.reload();
 	} else {
 		alert(res.data.msg);
 	}
