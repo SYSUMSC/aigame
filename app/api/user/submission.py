@@ -43,10 +43,10 @@ async def get_current_team_id(current_user: str = Depends(get_current_user), ses
 @submission_router.post("/problem/{problem_id}/submit", response_model=ResponseModel, tags=["Problem"])
 async def submit_problem_file(
     problem_id: int,
-    file: UploadFile = File(...),  # 接收上传文件
+    file: UploadFile = File(...),
     session: AsyncSession = Depends(get_session),
-    user_id: int = Depends(get_current_user_id),  # 获取当前用户的ID
-    team_id: int = Depends(get_current_team_id)   # 获取当前用户的队伍ID
+    user_id: int = Depends(get_current_user_id),
+    team_id: int = Depends(get_current_team_id)
 ):
     try:
         # 检查 problem_id 是否存在
@@ -56,13 +56,21 @@ async def submit_problem_file(
         if not problem:
             return ResponseModel(code=1, msg="赛题未找到")
 
-        # 文件大小限制
-        if file.spool_max_size > 10 * 1024 * 1024:  # 10MB 限制
+        # 检查文件大小
+        file_size = len(file.file.read())
+        file.file.seek(0)  # 将文件指针重置到开头
+
+        if file_size > 10 * 1024 * 1024:  # 10MB 限制
             return ResponseModel(code=1, msg="文件大小超过限制")
 
         # 保存文件内容，确保文件名唯一性
+        upload_directory = os.path.join("uploads", str(problem_id))
+        if not os.path.exists(upload_directory):
+            os.makedirs(upload_directory)  # 如果目录不存在则创建
+
         file_name = f"{uuid.uuid4()}_{file.filename}"
-        file_location = os.path.join("uploads", str(problem_id), file_name)
+        file_location = os.path.join(upload_directory, file_name)
+
         with open(file_location, "wb+") as file_object:
             file_object.write(file.file.read())
 
@@ -73,7 +81,7 @@ async def submit_problem_file(
             problem_id=problem_id,
             competition_id=problem.competition_id,
             submission_content=file_location,
-            score=0,  # 初始得分为0
+            score=0,
             status=0,  # 状态为待评测
             submit_time=datetime.now(timezone.utc)
         )

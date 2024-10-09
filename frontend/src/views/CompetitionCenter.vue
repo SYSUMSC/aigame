@@ -4,46 +4,55 @@
       <div class="card">
         <div class="card-header">比赛中心</div>
 
-        <div class="card-body">
-          <div
-            class="p-2 border border-gray-300 rounded flex flex-row justify-between"
-            v-for="competition in competitions"
-            :key="competition.id"
-          >
-            <div>
-              <h2 class="mb-3 fs-4">{{ competition.name }}</h2>
-              <span>开始时间: {{ competition.start_time }}</span>
-              <span class="ml-6">结束时间: {{ competition.end_time }}</span>
-              <p>描述: {{ competition.description }}</p>
-            </div>
-            <div v-if="isCaptain">
-              <button
-                v-if="!isJoin(competition.id)"
-                @click="join(competition.id)"
-                class="btn btn-primary ml-6"
-              >
-                报名
-              </button>
-              <button
-                v-else
-                @click="quit(competition.id)"
-                class="btn btn-danger ml-6"
-              >
-                退出
-              </button>
-            </div>
-            <button
-              @click="viewDetail(competition.id)"
-              class="btn btn-secondary ml-6"
-            >
-              查看详情
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+				<div class="card-body">
+					<div
+						class="p-2 border border-gray-300 rounded flex flex-row justify-between"
+						v-for="competition in competitions"
+						:key="competition.id"
+					>
+						<div>
+							<h2 class="mb-3 fs-4">{{ competition.name }}</h2>
+							<span>开始时间: {{ competition.start_time }}</span>
+							<span class="ml-6"
+								>结束时间: {{ competition.end_time }}</span
+							>
+							<p>描述: {{ competition.description }}</p>
+						</div>
+						<div class="flex flex-row ml-6 space-x-2">
+							<button
+								v-if="isCaptain && !isJoin(competition.id)"
+								@click="join(competition.id)"
+								class="btn bg-blue-500 hover:bg-blue-600 text-white w-24 h-full mr-2"
+							>
+								报名
+							</button>
+							<button
+								v-else-if="isCaptain && isJoin(competition.id)"
+								@click="quit(competition.id)"
+								class="btn bg-red-500 hover:bg-red-600 text-white w-24 h-full"
+							>
+								退出
+							</button>
+							<button
+								@click="viewDetail(competition.id)"
+								class="btn bg-gray-500 hover:bg-gray-600 text-white w-24 h-full"
+							>
+								查看详情
+							</button>
+							<button
+								@click="viewLeaderboard(competition.id)"
+								class="btn bg-gray-500 hover:bg-gray-600 text-white w-24 h-full"
+							>
+								排行榜
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
+
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import axios from "axios";
@@ -66,11 +75,13 @@ type Participation = {
   update_time: string;
   user_id: number;
 };
+
 const isCaptain = ref<boolean>(false);
 const participations = ref<Participation[]>([]);
 const userStore = useUserStore();
 const competitions = ref<Competition[]>([]);
 const teamInfo = ref<any>(null);
+
 const isJoin = (competition_id: number) => {
   return participations.value.some((p) => p.competition_id === competition_id);
 };
@@ -135,8 +146,14 @@ onMounted(async () => {
   await getJoinInfo();
   await fetchTeamInfo();
 });
-//添加了查看详情按钮
+
+//查看详情按钮
 const viewDetail = (competition_id: any) => {
   router.push({ name: "CompetitionDetail", params: { id: competition_id } });
+};
+
+//排行榜按钮
+const viewLeaderboard = (competition_id: any) => {
+	router.push({ name: 'CompetitionLeaderboard', params: { id: competition_id } });
 };
 </script>
