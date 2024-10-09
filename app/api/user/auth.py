@@ -16,6 +16,7 @@ from app.api.models import ResponseModel
 from core.security import (create_access_token, get_password_hash, verify_password)
 from db.session import get_session
 from schemas.user import User, UserSchema
+from core.utils import load_smtp_config_from_db
 
 auth_router = APIRouter()
 
@@ -31,12 +32,12 @@ def getRandCode(n):
     return ''.join([str(random.randint(0, 9)) for i in range(n)])
 
 def send_email(subject, body, to_email):
-    #从环境变量里读取
-    load_dotenv()
-    smtp_server = os.getenv("SMTP_SERVER")  # 邮箱的smtp服务器地址
-    smtp_port = int(os.getenv("SMTP_PORT"))  # 端口号
-    smtp_user = os.getenv("SMTP_USER")  # 发送邮件的邮箱
-    smtp_password = os.getenv("SMTP_PASSWORD")  # 发送邮件的邮箱的授权码
+    # 从数据库中获取邮箱配置
+    config_dict = load_smtp_config_from_db()
+    smtp_server = config_dict.get("smtp_server")  # 邮箱的smtp服务器地址
+    smtp_port = config_dict.get("smtp_port")  # 端口号
+    smtp_user = config_dict.get("smtp_user")  # 发送邮件的邮箱
+    smtp_password = config_dict.get("smtp_password")  # 发送邮件的邮箱的授权码
     msg = MIMEMultipart()
     msg['From'] = smtp_user
     msg['To'] = to_email

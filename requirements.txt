@@ -12,4 +12,3 @@ Jinja2
 python-multipart
 itsdangerous
 greenlet
-python-dotenv
