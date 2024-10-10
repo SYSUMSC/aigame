@@ -1,0 +1,178 @@
+# # from fastapi import APIRouter, Depends
+# # from sqlalchemy.ext.asyncio import AsyncSession
+# # from sqlalchemy import func, select
+# # from db.session import get_session
+# # from app.api.models import ResponseModel
+# # from schemas.submission import Submission
+# # from schemas.team import Team  # 正确引用 Team 表
+
+# # leaderboard_router = APIRouter()
+
+# # @leaderboard_router.get("/competition/leaderboard", response_model=ResponseModel, tags=["Leaderboard"])
+# # async def get_leaderboard(competition_id: int, session: AsyncSession = Depends(get_session)):
+# #     try:
+# #         # 步骤1：找到每个队伍在每个题目的最新提交
+# #         subquery = select(
+# #             Submission.team_id,
+# #             Submission.problem_id,
+# #             func.max(Submission.submit_time).label('latest_submission_time')
+# #         ).where(
+# #             Submission.status == 1,  # 只取已评测的提交
+# #             Submission.competition_id == competition_id
+# #         ).group_by(Submission.team_id, Submission.problem_id).subquery()
+
+# #         # 步骤2：计算每个队伍的总分数
+# #         query = select(
+# #             Submission.team_id,
+# #             Team.name,  # 通过 Team 表获取队伍名称
+# #             func.sum(Submission.score).label('total_score')
+# #         ).join(
+# #             subquery, 
+# #             (subquery.c.team_id == Submission.team_id) & 
+# #             (subquery.c.problem_id == Submission.problem_id) & 
+# #             (subquery.c.latest_submission_time == Submission.submit_time)
+# #         ).join(
+# #             Team, Team.id == Submission.team_id  # 连接 Team 表，获取队伍信息
+# #         ).group_by(Submission.team_id, Team.name).order_by(func.sum(Submission.score).desc())
+
+# #         result = await session.execute(query)
+# #         leaderboard_data = result.all()
+
+# #         # 格式化结果
+# #         leaderboard = [
+# #             {
+# #                 "team_id": row.team_id,
+# #                 "name": row.name,
+# #                 "total_score": row.total_score
+# #             }
+# #             for row in leaderboard_data
+# #         ]
+
+# #         return ResponseModel(code=0, msg="排行榜获取成功", data=leaderboard)
+
+# #     except Exception as e:
+# #         return ResponseModel(code=1, msg=f"获取排行榜时出错: {str(e)}")
+
+# from fastapi import APIRouter, Depends, HTTPException
+# from sqlalchemy.ext.asyncio import AsyncSession
+# from sqlalchemy import func, select
+# from db.session import get_session
+# from app.api.models import ResponseModel
+# from schemas.submission import Submission
+# from schemas.team import Team  # 正确引用 Team 表
+# from pydantic import BaseModel
+
+# # 定义请求体模型
+# class CompetitionRequest(BaseModel):
+#     competition_id: int
+
+# leaderboard_router = APIRouter()
+
+# @leaderboard_router.post("/competition/leaderboard", response_model=ResponseModel, tags=["Leaderboard"])
+# async def get_leaderboard(request: CompetitionRequest, session: AsyncSession = Depends(get_session)):
+#     try:
+#         competition_id = request.competition_id
+        
+#         # 步骤1：找到每个队伍在每个题目的最新提交
+#         subquery = select(
+#             Submission.team_id,
+#             Submission.problem_id,
+#             func.max(Submission.submit_time).label('latest_submission_time')
+#         ).where(
+#             Submission.status == 1,  # 只取已评测的提交
+#             Submission.competition_id == competition_id
+#         ).group_by(Submission.team_id, Submission.problem_id).subquery()
+
+#         # 步骤2：计算每个队伍的总分数
+#         query = select(
+#             Submission.team_id,
+#             Team.name,  # 通过 Team 表获取队伍名称
+#             func.sum(Submission.score).label('total_score')
+#         ).join(
+#             subquery, 
+#             (subquery.c.team_id == Submission.team_id) & 
+#             (subquery.c.problem_id == Submission.problem_id) & 
+#             (subquery.c.latest_submission_time == Submission.submit_time)
+#         ).join(
+#             Team, Team.id == Submission.team_id  # 连接 Team 表，获取队伍信息
+#         ).group_by(Submission.team_id, Team.name).order_by(func.sum(Submission.score).desc())
+
+#         result = await session.execute(query)
+#         leaderboard_data = result.all()
+
+#         # 格式化结果
+#         leaderboard = [
+#             {
+#                 "team_id": row.team_id,
+#                 "name": row.name,
+#                 "total_score": row.total_score
+#             }
+#             for row in leaderboard_data
+#         ]
+
+#         return ResponseModel(code=0, msg="排行榜获取成功", data=leaderboard)
+
+#     except Exception as e:
+#         return ResponseModel(code=1, msg=f"获取排行榜时出错: {str(e)}")
+
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import func, select
+from db.session import get_session
+from app.api.models import ResponseModel
+from schemas.submission import Submission
+from schemas.team import Team  # 正确引用 Team 表
+from pydantic import BaseModel
+
+# 定义请求体模型
+class CompetitionRequest(BaseModel):
+    competition_id: int
+
+leaderboard_router = APIRouter()
+
+@leaderboard_router.post("/competition/leaderboard", response_model=ResponseModel, tags=["Leaderboard"])
+async def get_leaderboard(request: CompetitionRequest, session: AsyncSession = Depends(get_session)):
+    try:
+        competition_id = request.competition_id
+
+        # 步骤1：找到每个队伍在每个题目的最新提交
+        subquery = select(
+            Submission.team_id,
+            Submission.problem_id,
+            func.max(Submission.submit_time).label('latest_submission_time')
+        ).where(
+            Submission.status == 1,  # 只取已评测的提交
+            Submission.competition_id == competition_id
+        ).group_by(Submission.team_id, Submission.problem_id).subquery()
+
+        # 步骤2：计算每个队伍的总分数
+        query = select(
+            Submission.team_id,
+            Team.name,  # 通过 Team 表获取队伍名称
+            func.sum(Submission.score).label('total_score')
+        ).join(
+            subquery, 
+            (subquery.c.team_id == Submission.team_id) & 
+            (subquery.c.problem_id == Submission.problem_id) & 
+            (subquery.c.latest_submission_time == Submission.submit_time)
+        ).join(
+            Team, Team.id == Submission.team_id  # 连接 Team 表，获取队伍信息
+        ).group_by(Submission.team_id, Team.name).order_by(func.sum(Submission.score).desc())
+
+        result = await session.execute(query)
+        leaderboard_data = result.all()
+
+        # 格式化结果
+        leaderboard = [
+            {
+                "team_id": row.team_id,
+                "name": row.name,
+                "total_score": row.total_score
+            }
+            for row in leaderboard_data
+        ]
+
+        return ResponseModel(code=0, msg="排行榜获取成功", data=leaderboard)
+
+    except Exception as e:
+        return ResponseModel(code=1, msg=f"获取排行榜时出错: {str(e)}")
