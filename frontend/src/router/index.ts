@@ -11,6 +11,7 @@ import CompetitionDetail from "../views/CompetitionDetail.vue";
 import { useUserStore } from "../stores/user";
 import Column from "../views/Column.vue";
 import ProblemDetail from "../views/ProblemDetail.vue";
+import Leaderboard from "../views/Leaderboard.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -69,6 +70,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/problem/:id',
     name: 'ProblemDetail',
     component: ProblemDetail,
+    meta: { requiresAuth: true },
+    props: true 
+  },
+  {
+    path: '/competition/:id/leaderboard',
+    name: 'CompetitionLeaderboard',
+    component: Leaderboard,
     meta: { requiresAuth: true },
     props: true 
   }

@@ -39,7 +39,7 @@ const TextWelc = ref('')
   
 // 模拟打字效果  
 const typeEffect = (text: string, target: Ref<string>, interval: number = 100) => {  
-  let index = 0
+  let index = 0  
   const type = setInterval(() => {  
     if (index < text.length) {
       target.value += text.charAt(index)  

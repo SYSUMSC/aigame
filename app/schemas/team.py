@@ -2,10 +2,9 @@ from typing import List, Optional, Union
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from .user import User
-
 
 class Team(SQLModel, table=True):
+
     id: int | None = Field(default=None, primary_key=True)
     name: str | None = Field(unique=True)
     captain_id: int | None = Field(foreign_key="user.id")

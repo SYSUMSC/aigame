@@ -18,7 +18,7 @@
 							>
 							<p>描述: {{ competition.description }}</p>
 						</div>
-						<div class="flex flex-row ml-6">
+						<div class="flex flex-row ml-6 space-x-2">
 							<button
 								v-if="isCaptain && !isJoin(competition.id)"
 								@click="join(competition.id)"
@@ -29,7 +29,7 @@
 							<button
 								v-else-if="isCaptain && isJoin(competition.id)"
 								@click="quit(competition.id)"
-								class="btn bg-red-500 hover:bg-red-600 text-white w-24 h-full mr-2"
+								class="btn bg-red-500 hover:bg-red-600 text-white w-24 h-full"
 							>
 								退出
 							</button>
@@ -39,6 +39,12 @@
 							>
 								查看详情
 							</button>
+							<button
+								@click="viewLeaderboard(competition.id)"
+								class="btn bg-gray-500 hover:bg-gray-600 text-white w-24 h-full"
+							>
+								排行榜
+							</button>
 						</div>
 					</div>
 				</div>
@@ -46,6 +52,7 @@
 		</div>
 	</div>
 </template>
+
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
@@ -68,11 +75,13 @@ type Participation = {
 	update_time: string;
 	user_id: number;
 };
+
 const isCaptain = ref<boolean>(false);
 const participations = ref<Participation[]>([]);
 const userStore = useUserStore();
 const competitions = ref<Competition[]>([]);
 const teamInfo = ref<any>(null);
+
 const isJoin = (competition_id: number) => {
 	return participations.value.some(
 		(p) => p.competition_id === competition_id
@@ -142,8 +151,14 @@ onMounted(async () => {
 	await getJoinInfo();
 	await fetchTeamInfo();
 });
-//添加了查看详情按钮
+
+//查看详情按钮
 const viewDetail = (competition_id: any) => {
 	router.push({ name: 'CompetitionDetail', params: { id: competition_id } });
+};
+
+//排行榜按钮
+const viewLeaderboard = (competition_id: any) => {
+	router.push({ name: 'CompetitionLeaderboard', params: { id: competition_id } });
 };
 </script>

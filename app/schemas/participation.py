@@ -3,6 +3,7 @@ from typing import Optional
 from datetime import datetime, timezone
 
 class Participation(SQLModel, table=True):
+
     id: int | None = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="user.id")
     competition_id: int = Field(foreign_key="competition.id")

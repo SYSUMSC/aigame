@@ -47,7 +47,7 @@
     </div>
   </main>
 </template>
-
+<!-- 
 <script setup lang="ts">
 import { onMounted, ref, watchEffect } from "vue";
 import axios from "axios";
@@ -188,4 +188,61 @@ watchEffect(() => {
   fetchCompetitionDetail(competitionId);
   fetchProblems(competitionId);
 });
+</script> -->
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const selectedFile = ref<File | null>(null);
+
+// 处理文件选择
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    selectedFile.value = target.files[0];
+  }
+};
+
+// 提交文件
+const submitFile = async () => {
+  const competitionId = Number(route.params.id);
+
+  // Step 1: 检查队伍是否已经报名
+  const checkParticipation = await axios.get(`/api/user/participation`, {
+    params: {
+      team_id: /* 从用户信息中获取 team_id */,
+    },
+  });
+
+  if (checkParticipation.data.code !== 0 || checkParticipation.data.data.length === 0) {
+    alert('您的队伍尚未报名此比赛，无法提交文件');
+    return; // 阻止提交文件
+  }
+
+  // Step 2: 提交文件（假设已报名）
+  if (selectedFile.value) {
+    const formData = new FormData();
+    formData.append('file', selectedFile.value);
+
+    try {
+      const res = await axios.post(`/api/user/problem/${competitionId}/submit`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (res.data.code === 0) {
+        alert('文件提交成功');
+      } else {
+        alert(`文件提交失败: ${res.data.msg}`);
+      }
+    } catch (error) {
+      console.error('文件提交失败:', error);
+    }
+  } else {
+    alert('请先选择一个文件');
+  }
+};
 </script>
