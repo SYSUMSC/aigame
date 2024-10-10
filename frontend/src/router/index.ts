@@ -3,6 +3,7 @@ import axios from "axios";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Reg from "../views/Reg.vue";
+import Forget from "../views/Forget.vue";
 import UserCenter from "../views/UserCenter.vue";
 import Team from "../views/Team.vue";
 import CompetitionCenter from "../views/CompetitionCenter.vue";
@@ -28,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user/reg",
     name: "注册",
     component: Reg,
+  },
+  {
+    path: "/user/forget",
+    name: "忘记密码",
+    component: Forget,
   },
   {
     path: "/user/team",

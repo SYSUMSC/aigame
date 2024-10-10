@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen py-6 flex flex-col sm:py-12">
-    <div class="container mx-auto">
-      <div class="card">
-        <div class="card-header">比赛中心</div>
+	<div class="min-h-screen py-6 flex flex-col sm:py-12">
+		<div class="container mx-auto">
+			<div class="card">
+				<div class="card-header">比赛中心</div>
 
 				<div class="card-body">
 					<div
@@ -54,26 +54,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import axios from "axios";
-import { useUserStore } from "../stores/user";
-import router from "../router";
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import { useUserStore } from '../stores/user';
+import router from '../router';
 type Competition = {
-  id: number;
-  name: string;
-  start_time: string;
-  end_time: string;
-  status: number;
-  description: string;
+	id: number;
+	name: string;
+	start_time: string;
+	end_time: string;
+	status: number;
+	description: string;
 };
 type Participation = {
-  competition_id: number;
-  id: number;
-  join_time: string;
-  score: number | null;
-  team_id: number;
-  update_time: string;
-  user_id: number;
+	competition_id: number;
+	id: number;
+	join_time: string;
+	score: number | null;
+	team_id: number;
+	update_time: string;
+	user_id: number;
 };
 
 const isCaptain = ref<boolean>(false);
@@ -83,73 +83,78 @@ const competitions = ref<Competition[]>([]);
 const teamInfo = ref<any>(null);
 
 const isJoin = (competition_id: number) => {
-  return participations.value.some((p) => p.competition_id === competition_id);
+	return participations.value.some(
+		(p) => p.competition_id === competition_id
+	);
 };
 
 const join = async (competition_id: number) => {
-  const res = await axios.post("/api/user/participation", {
-    user_id: userStore.user?.id,
-    competition_id: competition_id,
-    team_id: userStore.user?.team_id,
-  });
-  if (res.status === 200 && res.data.code === 0) {
-    alert("报名成功");
-  } else {
-    alert(res.data.msg);
-  }
+	const res = await axios.post('/api/user/participation', {
+		user_id: userStore.user?.id,
+		competition_id: competition_id,
+		team_id: userStore.user?.team_id,
+	});
+	if (res.status === 200 && res.data.code === 0) {
+		alert('报名成功');
+		//刷新页面
+		window.location.reload();
+	} else {
+		alert(res.data.msg);
+	}
 };
 
 const getJoinInfo = async () => {
-  const res = await axios.get("/api/user/participation", {
-    params: {
-      team_id: userStore.user?.team_id,
-    },
-  });
-  if (res.status === 200 && res.data.code === 0) {
-    participations.value = await res.data.data;
-  }
+	const res = await axios.get('/api/user/participation', {
+		params: {
+			team_id: userStore.user?.team_id,
+		},
+	});
+	if (res.status === 200 && res.data.code === 0) {
+		participations.value = await res.data.data;
+	}
 };
 
 const quit = async (competition_id: number) => {
-  const res = await axios.delete("/api/user/participation", {
-    params: {
-      team_id: userStore.user?.team_id,
-      competition_id: competition_id,
-    },
-  });
-  if (res.status === 200 && res.data.code === 0) {
-    alert("退出成功");
-  } else {
-    alert(res.data.msg);
-  }
+	const res = await axios.delete('/api/user/participation', {
+		params: {
+			team_id: userStore.user?.team_id,
+			competition_id: competition_id,
+		},
+	});
+	if (res.status === 200 && res.data.code === 0) {
+		alert('退出成功');
+		window.location.reload();
+	} else {
+		alert(res.data.msg);
+	}
 };
 
 const fetchTeamInfo = async () => {
-  try {
-    const res = await axios.get("/api/user/team_info");
-    if (res.status === 200 && res.data.code === 0) {
-      teamInfo.value = res.data.data;
-      if (userStore.user) {
-        userStore.user.team_id = teamInfo.value.id;
-      }
-      isCaptain.value = teamInfo.value.captain_id === userStore.user?.id;
-    }
-  } catch (error) {
-    console.error(error);
-    alert("获取队伍信息失败，请稍后再试。");
-  }
+	try {
+		const res = await axios.get('/api/user/team_info');
+		if (res.status === 200 && res.data.code === 0) {
+			teamInfo.value = res.data.data;
+			if (userStore.user) {
+				userStore.user.team_id = teamInfo.value.id;
+			}
+			isCaptain.value = teamInfo.value.captain_id === userStore.user?.id;
+		}
+	} catch (error) {
+		console.error(error);
+		alert('获取队伍信息失败，请稍后再试。');
+	}
 };
 
 onMounted(async () => {
-  const res = await axios.get("/api/user/competition");
-  competitions.value = res.data.data;
-  await getJoinInfo();
-  await fetchTeamInfo();
+	const res = await axios.get('/api/user/competition');
+	competitions.value = res.data.data;
+	await getJoinInfo();
+	await fetchTeamInfo();
 });
 
 //查看详情按钮
 const viewDetail = (competition_id: any) => {
-  router.push({ name: "CompetitionDetail", params: { id: competition_id } });
+	router.push({ name: 'CompetitionDetail', params: { id: competition_id } });
 };
 
 //排行榜按钮
