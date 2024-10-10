@@ -1,6 +1,7 @@
 # 这里不能加app. 否则有bug？
 from schemas.problem import Problem
 from schemas.submission import Submission
+from schemas.participation import Participation  # 导入Participation模型
 from schemas.user import User
 from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -56,6 +57,17 @@ async def submit_problem_file(
         if not problem:
             return ResponseModel(code=1, msg="赛题未找到")
 
+        # 检查队伍是否报名比赛
+        participation_statement = select(Participation).where(
+            Participation.competition_id == problem.competition_id,
+            Participation.team_id == team_id
+        )
+        participation_result = await session.execute(participation_statement)
+        participation = participation_result.scalar_one_or_none()
+
+        if not participation:
+            return ResponseModel(code=1, msg="您的队伍尚未报名此比赛，无法提交文件")
+
         # 检查文件大小
         file_size = len(file.file.read())
         file.file.seek(0)  # 将文件指针重置到开头
@@ -80,7 +92,7 @@ async def submit_problem_file(
             team_id=team_id,
             problem_id=problem_id,
             competition_id=problem.competition_id,
-            submission_content=file_location,
+            submission_content=file_name,  # 不返回完整路径，只返回文件名
             score=0,
             status=0,  # 状态为待评测
             submit_time=datetime.now(timezone.utc)
@@ -88,7 +100,7 @@ async def submit_problem_file(
         session.add(submission)
         await session.commit()
 
-        return ResponseModel(code=0, msg="文件提交成功", data={"file_location": file_location})
+        return ResponseModel(code=0, msg="文件提交成功")
 
     except FileNotFoundError as e:
         return ResponseModel(code=1, msg="文件保存失败: 文件未找到")
