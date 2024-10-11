@@ -96,6 +96,25 @@ python main.py
 |---main.py #启动文件
 ```
 
+# 数据库字段变更迁移说明
+
+
+如果增加了新的model
+需要在`alembic\env.py`引入
+```python
+# 导入所有的模型
+from app.schemas.user import User
+```
+
+在项目根路径执行，生成当前的版本
+```
+python -m alembic revision --autogenerate -m "说明"
+```
+将alembic的版本更新到schema的最新版
+```
+python -m alembic upgrade head
+```
+
 # 开发说明
 
 ## 前台前端开发说明

@@ -7,6 +7,7 @@ __pycache__/
 # Ignore database files
 *.db
 目录.py
+local.md
 
 # pnpm前端
 node_modules/

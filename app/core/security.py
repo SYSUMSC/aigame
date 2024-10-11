@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-from core.config import settings
+from app.core.config import settings
 
 oauth2_scheme_admin = OAuth2PasswordBearer(tokenUrl=f"{settings.API_ADMIN_STR}/login")
 oauth2_scheme_user = OAuth2PasswordBearer(tokenUrl=f"{settings.API_USER_STR}/login")
