@@ -2,7 +2,8 @@ from sqlmodel import Field, Relationship, SQLModel
 
 
 class User(SQLModel, table=True):
-
+    __tablename__ = "user"
+    __table_args__ = {"extend_existing": True}
     id: int | None = Field(default=None, primary_key=True)
     username: str = Field(unique=True)
     email: str = Field(unique=True)

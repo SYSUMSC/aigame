@@ -1,8 +1,8 @@
 # 这里不能加app. 否则有bug？
-from schemas.problem import Problem
-from schemas.submission import Submission
-from schemas.participation import Participation  # 导入Participation模型
-from schemas.user import User
+from app.schemas.problem import Problem
+from app.schemas.submission import Submission
+from app.schemas.participation import Participation  # 导入Participation模型
+from app.schemas.user import User
 from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select

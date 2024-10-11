@@ -6,7 +6,7 @@ import secrets
 
 from core.security import get_password_hash
 from db.session import get_session
-from schemas.user import User, UserSchema, UserSearchSchema
+from app.schemas.user import User, UserSchema, UserSearchSchema
 
 from ..models import BatchDeleteRequest, ResponseModel
 

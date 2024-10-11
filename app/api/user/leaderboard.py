@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import func, select
 from db.session import get_session
 from app.api.models import ResponseModel
-from schemas.submission import Submission
-from schemas.team import Team
+from app.schemas.submission import Submission
+from app.schemas.team import Team
 from pydantic import BaseModel
 
 class CompetitionRequest(BaseModel):
@@ -25,9 +25,9 @@ async def get_leaderboard(
 
         if competition_id <= 0:
             raise ValueError("Invalid competition_id")
-        
+
         offset = (page - 1) * page_size
-        
+
         # 步骤1：找到每个队伍在每个题目的最新提交
         subquery = select(
             Submission.team_id,
@@ -44,9 +44,9 @@ async def get_leaderboard(
             Team.name,
             func.sum(Submission.score).label('total_score')
         ).join(
-            subquery, 
-            (subquery.c.team_id == Submission.team_id) & 
-            (subquery.c.problem_id == Submission.problem_id) & 
+            subquery,
+            (subquery.c.team_id == Submission.team_id) &
+            (subquery.c.problem_id == Submission.problem_id) &
             (subquery.c.latest_submission_time == Submission.submit_time)
         ).join(
             Team, Team.id == Submission.team_id

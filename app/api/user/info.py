@@ -4,7 +4,7 @@ from sqlmodel import select
 
 from app.api.models import ResponseModel
 from db.session import get_session
-from schemas.user import User, UserSchema
+from app.schemas.user import User, UserSchema
 from core.security import get_current_user, get_password_hash
 
 info_router = APIRouter()

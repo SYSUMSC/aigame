@@ -8,6 +8,7 @@ from sqlmodel import SQLModel, select
 from app.core.config import settings
 from app.core.security import get_password_hash
 from app.schemas.config import Config
+from app.db.init import init_test_data
 
 DATABASE_URL = settings.DATABASE_URI
 engine = create_async_engine(DATABASE_URL, echo=True)
@@ -16,6 +17,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, clas
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with SessionLocal() as session:
         yield session
+
 
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
@@ -32,4 +34,8 @@ async def lifespan(app: FastAPI):
             session.add(Config(k="admin_pwd", v=get_password_hash("123456")))
         await session.commit()
 
+        # 可选：生成测试数据
+        await init_test_data(session)
+
     yield
+

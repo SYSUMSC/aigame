@@ -4,7 +4,8 @@ from sqlmodel import Field, Relationship, SQLModel
 
 
 class Team(SQLModel, table=True):
-
+    __tablename__ = "team"
+    __table_args__ = {"extend_existing": True}
     id: int | None = Field(default=None, primary_key=True)
     name: str | None = Field(unique=True)
     captain_id: int | None = Field(foreign_key="user.id")

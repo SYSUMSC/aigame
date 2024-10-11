@@ -15,7 +15,7 @@ import random
 from app.api.models import ResponseModel
 from core.security import (create_access_token, get_password_hash, verify_password)
 from db.session import get_session
-from schemas.user import User, UserSchema
+from app.schemas.user import User, UserSchema
 from core.utils import load_smtp_config_from_db
 
 auth_router = APIRouter()
@@ -57,8 +57,8 @@ def send_email(subject, body, to_email):
 
 @auth_router.post("/register", response_model=ResponseModel, tags=["User"])
 async def register(
-    user: UserSchema, 
-    request: Request, 
+    user: UserSchema,
+    request: Request,
     session: AsyncSession = Depends(get_session),
     x_verify_code: str = Header(None)
 ):
@@ -67,45 +67,45 @@ async def register(
         existing_user = await session.execute(select(User).where(User.username == user.username))
         if existing_user.scalar_one_or_none():
             return ResponseModel(code=1, msg="用户名已存在")
-        
+
         # 检查邮箱是否已存在
         existing_email = await session.execute(select(User).where(User.email == user.email))
         if existing_email.scalar_one_or_none():
             return ResponseModel(code=1, msg="邮箱已存在")
-        
+
         # 检查学号是否已存在
         existing_student_id = await session.execute(select(User).where(User.student_id == user.student_id))
         if existing_student_id.scalar_one_or_none():
             return ResponseModel(code=1, msg="学号已存在")
-        
+
         # 验证码逻辑
         if 'verify_code' in request.session:
             verify_code = request.session['verify_code']
-            
+
             if not x_verify_code or x_verify_code != verify_code:
                 return ResponseModel(code=1, msg="验证码错误")
-            
+
             # 创建用户
             user_db = User(**user.model_dump())
             user_db.password = get_password_hash(user.password)
             session.add(user_db)
             await session.commit()
             await session.refresh(user_db)
-            
+
             # 清理 session 中的验证码
             del request.session['verify_code']
-            
+
             return ResponseModel(code=0, msg="用户注册成功", data=user_db.model_dump())
         else:
             # 生成并发送验证码
             verify_code = getRandCode(6)
             print(verify_code)
             send_email("欢迎注册AI游戏平台", f"验证码是: {verify_code}", user.email)
-            
+
             # 将验证码存入 session
             request.session['verify_code'] = verify_code
             return ResponseModel(code=0, msg="验证码已发送，请查收")
-    
+
     except Exception as e:
         return ResponseModel(code=1, msg=f"注册失败: {str(e)}")
 
@@ -128,7 +128,7 @@ async def login(request: LoginRequest, session: AsyncSession = Depends(get_sessi
         return ResponseModel(code=0, msg="登录成功", data={"access_token": access_token, "token_type": "bearer"})
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
-    
+
 @auth_router.post("/forgot-password", response_model=ResponseModel, tags=["User"])
 async def forgot_password(email: str, request: Request, session: AsyncSession = Depends(get_session)):
     try:
@@ -137,26 +137,26 @@ async def forgot_password(email: str, request: Request, session: AsyncSession = 
         user = existing_email.scalar_one_or_none()
         if not user:
             return ResponseModel(code=1, msg="邮箱不存在")
-        
+
         # 生成验证码并发送邮件
         reset_code = getRandCode(6)
         send_email("重置密码请求", f"验证码是: {reset_code}", email)
-        
+
         # 将验证码存储到 session
         request.session['reset_code'] = reset_code
         request.session['email'] = email
-        
+
         return ResponseModel(code=0, msg="重置验证码已发送，请检查您的邮箱")
-    
+
     except Exception as e:
         return ResponseModel(code=1, msg=f"发送重置密码验证码失败: {str(e)}")
 
 
 @auth_router.post("/reset-password", response_model=ResponseModel, tags=["User"])
 async def reset_password(
-    reset_password_data: ResetPasswordSchema, 
-    request: Request, 
-    x_reset_code: str = Header(None), 
+    reset_password_data: ResetPasswordSchema,
+    request: Request,
+    x_reset_code: str = Header(None),
     session: AsyncSession = Depends(get_session)
 ):
     try:
@@ -171,27 +171,27 @@ async def reset_password(
         print(x_reset_code,session_reset_code)
         if not x_reset_code or x_reset_code != session_reset_code:
             return ResponseModel(code=1, msg="验证码错误")
-        
+
         # 检查请求中的邮箱是否与 session 中的邮箱匹配
         if reset_password_data.email != session_email:
             return ResponseModel(code=1, msg="邮箱与验证码不匹配")
-        
+
         # 更新用户的密码
         existing_user = await session.execute(select(User).where(User.email == reset_password_data.email))
         user = existing_user.scalar_one_or_none()
         if not user:
             return ResponseModel(code=1, msg="用户不存在")
-        
+
         user.password = get_password_hash(reset_password_data.new_password)
         session.add(user)
         await session.commit()
         await session.refresh(user)
-        
+
         # 清除 session 中的验证码
         del request.session['reset_code']
         del request.session['email']
-        
+
         return ResponseModel(code=0, msg="密码重置成功")
-    
+
     except Exception as e:
         return ResponseModel(code=1, msg=f"重置密码失败: {str(e)}")

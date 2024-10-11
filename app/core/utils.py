@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from db.session import get_session
-from schemas.config import Config
+from app.schemas.config import Config
 
 
 async def load_config_from_db(session: AsyncSession):

@@ -6,9 +6,9 @@ from typing import Optional, List
 
 from app.api.models import ResponseModel
 from db.session import get_session
-from schemas.competition import Competition
-from schemas.problem import Problem
-from schemas.problem_type import ProblemType  # 确保你已经定义了ProblemType
+from app.schemas.competition import Competition
+from app.schemas.problem import Problem
+from app.schemas.problem_type import ProblemType  # 确保你已经定义了ProblemType
 
 
 

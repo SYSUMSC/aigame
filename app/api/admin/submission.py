@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from db.session import get_session
-from schemas.submission import Submission, SubmissionSearchSchema
+from app.schemas.submission import Submission, SubmissionSearchSchema
 from ..models import BatchDeleteRequest, ResponseModel
 
 submission_router = APIRouter()

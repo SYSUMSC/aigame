@@ -1,10 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 from db.session import get_session
-from schemas.problem import Problem
+from app.schemas.problem import Problem
 from app.api.models import ResponseModel
-from schemas.problem_type import ProblemType
-
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from app.schemas.problem import Problem
 from fastapi import APIRouter, Depends, HTTPException, Body, Path
 
 problem_router = APIRouter()
@@ -28,8 +29,8 @@ async def get_problem_detail(
         problem_type = problem_db.problem_type
 
         return ResponseModel(
-            code=0, 
-            msg="赛题详情获取成功", 
+            code=0,
+            msg="赛题详情获取成功",
             data={"problem": problem_db.model_dump(), "problem_type": problem_type.model_dump() if problem_type else None}
         )
     except Exception as e:

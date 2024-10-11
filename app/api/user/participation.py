@@ -6,9 +6,9 @@ from sqlmodel import select
 from app.api.models import ResponseModel
 
 from db.session import get_session
-from schemas.participation import Participation, ParticipationSchema
-from schemas.user import User
-from schemas.team import Team
+from app.schemas.participation import Participation, ParticipationSchema
+from app.schemas.user import User
+from app.schemas.team import Team
 
 from core.security import get_current_user
 
@@ -58,7 +58,7 @@ async def join_competition(participation: ParticipationSchema,current_user: str 
         existing_participation = await session.execute(select(Participation).where(Participation.user_id == participation.user_id, Participation.competition_id == participation.competition_id))
         if existing_participation.scalar_one_or_none():
             return ResponseModel(code=1, msg="用户已参加比赛")
-        
+
         # 创建新参赛记录
         participation_db = Participation(**participation.model_dump())
         session.add(participation_db)
@@ -67,7 +67,7 @@ async def join_competition(participation: ParticipationSchema,current_user: str 
         return ResponseModel(code=0, msg="参赛成功", data=participation_db.model_dump())
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
-    
+
 @participation_router.delete("/participation", response_model=ResponseModel, tags=["User"])
 async def quit_competition(team_id: int, competition_id: int, session: AsyncSession = Depends(get_session)):
     # 退出比赛
@@ -79,7 +79,7 @@ async def quit_competition(team_id: int, competition_id: int, session: AsyncSess
         participation_db = existing_participation.scalar_one_or_none()
         if not participation_db:
             return ResponseModel(code=1, msg="用户未参加比赛")
-        
+
         # 删除参赛记录
         await session.delete(participation_db)
         await session.commit()

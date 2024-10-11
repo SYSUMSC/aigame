@@ -6,8 +6,8 @@ from sqlmodel import select
 
 from app.api.models import ResponseModel
 from db.session import get_session
-from schemas.team import Team, TeamSchema
-from schemas.user import User
+from app.schemas.team import Team, TeamSchema
+from app.schemas.user import User
 from core.security import get_current_user
 
 team_router = APIRouter()
@@ -244,13 +244,13 @@ async def leave_team(current_user: str = Depends(get_current_user), session: Asy
         return ResponseModel(code=0, msg="退出队伍成功")
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
-    
-@team_router.post("/transfer_captain", response_model=ResponseModel, tags=["User", "Team"])  
-async def transfer_captain(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):  
-    try:  
-        # # 获取当前用户  
-        # statement = select(User).where(User.username == current_user)  
-        # current_user_db = await session.execute(statement).scalar_one()  
+
+@team_router.post("/transfer_captain", response_model=ResponseModel, tags=["User", "Team"])
+async def transfer_captain(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    try:
+        # # 获取当前用户
+        # statement = select(User).where(User.username == current_user)
+        # current_user_db = await session.execute(statement).scalar_one()
         body = await request.json()
         new_captain_id = body.get("new_captain_id")
         statement = select(User).where(User.username == current_user)
@@ -262,16 +262,16 @@ async def transfer_captain(request: Request, current_user: str = Depends(get_cur
         # 检查当前用户是否在队伍中
         if not user_db.team_id:
             return ResponseModel(code=1, msg="用户不在任何队伍中")
-        
+
         # get team_id
         team_statement = select(Team).where(Team.id == user_db.team_id)
         result_team = await session.execute(team_statement)
         team_db = result_team.scalar_one()
-        # return ResponseModel(code=0, msg="队伍转让成功") 
+        # return ResponseModel(code=0, msg="队伍转让成功")
         # check whether current user is captain
         if team_db.captain_id!= user_db.id:
             return ResponseModel(code=1, msg="用户不是队长，无法转让队长")
-        
+
         # check whether new_captain_id is in team
         new_captain_statement = select(User).where(User.id == new_captain_id, User.team_id == team_db.id)
         new_captain_db = (await session.execute(new_captain_statement)).scalar_one_or_none()
@@ -279,13 +279,13 @@ async def transfer_captain(request: Request, current_user: str = Depends(get_cur
         # new_captain_db = result_new_captain.scalar_one_or_none()
         if not new_captain_db:
             return ResponseModel(code=1, msg="新队长未找到或不在队伍中")
-        
+
         # update team's captain_id
         team_db.captain_id = new_captain_id
         session.add(team_db)
         await session.commit()
         await session.refresh(team_db)
-  
-        return ResponseModel(code=0, msg="队伍转让成功")  
-    except Exception as e:  
+
+        return ResponseModel(code=0, msg="队伍转让成功")
+    except Exception as e:
         return ResponseModel(code=1, msg=str(e))

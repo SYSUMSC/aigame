@@ -4,10 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from db.session import get_session
-from schemas.user import User
-from schemas.config import Config
-from schemas.competition import Competition
-from schemas.problem_type import ProblemType
+from app.schemas.user import User
+from app.schemas.config import Config
+from app.schemas.competition import Competition
+from app.schemas.problem_type import ProblemType
 from app.api.models import *
 
 admin_router = APIRouter()
