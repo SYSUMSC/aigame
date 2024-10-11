@@ -5,18 +5,59 @@
         <div class="card-header">赛题详情</div>
         <div class="card-body">
           <h1 class="mb-3 fs-4">{{ problem?.name }}</h1>
-          <p>难度: {{ difficultyLevels[problem?.difficulty as 1 | 2 | 3 | 4] || "未知难度" }}</p>
-          <p>类型: {{ problemType?.name || "未知类型" }}</p>
-          <p>描述: {{ problemType?.description || "无描述" }}</p>
-          <p>分数: {{ problem?.score || "未评分" }}</p>
+          <div class="flex flex-col space-y-2">
+            <div class="flex items-center">
+              <span class="font-bold text-gray-700 mr-2">难度:</span>
+              <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">{{
+                difficultyLevels[problem?.difficulty as 1 | 2 | 3 | 4] ||
+                "未知难度"
+              }}</span>
+            </div>
 
-          <!-- 文件上传表单 -->
-          <form @submit.prevent="submitFile">
-            <input type="file" @change="handleFileChange" class="mb-3" required />
-            <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
-              提交文件
-            </button>
-          </form>
+            <div class="flex items-center">
+              <span class="font-bold text-gray-700 mr-2">类型:</span>
+              <span class="bg-green-100 text-green-800 px-2 py-1 rounded">{{
+                problemType?.name || "未知类型"
+              }}</span>
+            </div>
+
+            <div class="flex items-center">
+              <span class="font-bold text-gray-700 mr-2">类型描述:</span>
+              <span class="text-gray-600">{{
+                problemType?.description || "无描述"
+              }}</span>
+            </div>
+
+            <div class="flex items-start">
+              <span class="font-bold text-gray-700 mr-2">描述:</span>
+              <p class="text-gray-600">{{ problem?.content || "无描述" }}</p>
+            </div>
+
+            <div class="flex items-center">
+              <span class="font-bold text-gray-700 mr-2">分数:</span>
+              <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">{{
+                problem?.score || "未评分"
+              }}</span>
+            </div>
+
+            <div class="flex items-center">
+              <!-- 文件上传表单 -->
+              <form @submit.prevent="submitFile">
+                <input
+                  type="file"
+                  @change="handleFileChange"
+                  class="mb-3 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+                <button
+                  type="submit"
+                  class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+                >
+                  提交文件
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,21 +74,21 @@ type Problem = {
   name: string;
   difficulty: number;
   problem_type_id: number;
-  description: string;
+  content: string;
   score: number;
 };
 
 type ProblemType = {
   id: number;
   name: string;
-  description:string;
+  description: string;
 };
 
 const route = useRoute();
 const problem = ref<Problem | null>(null);
 const problemType = ref<ProblemType | null>(null);
 const selectedFile = ref<File | null>(null);
-const userStore = { team_id: 1 };  // 假设从userStore获取team_id
+const userStore = { team_id: 1 }; // 假设从userStore获取team_id
 
 const difficultyLevels = {
   1: "旅行",
@@ -64,7 +105,10 @@ const fetchProblemDetail = async (problemId: number) => {
       problem.value = res.data.data.problem;
       problemType.value = res.data.data.problem_type;
     } else {
-      console.error("获取赛题详情失败:", `状态码: ${res.status}, 错误消息: ${res.data.msg}`);
+      console.error(
+        "获取赛题详情失败:",
+        `状态码: ${res.status}, 错误消息: ${res.data.msg}`
+      );
     }
   } catch (error) {
     console.error("发生错误:", error);
@@ -87,26 +131,33 @@ const submitFile = async () => {
   }
 
   // 检查队伍是否已报名
-  const checkParticipation = await axios.get('/api/user/participation', {
+  const checkParticipation = await axios.get("/api/user/participation", {
     params: {
       team_id: userStore.team_id,
     },
   });
 
-  if (checkParticipation.data.code !== 0 || checkParticipation.data.data.length === 0) {
-    alert('您的队伍尚未报名此比赛，无法提交文件');
-    return;  // 阻止文件提交
+  if (
+    checkParticipation.data.code !== 0 ||
+    checkParticipation.data.data.length === 0
+  ) {
+    alert("您的队伍尚未报名此比赛，无法提交文件");
+    return; // 阻止文件提交
   }
 
   const formData = new FormData();
   formData.append("file", selectedFile.value);
 
   try {
-    const res = await axios.post(`/api/user/problem/${problem.value?.id}/submit`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+    const res = await axios.post(
+      `/api/user/problem/${problem.value?.id}/submit`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }
-    });
+    );
 
     if (res.status === 200 && res.data.code === 0) {
       alert("文件提交成功");
