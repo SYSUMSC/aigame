@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-6 flex flex-col sm:py-12">
+  <div class="py-6 flex flex-col sm:py-12">
     <div class="container mx-auto">
       <div class="card">
         <div class="card-header">用户中心</div>
