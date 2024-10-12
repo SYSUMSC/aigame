@@ -5,13 +5,15 @@
     <div class="card-body">
       <div v-for="competition in competitions" :key="competition.id">
         <div
-          class="p-2 border border-gray-300 rounded flex flex-col sm:flex-row justify-between"
+          class="p-2 border border-gray-300 rounded-lg shadow-lg flex flex-col sm:flex-row justify-between"
         >
-          <div class="flex-1">
-            <h2 class="mb-3 fs-4">{{ competition.name }}</h2>
-            <span>开始时间: {{ competition.start_time }}</span>
-            <span class="ml-6">结束时间: {{ competition.end_time }}</span>
-            <p>描述: {{ competition.description }}</p>
+          <div class="flex-1g">
+            <h2 class="mb-3 text-2xl font-bold text-gray-800">
+              {{ competition.name }}
+            </h2>
+            <p class="text-gray-600">开始时间: {{ competition.start_time }}</p>
+            <p class="text-gray-600">结束时间: {{ competition.end_time }}</p>
+            <p class="mt-4 text-gray-700">{{ competition.description }}</p>
           </div>
           <div class="flex flex-row ml-6 space-x-2 sm:ml-0 sm:mt-2">
             <button
