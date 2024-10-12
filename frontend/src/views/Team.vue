@@ -1,93 +1,87 @@
 <template>
-  <div class="py-6 flex flex-col sm:py-12">
-    <div class="container mx-auto">
-      <div class="card">
-        <div class="card-header">队伍管理</div>
+  <div class="card">
+    <div class="card-header">队伍管理</div>
 
-        <div class="card-body">
-          <template v-if="!userStore.user?.team_id">
-            <!-- 用户未加入任何队伍，显示加入或创建队伍的选项 -->
-            <button
-              @click="showCreateTeamModal = true"
-              class="btn btn-success w-100 mb-4"
-            >
-              创建队伍
-            </button>
-            <form @submit.prevent="joinTeam">
-              <div class="form-group mb-3">
-                <label for="invite_code">邀请码</label>
-                <input
-                  type="text"
-                  id="invite_code"
-                  v-model="inviteCode"
-                  class="form-control"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn btn-primary w-100">
-                加入队伍
-              </button>
-            </form>
-          </template>
+    <div class="card-body">
+      <template v-if="!userStore.user?.team_id">
+        <!-- 用户未加入任何队伍，显示加入或创建队伍的选项 -->
+        <button
+          @click="showCreateTeamModal = true"
+          class="btn btn-success w-100 mb-4"
+        >
+          创建队伍
+        </button>
+        <form @submit.prevent="joinTeam">
+          <div class="form-group mb-3">
+            <label for="invite_code">邀请码</label>
+            <input
+              type="text"
+              id="invite_code"
+              v-model="inviteCode"
+              class="form-control"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">加入队伍</button>
+        </form>
+      </template>
 
-          <template v-else-if="teamInfo">
-            <!-- 用户已加入队伍，显示队伍信息 -->
-            <h2 class="text-xl font-bold mb-4">当前队伍信息</h2>
-            <p><strong>队伍名称:</strong> {{ teamInfo.name }}</p>
-            <p>
-              <strong
-                id="inviteCode"
-                data-clipboard-text="{{ teamInfo.invite_code }}"
-                >邀请码:</strong
-              >
-              {{ teamInfo.invite_code }}
-              <button
-                @click="oldCopyToClipboard(teamInfo.invite_code)"
-                class="border-2 border-white bg-yellow-50 rounded-md btn ml-2"
-              >
-                复制
-              </button>
-            </p>
-            <p><strong>队员:</strong></p>
-            <ul>
-              <li v-for="member in teamInfo.members" :key="member.id">
-                {{ member.name }} ({{ member.username }})
-                <button
-                  v-if="isCaptain && member.id !== userStore.user.id"
-                  @click="removeMember(member.id)"
-                  class="border-2 border-white rounded-md mt-1 btn btn-danger btn-sm"
-                >
-                  移除
-                </button>
-              </li>
-            </ul>
+      <template v-else-if="teamInfo">
+        <!-- 用户已加入队伍，显示队伍信息 -->
+        <h2 class="text-xl font-bold mb-4">当前队伍信息</h2>
+        <p><strong>队伍名称:</strong> {{ teamInfo.name }}</p>
+        <p>
+          <strong
+            id="inviteCode"
+            data-clipboard-text="{{ teamInfo.invite_code }}"
+            >邀请码:</strong
+          >
+          {{ teamInfo.invite_code }}
+          <button
+            @click="oldCopyToClipboard(teamInfo.invite_code)"
+            class="border-2 border-white bg-yellow-50 rounded-md btn ml-2"
+          >
+            复制
+          </button>
+        </p>
+        <p><strong>队员:</strong></p>
+        <ul>
+          <li v-for="member in teamInfo.members" :key="member.id">
+            {{ member.name }} ({{ member.username }})
             <button
-              v-if="isCaptain"
-              @click="generateInviteCode"
-              class="border-2 border-white rounded-md btn btn-info mt-4"
+              v-if="isCaptain && member.id !== userStore.user.id"
+              @click="removeMember(member.id)"
+              class="border-2 border-white rounded-md mt-1 btn btn-danger btn-sm"
             >
-              生成邀请码
+              移除
             </button>
-            <button
-              v-if="isCaptain"
-              @click="showTransferModal = true"
-              class="border-2 border-white rounded-md btn btn-danger mt-4"
-            >
-              转让队伍
-            </button>
-            <button
-              v-if="isCaptain"
-              @click="disbandTeam"
-              class="border-2 border-white rounded-md btn btn-danger mt-4"
-            >
-              解散队伍
-            </button>
-            <button v-else @click="leaveTeam" class="btn btn-warning mt-4">
-              退出队伍
-            </button>
-          </template>
-        </div>
-      </div>
+          </li>
+        </ul>
+        <button
+          v-if="isCaptain"
+          @click="generateInviteCode"
+          class="border-2 border-white rounded-md btn btn-info mt-4"
+        >
+          生成邀请码
+        </button>
+        <button
+          v-if="isCaptain"
+          @click="showTransferModal = true"
+          class="border-2 border-white rounded-md btn btn-danger mt-4"
+        >
+          转让队伍
+        </button>
+        <button
+          v-if="isCaptain"
+          @click="disbandTeam"
+          class="border-2 border-white rounded-md btn btn-danger mt-4"
+        >
+          解散队伍
+        </button>
+        <button v-else @click="leaveTeam" class="btn btn-warning mt-4">
+          退出队伍
+        </button>
+      </template>
     </div>
 
     <!-- 创建队伍模态框 -->
@@ -194,7 +188,6 @@ import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
 import ClipboardJS from "clipboard";
 import { layer } from "vue3-layer";
-
 
 const userStore = useUserStore();
 const router = useRouter();

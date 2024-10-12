@@ -1,67 +1,62 @@
 <template>
-  <main class="min-h-screen py-6 flex flex-col justify-center items-center">
-    <div class="container mx-auto">
-      <div class="card">
-        <div class="card-header">赛题详情</div>
-        <div class="card-body">
-          <h1 class="mb-3 fs-4">{{ problem?.name }}</h1>
-          <div class="flex flex-col space-y-2">
-            <div class="flex items-center">
-              <span class="font-bold text-gray-700 mr-2">难度:</span>
-              <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">{{
-                difficultyLevels[problem?.difficulty as 1 | 2 | 3 | 4] ||
-                "未知难度"
-              }}</span>
-            </div>
+  <div class="card">
+    <div class="card-header">赛题详情</div>
+    <div class="card-body">
+      <h1 class="mb-3 fs-4">{{ problem?.name }}</h1>
+      <div class="flex flex-col space-y-2">
+        <div class="flex items-center">
+          <span class="font-bold text-gray-700 mr-2">难度:</span>
+          <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded">{{
+            difficultyLevels[problem?.difficulty as 1 | 2 | 3 | 4] || "未知难度"
+          }}</span>
+        </div>
 
-            <div class="flex items-center">
-              <span class="font-bold text-gray-700 mr-2">类型:</span>
-              <span class="bg-green-100 text-green-800 px-2 py-1 rounded">{{
-                problemType?.name || "未知类型"
-              }}</span>
-            </div>
+        <div class="flex items-center">
+          <span class="font-bold text-gray-700 mr-2">类型:</span>
+          <span class="bg-green-100 text-green-800 px-2 py-1 rounded">{{
+            problemType?.name || "未知类型"
+          }}</span>
+        </div>
 
-            <div class="flex items-center">
-              <span class="font-bold text-gray-700 mr-2">类型描述:</span>
-              <span class="text-gray-600">{{
-                problemType?.description || "无描述"
-              }}</span>
-            </div>
+        <div class="flex items-center">
+          <span class="font-bold text-gray-700 mr-2">类型描述:</span>
+          <span class="text-gray-600">{{
+            problemType?.description || "无描述"
+          }}</span>
+        </div>
 
-            <div class="flex items-start">
-              <span class="font-bold text-gray-700 mr-2">描述:</span>
-              <p class="text-gray-600">{{ problem?.content || "无描述" }}</p>
-            </div>
+        <div class="flex items-start">
+          <span class="font-bold text-gray-700 mr-2">描述:</span>
+          <p class="text-gray-600">{{ problem?.content || "无描述" }}</p>
+        </div>
 
-            <div class="flex items-center">
-              <span class="font-bold text-gray-700 mr-2">分数:</span>
-              <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">{{
-                problem?.score || "未评分"
-              }}</span>
-            </div>
+        <div class="flex items-center">
+          <span class="font-bold text-gray-700 mr-2">分数:</span>
+          <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded">{{
+            problem?.score || "未评分"
+          }}</span>
+        </div>
 
-            <div class="flex items-center">
-              <!-- 文件上传表单 -->
-              <form @submit.prevent="submitFile">
-                <input
-                  type="file"
-                  @change="handleFileChange"
-                  class="mb-3 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                />
-                <button
-                  type="submit"
-                  class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-                >
-                  提交文件
-                </button>
-              </form>
-            </div>
-          </div>
+        <div class="flex items-center">
+          <!-- 文件上传表单 -->
+          <form @submit.prevent="submitFile">
+            <input
+              type="file"
+              @change="handleFileChange"
+              class="mb-3 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <button
+              type="submit"
+              class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+            >
+              提交文件
+            </button>
+          </form>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
