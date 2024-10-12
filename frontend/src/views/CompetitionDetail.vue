@@ -2,47 +2,55 @@
   <div class="card">
     <div class="card-header">比赛详情</div>
     <div class="card-body">
-      <h1 class="mb-3 fs-4">{{ competition?.name }}</h1>
-      <p>开始时间: {{ competition?.start_time }}</p>
-      <p>结束时间: {{ competition?.end_time }}</p>
-      <p>描述: {{ competition?.description }}</p>
+      <h1 class="mb-3 text-2xl font-bold">{{ competition?.name }}</h1>
+      <p class="text-gray-600">开始时间: {{ competition?.start_time }}</p>
+      <p class="text-gray-600">结束时间: {{ competition?.end_time }}</p>
+      <p class="text-gray-700">{{ competition?.description }}</p>
       <br /><br />
-      <h3>赛题列表:</h3>
+      <h3 class="text-xl font-semibold mb-4">赛题列表:</h3>
 
-      <select v-model="filters.difficulty" class="mb-2">
-        <option value="null">全部难度</option>
-        <option value="1">旅行</option>
-        <option value="2">经典</option>
-        <option value="3">专家</option>
-        <option value="4">大师</option>
-      </select>
-      <select v-model="filters.problem_type_id">
-        <option value="null">全部类型</option>
-        <option v-for="type in problemTypes" :key="type.id" :value="type.id">
-          {{ type.name }}
-        </option>
-      </select>
-      <button
-        @click="fetchProblems(Number(route.params.id))"
-        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-      >
-        筛选
-      </button>
-      <ul>
-        <li v-for="problem in problems" :key="problem.id">
-          {{ problem.name }} -- 难度:
-          {{
-            difficultyLevels[problem.difficulty as 1 | 2 | 3 | 4] || "未知难度"
-          }}
-          -- 类型：{{
-            problemTypes[problem.problem_type_id - 1]?.name || "未知类型"
-          }}
-          <button
-            @click="viewProblemDetail(problem.id)"
-            class="bg-green-500 text-white font-bold py-1 px-3 ml-4 rounded hover:bg-green-700"
-          >
-            查看详情
-          </button>
+      <div class="flex space-x-4 mb-4">
+        <select v-model="filters.difficulty" class="p-2 border rounded">
+          <option value="null">全部难度</option>
+          <option value="1">旅行</option>
+          <option value="2">经典</option>
+          <option value="3">专家</option>
+          <option value="4">大师</option>
+        </select>
+        <select v-model="filters.problem_type_id" class="p-2 border rounded">
+          <option value="null">全部类型</option>
+          <option v-for="type in problemTypes" :key="type.id" :value="type.id">
+            {{ type.name }}
+          </option>
+        </select>
+      </div>
+
+      <ul class="space-y-4">
+        <li
+          v-for="problem in problems"
+          :key="problem.id"
+          class="p-4 border border-gray-200 rounded-lg shadow-sm"
+        >
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="text-lg font-semibold">{{ problem.name }}</span> --
+              难度:
+              <span class="text-gray-600">{{
+                difficultyLevels[problem.difficulty as 1 | 2 | 3 | 4] ||
+                "未知难度"
+              }}</span>
+              -- 类型：
+              <span class="text-gray-600">{{
+                problemTypes[problem.problem_type_id - 1]?.name || "未知类型"
+              }}</span>
+            </div>
+            <button
+              @click="viewProblemDetail(problem.id)"
+              class="bg-green-500 text-white font-bold py-1 px-3 rounded hover:bg-green-700"
+            >
+              查看详情
+            </button>
+          </div>
         </li>
       </ul>
     </div>
@@ -50,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, ref, watch } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 
@@ -180,9 +188,12 @@ onMounted(() => {
   fetchProblemTypes();
 });
 
-watchEffect(() => {
-  const competitionId = Number(route.params.id);
-  fetchCompetitionDetail(competitionId);
-  fetchProblems(competitionId);
-});
+// 监听 filters 变化并自动筛选
+watch(
+  () => [filters.value.difficulty, filters.value.problem_type_id],
+  ([newDifficulty, newProblemTypeId]) => {
+    const competitionId = Number(route.params.id);
+    fetchProblems(competitionId);
+  }
+);
 </script>
