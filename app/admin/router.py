@@ -3,6 +3,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
+from app.core.utils import load_config_from_db
 from db.session import get_session
 from app.schemas.user import User
 from app.schemas.config import Config
@@ -109,3 +110,13 @@ async def problem_type(request: Request):
 @admin_router.get("/admin/problem_type_form")
 async def problem_type_form(request: Request):
     return templates.TemplateResponse("problem_type_form.html", {"request": request})
+
+# 设置
+@admin_router.get("/admin/setting")
+async def setting(request: Request, session: AsyncSession = Depends(get_session)):
+    try:
+        smtp_config = await load_config_from_db(session)
+    except Exception as e:
+        return {"code": 1, "msg": str(e), "data": None}
+    view = {"request": request, "smtp_config": smtp_config, "title":"设置", "url":"setting"}
+    return templates.TemplateResponse("setting.html", view)
