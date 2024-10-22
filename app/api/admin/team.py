@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+from sqlalchemy import select, join
 
+from app.schemas.user import User
 from db.session import get_session
 from app.schemas.team import Team, TeamSchema, TeamSearchSchema
 
@@ -70,20 +72,35 @@ async def delete_teams(request: BatchDeleteRequest, session: AsyncSession = Depe
 @team_router.post("/team/search", response_model=ResponseModel, tags=["Admin"])
 async def search_teams(search: TeamSearchSchema, page: int = 1, limit: int = 10, session: AsyncSession = Depends(get_session)):
     try:
-        query = select(Team)
+        # 构建查询队伍的初始语句，并与 User 表进行 JOIN 操作以获取队长名字
+        query = select(Team, User.name.label("captain_name")).join(User, Team.captain_id == User.id, isouter=True)
+
+        # 应用搜索过滤条件
         filters = []
         for field, value in search.model_dump(exclude_unset=True).items():
-            if isinstance(value, str) and field!="status":
+            if value is None or value == "":
+                continue
+            elif isinstance(value, str) and field != "status":
                 filters.append(getattr(Team, field).like(f"%{value}%"))
             else:
                 filters.append(getattr(Team, field) == value)
         query = query.where(*filters)
+
+        # 获取总数
         total_statement = select(func.count()).select_from(query.subquery())
         total_result = await session.execute(total_statement)
         total = total_result.scalar()
+
+        # 分页处理
         query = query.offset((page - 1) * limit).limit(limit)
         result = await session.execute(query)
-        teams = result.scalars().all()
-        return ResponseModel(code=0, msg="队伍检索成功", data=[team.model_dump() for team in teams], count=total)
+
+        teams_with_captain = []
+        for team, captain_name in result.all():
+            team_data = team.model_dump()
+            team_data["captain"] = captain_name  # 将captain_name附加到结果中
+            teams_with_captain.append(team_data)
+
+        return ResponseModel(code=0, msg="队伍检索成功", data=teams_with_captain, count=total)
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
