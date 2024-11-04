@@ -8,6 +8,7 @@ const router = useRouter();
 const logout = () => {
   userStore.setUser(null);
   router.push("/");
+  isOpen.value = false;
 };
 
 const navigateAndCloseNav = (routePath: string) => {
