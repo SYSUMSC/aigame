@@ -2,11 +2,14 @@
 import { RouterLink, RouterView } from "vue-router";
 import { useUserStore } from "./stores/user";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
 // @ts-ignore
 import { Collapse } from "bootstrap";
 
 const userStore = useUserStore();
 const router = useRouter();
+let expanded = ref(false);
+
 const logout = () => {
   userStore.setUser(null);
   router.push("/");
@@ -16,14 +19,41 @@ const logout = () => {
 const navigateAndCloseNav = (routePath: string) => {
   router.push(routePath);
 
-  const navbarCollapse = document.getElementById("navbarNav");
-  if (navbarCollapse && navbarCollapse.classList.contains("show")) {
-    const bsCollapse = new Collapse(navbarCollapse, {
-      toggle: false,
-    });
-    bsCollapse.hide();
-  }
+  // const navbarCollapse = document.getElementById("navbarNav");
+  // if (navbarCollapse && navbarCollapse.classList.contains("show")) {
+  //   const bsCollapse = new Collapse(navbarCollapse, {
+  //     toggle: false,
+  //   });
+  //   bsCollapse.hide();
+  // }
+  navReact()
 };
+
+const navReact = () => {
+  let navbarNav = document.getElementById("navbar");
+  expanded.value = !expanded.value;
+  console.log(expanded.value);
+  if (navbarNav || !expanded.value) {
+    const bsCollapse = new Collapse(navbarNav, {
+      toggle: expanded.value,
+    })
+    bsCollapse.hide()
+  }
+}
+
+// const outerClick = (e: MouseEvent) => {
+//   let navbarNav = document.getElementById("navbar");
+//   if (expanded.value === false && navbarNav && !navbarNav.contains(e.target as Node)) {
+//     expanded.value = !expanded.value;
+//     const bsCollapse = new Collapse(navbarNav, {
+//       toggle: expanded.value
+//     });
+//     bsCollapse.hide();
+//     console.log(expanded.value)
+//   }
+// }
+
+// window.addEventListener("click", outerClick);
 
 </script>
 
@@ -31,22 +61,17 @@ const navigateAndCloseNav = (routePath: string) => {
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <RouterLink class="navbar-brand" to="/">AI 竞赛平台</RouterLink>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" @click="navReact"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+      <div class="collapse navbar-collapse" id="navbar">
+        <div id="ele">
+          <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <a class="nav-link" @click.prevent="navigateAndCloseNav('/')" href="#">首页</a>
           </li>
           <template v-if="userStore.isLoggedIn()">
-            <!-- <li class="nav-item">
-              <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/')" href="#">用户中心</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/team')" href="#">队伍管理</a>
-            </li> -->
             <li class="nav-item">
               <a class="nav-link" @click.prevent="navigateAndCloseNav('/info')" href="#">用户中心</a>
             </li>
@@ -58,15 +83,15 @@ const navigateAndCloseNav = (routePath: string) => {
             </li>
           </template>
           <template v-else>
-            <li class="nav-item">
-              <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/login')" href="#">登录</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/reg')" href="#">注册</a>
-            </li>
-
+              <li class="nav-item">
+                <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/login')" href="#">登录</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" @click.prevent="navigateAndCloseNav('/user/reg')" href="#">注册</a>
+              </li>
           </template>
         </ul>
+        </div>
       </div>
     </div>
   </nav>

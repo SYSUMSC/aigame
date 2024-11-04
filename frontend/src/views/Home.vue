@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen">  
+  <div class="flex flex-col items-center justify-center h-screen">  
     <!-- 平台介绍 -->  
       <div class="text-center">  
         <h1 class="text-4xl font-bold text-gray-800 mb-4">AI 竞赛平台</h1>  

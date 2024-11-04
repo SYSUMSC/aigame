@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-6 flex flex-col sm:py-12">
+  <div class="py-6 flex flex-col sm:py-12">
     <div class="container mx-auto">
       <div class="card">
         <div class="card-header">队伍管理</div>
@@ -205,15 +205,6 @@ const isCaptain = ref(false);
 const showCreateTeamModal = ref(false);
 const showTransferModal = ref(false);
 const selectedCaptainId = ref("");
-// const copyInviteCode = ref(false)
-
-// const sendData = () => {
-//   emit('commit',
-//   // userStore.user?.id === teamInfo.value.captain_id
-//     isCaptain.value
-//   )
-//   console.log("send value is "+isCaptain.value)
-// }
 
 const copyToClipboard = async (text: string) => {
   // 使用原生api

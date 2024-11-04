@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container flex flex-col justify-center">
     <div class="row">
       <div class="col-md-6">
         <LeftComponent />
