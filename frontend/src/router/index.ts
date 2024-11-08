@@ -12,13 +12,14 @@ import { useUserStore } from "../stores/user";
 import Column from "../views/Column.vue";
 import ProblemDetail from "../views/ProblemDetail.vue";
 import Leaderboard from "../views/Leaderboard.vue";
+import Announcements from "../views/Announcements.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "首页",
     component: Home,
-    alias: '/home'  
+    alias: '/home'
   },
   {
     path: "/user/login",
@@ -64,22 +65,28 @@ const routes: Array<RouteRecordRaw> = [
     name: 'CompetitionDetail',
     component: CompetitionDetail,
     meta: { requiresAuth: true },
-    props: true 
+    props: true
   },
   {
     path: '/problem/:id',
     name: 'ProblemDetail',
     component: ProblemDetail,
     meta: { requiresAuth: true },
-    props: true 
+    props: true
   },
   {
     path: '/competition/:id/leaderboard',
     name: 'CompetitionLeaderboard',
     component: Leaderboard,
     meta: { requiresAuth: true },
-    props: true 
-  }
+    props: true
+  },
+  {
+    path: '/announcements',
+    name: '公告',
+    component: Announcements,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
@@ -114,7 +121,7 @@ router.beforeEach(async (to, from, next) => {
   // 如果目标路由需要认证
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!userStore.isLoggedIn()) {
-      next({ name: "登录", query: { redirect: to.fullPath }}); // 未登录，重定向到登录页面，并附带重定向路径
+      next({ name: "登录", query: { redirect: to.fullPath } }); // 未登录，重定向到登录页面，并附带重定向路径
     } else {
       next(); // 用户已登录，继续导航
     }

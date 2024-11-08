@@ -72,6 +72,12 @@ const isOpen = ref(false);
               @click="navigateAndCloseNav('/competitioncenter')"
               >比赛中心</RouterLink
             >
+            <RouterLink
+              class="text-gray-800 hover:text-blue-600"
+              to="/competitioncenter"
+              @click="navigateAndCloseNav('/announcements')"
+              >公告</RouterLink
+            >
             <button @click="logout" class="text-gray-800 hover:text-blue-600">
               退出
             </button>
@@ -119,6 +125,14 @@ const isOpen = ref(false);
                 to="/competitioncenter"
                 @click="navigateAndCloseNav('/competitioncenter')"
                 >比赛中心</RouterLink
+              >
+            </li>
+            <li>
+              <RouterLink
+                class="block text-gray-800 hover:text-blue-600 px-4"
+                to="/competitioncenter"
+                @click="navigateAndCloseNav('/announcements')"
+                >公告</RouterLink
               >
             </li>
             <li>

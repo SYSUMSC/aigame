@@ -3,3 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 /* 使用了名为PostCSS Language Support 的 vscode插件 */
+
+.btn-scale{
+	@apply transition-all duration-300 hover:scale-110 active:scale-90
+}
+.btn-scale-sm{
+	@apply transition-all duration-300 hover:scale-105 active:scale-95
+}
+.btn-shadow{
+	@apply transition-all duration-300 hover:shadow-lg
+}
+.btn-white{
+	@apply transition-all duration-300 bg-white hover:bg-gray-100 active:bg-gray-200
+}
