@@ -12,6 +12,7 @@ local.md
 # pnpm前端
 node_modules/
 pnpm-lock.yaml
+package-lock.json
 
 # 屏蔽 .vscode idea 文件夹
 .vscode/
@@ -20,3 +21,4 @@ pnpm-lock.yaml
 /app/uploads
 app/app.log
 app/.env
+

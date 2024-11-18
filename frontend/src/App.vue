@@ -1,17 +1,18 @@
 <template>
-  <a-layout>
-    <a-layout-sider
+  <a-layout class="h-screen">
+    <!-- <a-layout-sider
       breakpoint="lg"
       collapsed-width="0"
       @collapse="onCollapse"
       @breakpoint="onBreakpoint"
     >
-    <NavBar />
-    </a-layout-sider>
+  </a-layout-sider> -->
     <a-layout>
-      <a-layout-header :style="{ background: '#fff', padding: 0 }" />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
-        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">  <RouterView /></div>
+      <a-layout-header :style="{ background: '#fff', padding: 0 }" >
+        <NavBar />
+      </a-layout-header>
+      <a-layout-content class="h-screen overflow-y-auto" :style="{ margin: '24px 16px 0' }">
+        <div :style="{ padding: '24px', background: '#fff', height: '100%' }">  <RouterView /></div>
       </a-layout-content>
       <a-layout-footer style="text-align: center">
         Ant Design ©2018 Created by Ant UED

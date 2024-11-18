@@ -28,7 +28,7 @@ const logout = () => {
 </script>
 
 <template>
-    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
+    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal">
       <a-menu-item key="/">
         首页
       </a-menu-item>
