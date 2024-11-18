@@ -9,6 +9,9 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { useUserStore } from "./stores/user";
 import { s3Layer } from 'vue3-layer';
 import 'vue3-layer/dist/s3Layer.css';
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/reset.css';
+
 
 // 初始化 Pinia
 const pinia = createPinia();
@@ -57,6 +60,7 @@ app.config.globalProperties.$axios = axios;
 // 安装 Pinia 和路由
 app.use(pinia);
 app.use(router);
-
+//安装antd
+app.use(Antd);
 // 挂载应用
 app.mount("#app");
