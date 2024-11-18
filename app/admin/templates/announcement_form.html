@@ -1,0 +1,7 @@
+{% extends 'form_base.html' %} {% block title %} 公告管理-表单 {% endblock %} {%
+block content %} {% from 'form_macros.html' import input_field, select_field,
+textarea_field %} {{ input_field('公告名', 'name',
+'请输入公告名',required=True)}} {{ input_field('公告内容', 'content',
+'请输入公告内容', required=True) }} {% endblock %}
+
+<!-- {{ input_field('公告日期', 'date', '请输入日期', required=True) }} -->

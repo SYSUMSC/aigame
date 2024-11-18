@@ -8,6 +8,7 @@ from db.session import get_session
 from app.schemas.user import User
 from app.schemas.config import Config
 from app.schemas.competition import Competition
+from app.schemas.announcement import Announcement
 from app.schemas.problem_type import ProblemType
 from app.api.models import *
 
@@ -120,3 +121,36 @@ async def setting(request: Request, session: AsyncSession = Depends(get_session)
         return {"code": 1, "msg": str(e), "data": None}
     view = {"request": request, "smtp_config": smtp_config, "title":"设置", "url":"setting"}
     return templates.TemplateResponse("setting.html", view)
+
+# 公告
+@admin_router.get("/admin/announcement")
+async def announcement(request: Request, session: AsyncSession = Depends(get_session)): 
+    try:
+        statement = select(Announcement)
+        result = await session.execute(statement)
+        announcements = result.scalars().all()
+
+        announcement_list = [{"title": ann.title, "date": ann.date, "content": ann.content} for ann in announcements]
+
+        return templates.TemplateResponse("announcement.html", {"request": request, "announcements": announcement_list})
+    except Exception as e:
+        return {"code": 1, "msg": str(e), "data": None}
+
+
+
+    # return templates.TemplateResponse("announcement.html", {"request": request})
+
+# 公告管理
+@admin_router.get("/admin/announcement_form")
+async def announcement_form(request: Request, session: AsyncSession = Depends(get_session)):
+    try:
+        # 获取所有公告
+        statement = select(Announcement)
+        result = await session.execute(statement)
+        announcements = result.scalars().all()
+
+        announcement_form = [{"title": ann.title, "date": ann.date, "content": ann.content} for ann in announcements]
+
+        return templates.TemplateResponse("announcement_form.html", {"request": request, "announcements": announcement_form})
+    except Exception as e:
+        return {"code": 1, "msg": str(e), "data": None}

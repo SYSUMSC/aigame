@@ -5,6 +5,7 @@ from app.schemas.team import Team
 from app.schemas.problem_type import ProblemType
 from app.schemas.problem import Problem
 from app.schemas.competition import Competition
+from app.schemas.announcement import Announcement
 from app.schemas.config import Config
 from app.core.security import get_password_hash
 from datetime import datetime, timedelta, timezone
@@ -161,5 +162,16 @@ async def init_test_data(session: AsyncSession):
     test_user2.team_id = test_team2.id
     await session.commit()
 
+    # 生成公告
+    test_announcements = [
+        Announcement(
+            id=1,
+            title="Welcome to AI Programming Competition",
+            content="(USTC 校内) 参加 Hackergame 2024 的同学可以在「青春科大」平台报名获取学时。\n 只要完成签到题目（50 分） 即可获取 2.0 二课学时；其他分数（100，200，400，600，800，1000）的学时需要额外提交解答文档（writeup） 到 sec-class@ustclug.org ，详见二课平台各子项目通知。\n（子项目可重复报名，例如 1000 分+ 的选手可以报名所有子项目，并获取全部 24 个二课学时）\n题解提交截止时间：11.09 12:00 二课报名截止时间：11.16 12:00",
+            date="2024-11-09 12:00:00"
+        )
+    ]
+    session.add(test_announcements)
+    await session.commit()
 
     print("Test data generated successfully.")

@@ -1,0 +1,51 @@
+{% extends 'table_base.html' %} {% block title %} 公告内容 {% endblock %}
+{%block header %} {% from 'form_macros.html' import search_field %}
+<!-- {{
+search_field('用户名', 'username', '请输入用户名') }} {{
+search_field('邮箱','email', '请输入邮箱') }} {{ search_field('学号',
+'student_id', '请输入学号') }} -->
+{{search_field('公告ID', 'id', '请输入公告ID')}} {{search_field('标题', 'title',
+'请输入标题') }} {{search_field('内容', 'content', '请输入内容') }}
+{{search_field('日期', 'date', '请输入日期')}} {% endblock %} {% block extra_js
+%}
+<script>
+  var config = {
+    url: "announcement",
+    name: "公告",
+    table: {
+      elem: "#LAY-list",
+      url: "/api/admin/announcement/search",
+      cols: [
+        [
+          // { type: "checkbox", fixed: "left" },
+          // { field: "id", width: 80, title: "ID", sort: true },
+          // { field: "username", title: "用户名", width: 150 },
+          // { field: "email", title: "邮箱", width: 200 },
+          // { field: "student_id", title: "学号", width: 150 },
+          // {
+          //   field: "is_active",
+          //   title: "状态",
+          //   width: 100,
+          //   templet: (d) => (d.is_active ? "激活" : "未激活"),
+          // },
+          // {
+          //   title: "操作",
+          //   minWidth: 150,
+          //   align: "center",
+          //   fixed: "right",
+          //   toolbar: "#table-action-list",
+          // },
+          { type: "title", fixed: "left" },
+          { type: "content", fixed: "middle" },
+          { type: "date", fixed: "right" },
+        ],
+      ],
+      page: true,
+      limit: 3,
+      text: {
+        none: "暂无数据",
+      },
+    },
+  };
+</script>
+{% endblock %}
