@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@popperjs/core": "^2.11.8",
     "ant-design-vue": "4.x",
     "axios": "^1.7.7",
