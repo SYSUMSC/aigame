@@ -9,19 +9,34 @@
 	<!-- </div> -->
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import AnnouncementItems, { Announcement } from './AnnouncementItems.vue';
-// TODO to implement
-const testAnnouncement:Announcement[] = [{content:`选手 Ne***, Am***、zi*** 等 7 人存在作弊或疑似作弊等违规行为，相关用户已经封禁，如有异议请通过平台底部邮件联系组委会申诉。提醒各位选手认真阅读诚信比赛承诺书、数据收集政策和参赛提示：https://hack.lug.ustc.edu.cn/terms/ 。`,date:new Date("2024-11-08")}, {content:`(USTC 校内) 参加 Hackergame 2024 的同学可以在「青春科大」平台报名获取学时。
 
+// 定义公告数据
+const announcements = ref<Announcement[]>([]);
 
-只要完成签到题目（50 分） 即可获取 2.0 二课学时；其他分数（100，200，400，600，800，1000）的学时需要额外提交解答文档（writeup） 到 sec-class@ustclug.org ，详见二课平台各子项目通知。
+// 获取公告信息
+const fetchAnnouncements = async () => {
+  try {
+    const res = await axios.get('/api/user/announcements');
+    if (res.status === 200 && res.data.code === 0) {
+      announcements.value = res.data.data.map((item: any) => ({
+        content: item.content,
+        date: new Date(item.date),
+      }));
+    } else {
+      console.error('获取公告失败:', res.data.msg);
+    }
+  } catch (error) {
+    console.error('公告请求失败:', error);
+  }
+};
 
-（子项目可重复报名，例如 1000 分+ 的选手可以报名所有子项目，并获取全部 24 个二课学时）
-
-题解提交截止时间：11.09 12:00 二课报名截止时间：11.16 12:00`,date:new Date("2024-11-09")}, {content:`选手 千高***, Je***、4k**** 等 11 人存在作弊或疑似作弊等违规行为，相关用户已经封禁，如有异议请通过平台底部邮件联系组委会申诉。提醒各位选手认真阅读诚信比赛承诺书、数据收集政策和参赛提示：https://hack.lug.ustc.edu.cn/terms/ 。`,date:new Date("2024-11-10")}, {content:`选手 yu******, 我爱***、wd**** 等 7 人存在作弊或疑似作弊等违规行为，相关用户已经封禁，如有异议请通过平台底部邮件联系组委会申诉。提醒各位选手认真阅读诚信比赛承诺书、数据收集政策和参赛提示：https://hack.lug.ustc.edu.cn/terms/ 。`,date:new Date("2024-11-11")}]
-const announcements = ref < Announcement[] > (testAnnouncement)
+// 页面加载时获取公告数据
+onMounted(fetchAnnouncements);
 </script>
+
 <style scoped>
 h1:before{
 	content: '';
