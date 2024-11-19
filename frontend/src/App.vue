@@ -1,6 +1,6 @@
 <template>
   <a-layout class="h-screen">
-    <a-layout-sider
+    <a-layout-sider style="position: fixed;" class="h-screen z-50"
     v-if="windowWidth < AntdWindowsWidth.lg"
       breakpoint="lg"
       collapsed-width="0"
@@ -37,6 +37,7 @@ const onBreakpoint = (broken: boolean) => {
 };
 const windowWidth = ref(0);
 onMounted(() => {
+  windowWidth.value = window.innerWidth;
   window.addEventListener('resize', () => {
     windowWidth.value = window.innerWidth;
   });

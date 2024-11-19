@@ -12,16 +12,28 @@ const router = useRouter();
 
 
 // 当前选中的菜单项
-const selectedKeys = ref<string[]>(['/']);
+const selectedKeys = ref<string[]>([router.currentRoute.value.path]);
 
 // 监听 selectedKeys 的变化并跳转路由
 watch(selectedKeys, (newKeys) => {
-  const newKey = newKeys[0];
-  if (newKey === '/logout') {
+  // const newKey = newKeys[0];
+  // if (newKey === '/logout') {
+  //   logout();
+  // } else {
+    router.push(newKeys[0]);
+  // }
+});
+
+// 新的tab切换逻辑
+watch(router.currentRoute, (to) => {
+    if (to.path === '/logout') {
     logout();
   } else {
-    router.push(newKey);
+    // TODO 如果比赛和赛题用的是子路由的形式就可以继续在"比赛中心"的tab处高亮
+    router.push(to.path);
+    selectedKeys.value = [to.path];
   }
+
 });
 
 // 用户登出
