@@ -2,9 +2,14 @@
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { ref, watch } from "vue";
+import { AntdWindowsWidth } from "../constants/antd-windows-width";
+
+const {windowWidth} = defineProps<{windowWidth: number}>();
 
 const userStore = useUserStore();
 const router = useRouter();
+
+
 
 // 当前选中的菜单项
 const selectedKeys = ref<string[]>(['/']);
@@ -28,7 +33,7 @@ const logout = () => {
 </script>
 
 <template>
-    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal">
+    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" v-bind:mode=" windowWidth < AntdWindowsWidth.lg  ? 'inline' : 'horizontal' " >
       <a-menu-item key="/">
         首页
       </a-menu-item>

@@ -1,15 +1,17 @@
 <template>
   <a-layout class="h-screen">
-    <!-- <a-layout-sider
+    <a-layout-sider
+    v-if="windowWidth < AntdWindowsWidth.lg"
       breakpoint="lg"
       collapsed-width="0"
       @collapse="onCollapse"
       @breakpoint="onBreakpoint"
     >
-  </a-layout-sider> -->
-    <a-layout>
-      <a-layout-header :style="{ background: '#fff', padding: 0 }" >
-        <NavBar />
+    <NavBar :window-width="windowWidth"/>
+  </a-layout-sider>
+  <a-layout>
+    <a-layout-header v-if="windowWidth >= AntdWindowsWidth.lg" :style="{ background: '#fff', padding: 0 }" >
+        <NavBar :window-width="windowWidth"/>
       </a-layout-header>
       <a-layout-content class="h-screen overflow-y-auto" :style="{ margin: '24px 16px 0' }">
         <div :style="{ padding: '24px', background: '#fff', height: '100%' }">  <RouterView /></div>
@@ -21,10 +23,11 @@
   </a-layout>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { UserOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons-vue';
 import { RouterView } from "vue-router";
 import NavBar from './components/NavBar.vue';
+import { AntdWindowsWidth } from './constants/antd-windows-width';
 const onCollapse = (collapsed: boolean, type: string) => {
   console.log(collapsed, type);
 };
@@ -32,6 +35,19 @@ const onCollapse = (collapsed: boolean, type: string) => {
 const onBreakpoint = (broken: boolean) => {
   console.log(broken);
 };
+const windowWidth = ref(0);
+onMounted(() => {
+  window.addEventListener('resize', () => {
+    windowWidth.value = window.innerWidth;
+  });
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', () => {
+    windowWidth.value = window.innerWidth;
+  });
+})
+
+
 
 </script>
 <style scoped>
