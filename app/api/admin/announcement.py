@@ -3,6 +3,7 @@ from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 import secrets
+from datetime import datetime, timezone
 
 from core.security import get_password_hash
 from db.session import get_session
@@ -11,30 +12,63 @@ from app.schemas.announcement import Announcement, AnnouncementSchema, Announcem
 
 from ..models import BatchDeleteRequest, ResponseModel
 
-ann_router = APIRouter()
+announce_router = APIRouter()
 
-@ann_router.post("/announcement", response_model=ResponseModel, tags=["Admin"])
+@announce_router.post("/announcement", response_model=ResponseModel, tags=["Admin"])
 async def create_announcement(announcement: AnnouncementSchema, session: AsyncSession = Depends(get_session)):
     try:
-        # if user.password is None:
-        #     user.password = secrets.token_urlsafe(10)  # 生成随机密码
+        # 如果日期未设置，使用当前时间
         if announcement.date is None:
-            announcement.date = datetime.now(timezone.utc).to_string()
-        # announcement id => need to fix
-        # if announcement.id is None:
-        #     announcement.id = 
-        announcement_db = Announcement()
+            announcement.date = datetime.now(timezone.utc)
+
+        # 创建公告实例
+        announcement_db = Announcement(**announcement.model_dump())
         session.add(announcement_db)
         await session.commit()
         await session.refresh(announcement_db)
-        return ResponseModel(code=0, 
-                            #  msg="用户创建成功，默认密码是"+user.password,
-                             msg="公告创建成功, id是" + announcement_db.id,
-                             data=announcement_db.model_dump())
+
+        return ResponseModel(
+            code=0,
+            msg=f"公告创建成功, id是 {announcement_db.id}",
+            data=announcement_db.model_dump()
+        )
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
+@announce_router.put("/announcement/{announcement_id}", response_model=ResponseModel, tags=["Admin"])
+async def update_announcement(
+    announcement_id: int,
+    announcement: AnnouncementSchema,
+    session: AsyncSession = Depends(get_session)
+):
+    try:
+        # 查询公告
+        statement = select(Announcement).where(Announcement.id == announcement_id)
+        result = await session.execute(statement)
+        announcement_db = result.scalar_one_or_none()
 
-@ann_router.delete("/announcement/{ann_id}", response_model=ResponseModel, tags=["Admin"])
+        if not announcement_db:
+            return ResponseModel(code=1, msg="公告未找到")
+
+        # 更新公告字段，仅更新传入的值
+        announcement_data = announcement.model_dump(exclude_unset=True)
+        for key, value in announcement_data.items():
+            setattr(announcement_db, key, value)
+
+        # 更新编辑时间
+        announcement_db.date = datetime.now(timezone.utc)
+
+        session.add(announcement_db)
+        await session.commit()
+        await session.refresh(announcement_db)
+
+        return ResponseModel(
+            code=0,
+            msg="公告更新成功",
+            data=announcement_db.model_dump()
+        )
+    except Exception as e:
+        return ResponseModel(code=1, msg=str(e))
+@announce_router.delete("/announcement/{ann_id}", response_model=ResponseModel, tags=["Admin"])
 async def delete_user(ann_id: int, session: AsyncSession = Depends(get_session)):
     try:
         statement = select(Announcement).where(Announcement.id == ann_id)
@@ -49,7 +83,7 @@ async def delete_user(ann_id: int, session: AsyncSession = Depends(get_session))
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 
-@ann_router.delete("/announcement", response_model=ResponseModel, tags=["Admin"])
+@announce_router.delete("/announcement", response_model=ResponseModel, tags=["Admin"])
 async def delete_announcements(request: BatchDeleteRequest, session: AsyncSession = Depends(get_session)):
     try:
         ann_ids = request.ids
@@ -63,7 +97,7 @@ async def delete_announcements(request: BatchDeleteRequest, session: AsyncSessio
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 
-@ann_router.post("/announcement/search", response_model=ResponseModel, tags=["Admin"])
+@announce_router.post("/announcement/search", response_model=ResponseModel, tags=["Admin"])
 async def search_users(search: AnnouncementSearchSchema, page: int = 1, limit: int = 10, session: AsyncSession = Depends(get_session)):
     try:
         query = select(Announcement)
@@ -80,6 +114,7 @@ async def search_users(search: AnnouncementSearchSchema, page: int = 1, limit: i
         query = query.offset((page - 1) * limit).limit(limit)
         result = await session.execute(query)
         announcements = result.scalars().all()
-        return ResponseModel(code=0, msg="Search Successfully", data=[announcements.model_dump() for ann in announcements], count=total)
+        print(announcements)
+        return ResponseModel(code=0, msg="Search Successfully", data=[ann.model_dump() for ann in announcements], count=total)
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))

@@ -32,7 +32,8 @@ from .team import team_router
 from .competion import competition_router
 from .participation import participation_router
 from .problem import problem_router
-from .leaderboard import leaderboard_router  # 导入 Leaderboard 的路由
+from .leaderboard import leaderboard_router
+from .announcement import announce_router
 
 user_router = APIRouter()
 
@@ -43,4 +44,5 @@ user_router.include_router(competition_router)
 user_router.include_router(participation_router)
 user_router.include_router(problem_router)
 user_router.include_router(submission_router)
-user_router.include_router(leaderboard_router)  # 注册 Leaderboard 路由
+user_router.include_router(leaderboard_router)
+user_router.include_router(announce_router)
