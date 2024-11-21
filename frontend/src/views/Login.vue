@@ -10,30 +10,15 @@
 						<form @submit.prevent="login">
 							<div class="form-group mb-3">
 								<label for="username">用户名</label>
-								<input
-									type="text"
-									id="username"
-									v-model="username"
-									class="form-control"
-									required
-								/>
+								<input type="text" id="username" v-model="username" class="form-control" required />
 							</div>
 							<div class="form-group mb-3">
 								<label for="password">密码</label>
-								<input
-									type="password"
-									id="password"
-									v-model="password"
-									class="form-control"
-									required
-								/>
+								<input type="password" id="password" v-model="password" class="form-control" required />
 							</div>
-							<button
-								type="submit"
-								class="btn btn-primary w-100"
-							>
+							<a-button type="primary" class=" w-100" @click="login">
 								登录
-							</button>
+							</a-button>
 							<button @click="forget" class="btn btn-primary w-100 mt-3">
 								忘记密码
 							</button>
@@ -57,7 +42,7 @@ const userStore = useUserStore();
 const router = useRouter();
 
 const forget = () => {
-  router.push('/user/forget');
+	router.push('/user/forget');
 };
 
 const login = async () => {

@@ -16,3 +16,83 @@
 .btn-white{
 	@apply transition-all duration-300 bg-white hover:bg-gray-100 active:bg-gray-200
 }
+
+
+/* //**----------------------------Antd Overwrite----------------------------------------------------- */
+/* //**----------------------------Menu----------------------------------------------------- */
+.ant-menu-item-selected.amenu-select{
+	height: 50px !important;
+	color: #fff !important;
+	/* background-color: transparent !important; */
+	/* position: relative !important; */
+	&::after{
+		display: none !important;
+	}
+	/* &::after{
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #757FDE;
+		opacity: 1;
+		z-index: 0;
+		} */
+	> span{
+		background-color: #757FDE;
+		transition: background-color 0.3s ease-in-out;
+	}
+}
+.amenu-select>span{
+	@apply px-3 py-2 rounded-md
+}
+.ant-menu-item-active.amenu-select{
+	/* color:#757FDE ; */
+	&::after{
+		display: none !important;
+	}
+}
+.amenu-select-hidden{
+	color: #000 !important;
+	&::after{
+		@apply hidden
+	}
+}
+.amenu-compact-l{
+	padding-left: 0 !imprtant;
+	padding-right: 0 !mportant;
+	>span{
+		padding-left: 0 !important;
+		/* padding-right: 0 !important; */
+	}
+}
+.amenu-compact{
+	padding-left: 0 !imprtant;
+	padding-right: 0 !mportant;
+	>span{
+		padding-left: 0 !important;
+		/* padding-right: 0 !important; */
+	}
+}
+/* //**----------------------------Button----------------------------------------------------- */
+.abtn-icon-lg>span{
+	transform: scale(1.5) !important;
+}
+/* //**----------------------------General----------------------------------------------------- */
+.force-ml-auto{
+	margin-left:auto !important;
+}
+.force-p-0{
+	padding:0 !important;
+}
+.force-px-0{
+	padding-left:0 !important;
+	padding-right:0 !important;
+}
+.force-pl-0{
+	padding-left:0 !important;
+}
+.force-justify-self-end{
+	align-self:flex-end !important;
+}
