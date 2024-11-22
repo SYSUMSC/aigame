@@ -12,6 +12,7 @@
 	--secondary-color-active: #B36B43;
 }
 
+
 .btn-scale{
 	@apply transition-all duration-300 hover:scale-110 active:scale-90
 }
@@ -106,21 +107,4 @@
 /* //**----------------------------Button----------------------------------------------------- */
 .abtn-icon-lg>span{
 	transform: scale(1.5) !important;
-}
-/* //**----------------------------General----------------------------------------------------- */
-.force-ml-auto{
-	margin-left:auto !important;
-}
-.force-p-0{
-	padding:0 !important;
-}
-.force-px-0{
-	padding-left:0 !important;
-	padding-right:0 !important;
-}
-.force-pl-0{
-	padding-left:0 !important;
-}
-.force-justify-self-end{
-	align-self:flex-end !important;
 }

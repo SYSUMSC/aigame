@@ -5,8 +5,9 @@ import { ref, watch } from "vue";
 import { AntdWindowsWidth } from "../constants/antd-windows-width";
 import { LogoutOutlined } from "@ant-design/icons-vue";
 import { h } from "vue";
+import { windowWidth } from "../global/window";
 
-const { windowWidth } = defineProps<{ windowWidth: number }>();
+// const { windowWidth } = defineProps<{ windowWidth: number }>();
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -48,42 +49,45 @@ const logout = () => {
 
 <template>
     <a-menu v-model:selectedKeys="selectedKeys" theme="light"
-        v-bind:mode="windowWidth < AntdWindowsWidth.lg ? 'inline' : 'horizontal'" style="width: 100%;" class="w-ful">
-        <a-menu-item key="/" class="amenu-select-hidden">
+        v-bind:mode="windowWidth < AntdWindowsWidth.lg ? 'inline' : 'horizontal'" style="width: 100%; height: 100%;" :class="[windowWidth > AntdWindowsWidth.lg? '':'flex flex-col justify-start']">
+        <a-menu-item v-if="windowWidth > AntdWindowsWidth.lg" key="/" class="amenu-select-hidden">
             <img src="/logo_aigame.svg" alt="AIGame" class="size-[50px] ">
         </a-menu-item>
-        <a-menu-item key="/" style="" class="amenu-select">
+        <a-menu-item key="/" style="" :class="windowWidth > AntdWindowsWidth.lg&& 'amenu-select'">
             首页
         </a-menu-item>
-        <a-menu-item key="/info" class="amenu-select" :disabled="!userStore.isLoggedIn()">
+        <a-menu-item key="/info" :class="windowWidth > AntdWindowsWidth.lg&& 'amenu-select'" :disabled="!userStore.isLoggedIn()">
             用户中心
         </a-menu-item>
-        <a-menu-item key="/competitioncenter" class="amenu-select" :disabled="!userStore.isLoggedIn()">
+        <a-menu-item key="/competitioncenter" :class="windowWidth > AntdWindowsWidth.lg&& 'amenu-select'" :disabled="!userStore.isLoggedIn()">
             比赛中心
         </a-menu-item>
-        <a-menu-item key="/announcements" class="amenu-select" :disabled="!userStore.isLoggedIn()">
+        <a-menu-item key="/announcements" :class="windowWidth > AntdWindowsWidth.lg&& 'amenu-select'" :disabled="!userStore.isLoggedIn()">
             公告
         </a-menu-item>
         <template v-if="userStore.isLoggedIn()">
-            <a-menu-item key="/info" class="amenu-select-hidden force-ml-auto text-xl py-3 force-px-0">
+            <a-menu-item v-if="windowWidth > AntdWindowsWidth.lg" key="/info" class="amenu-select-hidden !ml-auto lg:text-xl py-3 lg:!px-0">
                 {{ userStore.user!.username }}
             </a-menu-item>
-            <a-menu-item key="/logout" class="amenu-select amenu-compact-l py-1 mr-10 force-px-0">
-                <a-button size="large" shape="circle" :icon="h(LogoutOutlined)" danger style="padding: 0; border: none;" class="force-p-0 abtn-icon-lg"/>
+            <a-menu-item key="/logout" :class="[windowWidth > AntdWindowsWidth.lg? 'amenu-select':'', 'amenu-compact-l' ,'py-1','justify-self-end', 'mr-10' ,'lg:!px-0']">
+                <a-button v-if="windowWidth > AntdWindowsWidth.lg" size="large" shape="circle" :icon="h(LogoutOutlined)" danger style="padding: 0; border: none;" class="!p-0 abtn-icon-lg"/>
+                <span class="text-red-500" v-else>退出登录</span>
             </a-menu-item>
         </template>
         <template v-else>
             <!-- <div class="justify-self-end"> -->
-            <a-menu-item key="/user/login" class="amenu-select-hidden force-ml-auto force-px-0">
-                <a-button>
+            <a-menu-item key="/user/login" class="amenu-select-hidden !ml-auto lg:!px-0">
+                <a-button v-if="windowWidth > AntdWindowsWidth.lg">
                     登录
                 </a-button>
+                <span v-else>登录</span>
             </a-menu-item>
-            <!-- flex- self-end force-justify-self-end fle justify-end  -->
-            <a-menu-item key="/user/reg" class="amenu-select-hidden force-pl-">
-                <a-button type="primary" class="force-p">
+            <!-- flex- self-end !justify-self-end fle justify-end  -->
+            <a-menu-item key="/user/reg" class="amenu-select-hidden">
+                <a-button type="primary" v-if="windowWidth > AntdWindowsWidth.lg">
                     注册
                 </a-button>
+                <span v-else>注册</span>
             </a-menu-item>
             <!-- </div> -->
             <!-- <div class="self-end"> -->

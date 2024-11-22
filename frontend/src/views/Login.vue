@@ -1,10 +1,11 @@
 <template>
 	<div class="size-full relative">
-		<div class="w-[400px] h-[500px] max-h-full bg-white rounded-2xl shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" >
+		<div class="size-full lg:w-[400px] lg:h-[500px] max-h-full bg-white rounded-2xl shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" >
 			<!-- style="width: 400px; height: 600px; max-height: 100%;" class="p-3 bg-white rounded-2xl shadow-md fle flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-y-auto" -->
-			<a-form layout="vertical" @submit.prevent="login" class="w-full max-h-full p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto" >
+			<a-form layout="vertical" @submit.prevent="login" class="w-full max-h-full p-5 lg:p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto" >
 				<!-- dTODO flex导致出现滚动条的高度下能正常滚动底部到但顶部无法滚动完全 -->
-				<a-form-item class="mb-3">
+				<a-form-item class="mb-3 flex justify-center">
+					<img v-if="windowWidth <= AntdWindowsWidth.lg" src="/logo_aigame.svg" alt="" class="size-[200px]">
 					<h3 class="w-full text-4xl text-center font-bold text-primary">登录</h3>
 				</a-form-item>
 				<a-form-item label="用户名" class="mb-3" :rules="[{ required: true, message: '请输入用户名',trigger:'blur' }]">
@@ -30,6 +31,8 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
+import { windowWidth } from '../global/window';
+import { AntdWindowsWidth } from '../constants/antd-windows-width';
 
 // const { windowWidth } = defineProps<{ windowWidth: number }>();
 
