@@ -7,16 +7,16 @@
 					<h3 class="w-full text-4xl text-center font-bold text-primary">找回密码</h3>
 				</a-form-item>
 				<a-form-item label="邮箱" class="mb-3">
-					<a-input v-model="email" placeholder="请输入邮箱" />
+					<a-input v-model:value="email" placeholder="请输入邮箱" />
 				</a-form-item>
 				<a-form-item label="验证码" class="mb-3">
 					<a-input-group class="!flex" compact>
-						<a-input class="flex-1" v-model="code" placeholder="验证码" />
+						<a-input class="flex-1" v-model:value="code" placeholder="验证码" />
 						<a-button type="default" @click="forgetPassword">发送验证码</a-button>
 					</a-input-group>
 				</a-form-item>
 				<a-form-item label="密码">
-					<a-input-password v-model="code" placeholder="请输入新密码" />
+					<a-input-password v-model:value="code" placeholder="请输入新密码" />
 				</a-form-item>
 				<a-form-item>
 					<a-button type="primary" html-type="submit" class="w-full">

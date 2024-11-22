@@ -1,91 +1,50 @@
 <template>
-
-	<div class="pt-5">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<div class="card">
-					<div class="card-header">
-						<h3 class="text-center">注册</h3>
-					</div>
-					<div class="card-body">
-						<form @submit.prevent="reg">
-							<div class="form-group mb-3">
-								<label for="username">用户名</label>
-								<input
-									type="text"
-									id="username"
-									v-model="username"
-									class="form-control"
-									required
-								/>
-							</div>
-							<div class="form-group mb-3">
-								<label for="email">电子邮件</label>
-								<input
-									type="email"
-									id="email"
-									v-model="email"
-									class="form-control"
-									required
-								/>
-							</div>
-							<div class="form-group mb-3">
-								<label for="verify_code">验证码</label>
-								<input
-									type="text"
-									id="verify_code"
-									v-model="verify_code"
-									class="form-control"
-								/>
-							</div>
-							<div class="form-group mb-3">
-								<label for="name">姓名</label>
-								<input
-									type="text"
-									id="name"
-									v-model="name"
-									class="form-control"
-									required
-								/>
-							</div>
-							<div class="form-group mb-3">
-								<label for="student_id">学号</label>
-								<input
-									type="text"
-									id="student_id"
-									v-model="student_id"
-									class="form-control"
-									required
-								/>
-							</div>
-							<div class="form-group mb-3">
-								<label for="password">密码</label>
-								<input
-									type="password"
-									id="password"
-									v-model="password"
-									class="form-control"
-									required
-								/>
-							</div>
-							<button
-								@click="sendVerifyCode"
-								class="btn btn-primary w-100 mb-3"
-							>
-								发送验证码
-							</button>
-							<button
-								type="submit"
-								class="btn btn-primary w-100"
-							>
-								注册
-							</button>
-						</form>
-					</div>
-				</div>
+	<a-config-provider :theme="{
+    token:{
+        colorPrimary: '#E58A57',
+        colorPrimaryHover: '#CF7D4F',
+        colorLinkHover: '#E58A57',
+    }}">
+		<div class="size-full relative">
+			<div class="w-[400px] h-[700px] max-h-full bg-white rounded-2xl shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" >
+				<!-- style="width: 400px; height: 600px; max-height: 100%;" class="p-3 bg-white rounded-2xl shadow-md fle flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-y-auto" -->
+				<a-form layout="vertical" :rules="{username: [{ required: true, message: '请输入用户名' }], password: [{ required: true, message: '请输入密码', trigger: 'blur' }]}" @submit.prevent="reg" class="w-full max-h-full p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto" >
+					<!-- dTODO flex导致出现滚动条的高度下能正常滚动底部到但顶部无法滚动完全 -->
+					<a-form-item class="mb-3">
+						<h3 class="w-full text-4xl text-center font-bold text-secondary">注册</h3>
+					</a-form-item>
+					<a-form-item label="用户名" class="mb-3">
+						<a-input v-model:value="username" placeholder="请输入用户名" />
+					</a-form-item>
+					<a-form-item label="电子邮箱" class="mb-3">
+						<a-input v-model:value="email" placeholder="请输入电子邮箱" />
+					</a-form-item>
+					<a-form-item label="验证码" class="mb-3">
+					<a-input-group class="!flex" compact>
+						<a-input class="flex-1" v-model:value="verify_code" placeholder="请输入验证码" />
+						<a-button type="default" @click="sendVerifyCode">发送验证码</a-button>
+					</a-input-group>
+					</a-form-item>
+					<a-form-item label="姓名" class="mb-3">
+						<a-input v-model:value="name" placeholder="请输入姓名" />
+					</a-form-item>
+					<a-form-item label="学号" class="mb-3">
+						<a-input v-model:value="student_id" placeholder="请输入学号" />
+					</a-form-item>
+					<a-form-item label="密码">
+						<a-input-password v-model:value="password" placeholder="请输入密码" />
+						<!-- <span class="w-full block text-sm text-end text-gray-400 hover:text-primary hover:underline"><a @click="forget">忘记密码?</a></span> -->
+					</a-form-item>
+					<a-form-item>
+						<a-button type="primary" html-type="submit" class="w-full text-l">
+							注册
+						</a-button>
+						<span class="w-full mt-1 block text-sm text-center text-gray-400 ">已有账号？<a class="hover:text-secondary hover:underline" @click="toLogin">去登录</a></span>
+					</a-form-item>
+				</a-form>
 			</div>
 		</div>
-	</div>
+	</a-config-provider>
 </template>
 
 <script setup lang="ts">
@@ -101,6 +60,9 @@ const password = ref('');
 const verify_code = ref('');
 const router = useRouter();
 
+function toLogin() {
+	router.push('/user/login');
+}
 const sendVerifyCode = async () => {
 	// 去除空格
 	email.value = email.value.trim();

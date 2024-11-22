@@ -7,6 +7,9 @@
 	--primary-color: #757FDE;
 	--primary-color-hover: #6C75CA;
 	--primary-color-active: #4A55B2;
+	--secondary-color: #E58A57;
+	--secondary-color-hover: #CF7D4F;
+	--secondary-color-active: #B36B43;
 }
 
 .btn-scale{
@@ -27,6 +30,12 @@
 }
 .hover\:text-primary:hover{
 	color: var(--primary-color-hover) !important;
+}
+.text-secondary{
+	color: var(--secondary-color) !important;
+}
+.hover\:text-secondary:hover{
+	color: var(--secondary-color-hover) !important;
 }
 
 
