@@ -1,31 +1,26 @@
 <template>
-	<div class="pt-5">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<div class="card">
-					<div class="card-header">
-						<h3 class="text-center">登录</h3>
-					</div>
-					<div class="card-body">
-						<form @submit.prevent="login">
-							<div class="form-group mb-3">
-								<label for="username">用户名</label>
-								<input type="text" id="username" v-model="username" class="form-control" required />
-							</div>
-							<div class="form-group mb-3">
-								<label for="password">密码</label>
-								<input type="password" id="password" v-model="password" class="form-control" required />
-							</div>
-							<a-button type="primary" class=" w-100" @click="login">
-								登录
-							</a-button>
-							<button @click="forget" class="btn btn-primary w-100 mt-3">
-								忘记密码
-							</button>
-						</form>
-					</div>
-				</div>
-			</div>
+	<div class="size-full relative">
+		<div class="w-[400px] h-[600px] max-h-full bg-white rounded-2xl shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" >
+			<!-- style="width: 400px; height: 600px; max-height: 100%;" class="p-3 bg-white rounded-2xl shadow-md fle flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-y-auto" -->
+			<a-form layout="vertical" @submit.prevent="login" class="w-full max-h-full p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto" >
+				<!-- dTODO flex导致出现滚动条的高度下能正常滚动底部到但顶部无法滚动完全 -->
+				<a-form-item class="mb-3">
+					<h3 class="w-full text-4xl text-center font-bold text-primary">登录</h3>
+				</a-form-item>
+				<a-form-item label="用户名" class="mb-3">
+					<a-input v-model="username" placeholder="请输入用户名" />
+				</a-form-item>
+				<a-form-item label="密码">
+					<a-input-password v-model="password" placeholder="请输入密码" />
+					<a class="w-full block text-xs text-end text-gray-400 " @click="forget">忘记密码？</a>
+				</a-form-item>
+				<a-form-item>
+					<a-button type="primary" html-type="submit" class="w-full">
+						登录
+					</a-button>
+					<span class="w-full mt-1 block text-xs text-center text-gray-400 ">还没有账号？去<a class="hover:text-primary hover:underline" @click="forget">注册</a></span>
+				</a-form-item>
+			</a-form>
 		</div>
 	</div>
 </template>
@@ -35,6 +30,8 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
+
+// const { windowWidth } = defineProps<{ windowWidth: number }>();
 
 const username = ref('');
 const password = ref('');

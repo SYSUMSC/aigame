@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 /* 使用了名为PostCSS Language Support 的 vscode插件 */
+:root {
+	--primary-color: #757FDE;
+	--primary-color-hover: #6C75CA;
+	--primary-color-active: #4A55B2;
+}
 
 .btn-scale{
 	@apply transition-all duration-300 hover:scale-110 active:scale-90
@@ -17,6 +22,17 @@
 	@apply transition-all duration-300 bg-white hover:bg-gray-100 active:bg-gray-200
 }
 
+.text-primary{
+	color: var(--primary-color) !important;
+}
+.hover\:text-primary:hover{
+	color: var(--primary-color-hover) !important;
+}
+
+
+.bg-gray{
+	background-color: #FAFAFA !important;
+}
 
 /* //**----------------------------Antd Overwrite----------------------------------------------------- */
 /* //**----------------------------Menu----------------------------------------------------- */
@@ -35,12 +51,12 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: #757FDE;
+		background-color: var(--primary-color) !important;;
 		opacity: 1;
 		z-index: 0;
 		} */
 	> span{
-		background-color: #757FDE;
+		background-color: var(--primary-color) !important;
 		transition: background-color 0.3s ease-in-out;
 	}
 }
@@ -48,7 +64,7 @@
 	@apply px-3 py-2 rounded-md
 }
 .ant-menu-item-active.amenu-select{
-	/* color:#757FDE ; */
+	/* color:var(--primary-color) !important; */
 	&::after{
 		display: none !important;
 	}
@@ -74,6 +90,9 @@
 		padding-left: 0 !important;
 		/* padding-right: 0 !important; */
 	}
+}
+/* //**----------------------------Form----------------------------------------------------- */
+.aform-item-compact{
 }
 /* //**----------------------------Button----------------------------------------------------- */
 .abtn-icon-lg>span{
