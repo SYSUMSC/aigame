@@ -18,7 +18,8 @@
         // colorBgElevated:'#757FDE'
         colorError:'#FF5C5C',
         colorErrorHover: '#B44343',
-        colorErrorActive:''
+        colorErrorActive: ''
+        // color
     }}">
         <a-layout class="h-screen">
             <a-layout-sider style="position: fixed;" theme="light" class="h-screen z-50" v-if="windowWidth < AntdWindowsWidth.lg"

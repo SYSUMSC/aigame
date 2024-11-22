@@ -1,4 +1,5 @@
 <template>
+
 	<div class="pt-5">
 		<div class="row justify-content-center">
 			<div class="col-md-6">
@@ -147,6 +148,6 @@ const reg = async () => {
 			} else {
 				alert(res.data.msg);
 			}
-	} 
+	}
 };
 </script>

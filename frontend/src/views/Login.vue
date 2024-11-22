@@ -2,7 +2,7 @@
 	<div class="size-full relative">
 		<div class="w-[400px] h-[600px] max-h-full bg-white rounded-2xl shadow-md absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" >
 			<!-- style="width: 400px; height: 600px; max-height: 100%;" class="p-3 bg-white rounded-2xl shadow-md fle flex-col justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-y-auto" -->
-			<a-form layout="vertical" @submit.prevent="login" class="w-full max-h-full p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto" >
+			<a-form layout="vertical" :rules="{username: [{ required: true, message: '请输入用户名' }], password: [{ required: true, message: '请输入密码', trigger: 'blur' }]}" submit.prevent="login" class="w-full max-h-full p-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto" >
 				<!-- dTODO flex导致出现滚动条的高度下能正常滚动底部到但顶部无法滚动完全 -->
 				<a-form-item class="mb-3">
 					<h3 class="w-full text-4xl text-center font-bold text-primary">登录</h3>
@@ -12,13 +12,13 @@
 				</a-form-item>
 				<a-form-item label="密码">
 					<a-input-password v-model="password" placeholder="请输入密码" />
-					<a class="w-full block text-xs text-end text-gray-400 " @click="forget">忘记密码？</a>
+					<span class="w-full block text-sm text-end text-gray-400 hover:text-primary hover:underline"><a @click="forget">忘记密码?</a></span>
 				</a-form-item>
 				<a-form-item>
-					<a-button type="primary" html-type="submit" class="w-full">
+					<a-button type="primary" html-type="submit" class="w-full text-l">
 						登录
 					</a-button>
-					<span class="w-full mt-1 block text-xs text-center text-gray-400 ">还没有账号？去<a class="hover:text-primary hover:underline" @click="forget">注册</a></span>
+					<span class="w-full mt-1 block text-sm text-center text-gray-400 ">还没有账号？去<a class="hover:text-primary hover:underline" @click="toLogin">注册</a></span>
 				</a-form-item>
 			</a-form>
 		</div>
@@ -42,6 +42,9 @@ const forget = () => {
 	router.push('/user/forget');
 };
 
+function toLogin() {
+	router.push('/user/reg');
+}
 const login = async () => {
 	try {
 		const res = await axios.post('/api/user/login', {
