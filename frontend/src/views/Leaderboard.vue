@@ -37,44 +37,6 @@ const noMoreData = ref(false);
 
 const route = useRoute();
 
-// const loadLeaderboard = async () => {
-//   if (loading.value || noMoreData.value) return;
-//   loading.value = true;
-
-//   try {
-//     const competitionId = route.params.id;
-
-//     // const res = await axios.post('/api/competition/leaderboard', {
-//     //   competition_id: competitionId,
-//     //   page: page.value,
-//     //   page_size: pageSize.value
-//     // });
-//     const res = await axios.post('/api/competition/leaderboard', 
-//       {
-//         competition_id: competitionId, 
-//         page: page.value, 
-//         page_size: pageSize.value 
-//       }, 
-//       {
-//         headers: { 'Content-Type': 'application/json' }
-//       });
-
-//     if (res.data.code === 0) {
-//       if (res.data.data.length < pageSize.value) {
-//         noMoreData.value = true;
-//       }
-//       leaderboard.value.push(...res.data.data);
-//       page.value += 1;
-//     } else {
-//       console.error('获取排行榜时出错:', res.data.msg);
-//     }
-//   } catch (error) {
-//     console.error('获取排行榜时发生错误:', error);
-//   } finally {
-//     loading.value = false;
-//   }
-// };
-
 const loadLeaderboard = async () => {
   if (loading.value || noMoreData.value) return;
   loading.value = true;
