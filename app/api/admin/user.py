@@ -1,12 +1,13 @@
+import secrets
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-import secrets
 
+from app.schemas.user import User, UserSchema, UserSearchSchema
 from core.security import get_password_hash
 from db.session import get_session
-from app.schemas.user import User, UserSchema, UserSearchSchema
 
 from ..models import BatchDeleteRequest, ResponseModel
 

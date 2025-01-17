@@ -1,16 +1,16 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.core.utils import load_config_from_db
-from db.session import get_session
-from app.schemas.user import User
-from app.schemas.config import Config
-from app.schemas.competition import Competition
-from app.schemas.announcement import Announcement
-from app.schemas.problem_type import ProblemType
 from app.api.models import *
+from app.core.utils import load_config_from_db
+from app.schemas.announcement import Announcement
+from app.schemas.competition import Competition
+from app.schemas.config import Config
+from app.schemas.problem_type import ProblemType
+from app.schemas.user import User
+from db.session import get_session
 
 admin_router = APIRouter()
 templates = Jinja2Templates(directory="admin/templates")

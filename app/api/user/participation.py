@@ -2,15 +2,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-
 from app.api.models import ResponseModel
-
-from db.session import get_session
 from app.schemas.participation import Participation, ParticipationSchema
-from app.schemas.user import User
 from app.schemas.team import Team
-
+from app.schemas.user import User
 from core.security import get_current_user
+from db.session import get_session
 
 participation_router = APIRouter()
 

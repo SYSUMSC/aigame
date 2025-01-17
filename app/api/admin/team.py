@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
+from sqlalchemy import func, join, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from sqlalchemy import select, join
 
+from app.schemas.team import Team, TeamSchema, TeamSearchSchema
 from app.schemas.user import User
 from db.session import get_session
-from app.schemas.team import Team, TeamSchema, TeamSearchSchema
 
 from ..models import BatchDeleteRequest, ResponseModel
 

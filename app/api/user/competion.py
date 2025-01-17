@@ -1,16 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, Body, Query, Path
+from typing import List, Optional
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from typing import Optional, List
 
 from app.api.models import ResponseModel
-from db.session import get_session
 from app.schemas.competition import Competition
 from app.schemas.problem import Problem
 from app.schemas.problem_type import ProblemType  # 确保你已经定义了ProblemType
-
-
+from db.session import get_session
 
 competition_router = APIRouter()
 

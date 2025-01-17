@@ -1,6 +1,8 @@
-from typing import Optional, Union
 from datetime import datetime
+from typing import Optional, Union
+
 from sqlmodel import Field, SQLModel
+
 
 class Competition(SQLModel, table=True):
     __tablename__ = "competition"

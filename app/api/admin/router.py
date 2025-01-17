@@ -2,16 +2,16 @@ from fastapi import APIRouter, Depends
 
 from core.security import oauth2_scheme_admin as oauth2_scheme
 
+from .announcement import announce_router
 from .auth import auth_router
-from .team import team_router
-from .user import user_router
 from .competition import competition_router
+from .participation import participation_router
 from .problem import problem_router
 from .problem_type import problem_type_router
-from .submission import submission_router
-from .participation import participation_router
 from .setting import setting_router
-from .announcement import announce_router
+from .submission import submission_router
+from .team import team_router
+from .user import user_router
 
 admin_api_router = APIRouter()
 

@@ -3,8 +3,9 @@ from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
+from app.schemas.competition import (Competition, CompetitionSchema,
+                                     CompetitionSearchSchema)
 from db.session import get_session
-from app.schemas.competition import Competition, CompetitionSchema, CompetitionSearchSchema
 
 from ..models import BatchDeleteRequest, ResponseModel
 

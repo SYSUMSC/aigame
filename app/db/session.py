@@ -7,8 +7,8 @@ from sqlmodel import SQLModel, select
 
 from app.core.config import settings
 from app.core.security import get_password_hash
-from app.schemas.config import Config
 from app.db.init import init_test_data
+from app.schemas.config import Config
 
 DATABASE_URL = settings.DATABASE_URI
 engine = create_async_engine(DATABASE_URL, echo=True)

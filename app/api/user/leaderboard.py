@@ -80,13 +80,15 @@
 
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import BaseModel
 from sqlalchemy import func, select
-from db.session import get_session
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.models import ResponseModel
 from app.schemas.submission import Submission
 from app.schemas.team import Team
-from pydantic import BaseModel
+from db.session import get_session
+
 
 class CompetitionRequest(BaseModel):
     competition_id: int

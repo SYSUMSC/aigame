@@ -1,13 +1,13 @@
-from fastapi import Request, Depends
+from fastapi import Depends, Request
 from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.middleware.base import BaseHTTPMiddleware
 
+from core.security import (get_current_admin, get_current_user,
+                           oauth2_scheme_user, verify_password)
 from core.utils import load_config_from_db
-from core.security import verify_password
 from db.session import get_session
-from core.security import get_current_admin, get_current_user
-from core.security import oauth2_scheme_user
+
 
 class AdminAuthMiddleware(BaseHTTPMiddleware):
     def __init__(self, app):

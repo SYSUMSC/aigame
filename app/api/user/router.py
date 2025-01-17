@@ -25,15 +25,15 @@ from fastapi import APIRouter, Depends
 
 from core.security import oauth2_scheme_user as oauth2_scheme
 
-from .submission import submission_router
+from .announcement import announce_router
 from .auth import auth_router
-from .info import info_router
-from .team import team_router
 from .competion import competition_router
+from .info import info_router
+from .leaderboard import leaderboard_router
 from .participation import participation_router
 from .problem import problem_router
-from .leaderboard import leaderboard_router
-from .announcement import announce_router
+from .submission import submission_router
+from .team import team_router
 
 user_router = APIRouter()
 

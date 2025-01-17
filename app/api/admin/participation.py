@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
+from app.schemas.participation import (Participation, ParticipationSchema,
+                                       ParticipationSearchSchema)
 from db.session import get_session
-from app.schemas.participation import Participation, ParticipationSchema, ParticipationSearchSchema
+
 from ..models import BatchDeleteRequest, ResponseModel
 
 participation_router = APIRouter()
