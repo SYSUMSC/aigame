@@ -1,12 +1,16 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from db.session import get_session
-from app.schemas.problem import Problem
+
 from app.api.models import ResponseModel
-from typing import TYPE_CHECKING
+from app.schemas.problem import Problem
+from db.session import get_session
+
 if TYPE_CHECKING:
     from app.schemas.problem import Problem
-from fastapi import APIRouter, Depends, HTTPException, Body, Path
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Path
 
 problem_router = APIRouter()
 

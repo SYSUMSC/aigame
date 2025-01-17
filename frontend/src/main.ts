@@ -1,17 +1,21 @@
 import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
-import router from "./router";
-import axios from "axios";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { useUserStore } from "./stores/user";
-import { s3Layer } from 'vue3-layer';
-import 'vue3-layer/dist/s3Layer.css';
-import Antd from 'ant-design-vue';
-import 'ant-design-vue/dist/reset.css';
 
+import router from "./router";
+
+import axios from "axios";
+
+import App from "./App.vue";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { s3Layer } from 'vue3-layer';
+import Antd from 'ant-design-vue';
+
+import 'vue3-layer/dist/s3Layer.css';
+import 'ant-design-vue/dist/reset.css';
+import "./style.css";
+
+import { useUserStore } from "./stores/user";
 
 // 初始化 Pinia
 const pinia = createPinia();

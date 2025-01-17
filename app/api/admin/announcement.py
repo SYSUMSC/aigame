@@ -1,14 +1,16 @@
+import secrets
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-import secrets
-from datetime import datetime, timezone
 
+# from app.schemas.user import User, UserSchema, UserSearchSchema
+from app.schemas.announcement import (Announcement, AnnouncementSchema,
+                                      AnnouncementSearchSchema)
 from core.security import get_password_hash
 from db.session import get_session
-# from app.schemas.user import User, UserSchema, UserSearchSchema
-from app.schemas.announcement import Announcement, AnnouncementSchema, AnnouncementSearchSchema
 
 from ..models import BatchDeleteRequest, ResponseModel
 
@@ -73,7 +75,6 @@ async def delete_user(ann_id: int, session: AsyncSession = Depends(get_session))
     try:
         statement = select(Announcement).where(Announcement.id == ann_id)
         result = await session.execute(statement)
-        # user_db = result.scalar_one_or_none()
         announcement_db = result.scalar_one_or_none()
         if not announcement_db:
             return ResponseModel(code=1, msg="公告未找到")

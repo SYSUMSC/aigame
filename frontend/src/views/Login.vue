@@ -28,13 +28,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
-import { useUserStore } from '../stores/user';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+import { useUserStore } from '../stores/user';
 import { windowWidth } from '../global/window';
 import { AntdWindowsWidth } from '../constants/antd-windows-width';
-
-// const { windowWidth } = defineProps<{ windowWidth: number }>();
 
 const username = ref('');
 const password = ref('');

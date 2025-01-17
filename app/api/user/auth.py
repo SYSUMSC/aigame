@@ -1,22 +1,22 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Header
+import os
+import random
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+from dotenv import load_dotenv
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-import os
-from dotenv import load_dotenv
-
 from starlette.middleware.sessions import SessionMiddleware
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-import random
 
 from app.api.models import ResponseModel
-from core.security import (create_access_token, get_password_hash, verify_password)
-from db.session import get_session
 from app.schemas.user import User, UserSchema
+from core.security import (create_access_token, get_password_hash,
+                           verify_password)
 from core.utils import load_smtp_config_from_db
+from db.session import get_session
 
 auth_router = APIRouter()
 

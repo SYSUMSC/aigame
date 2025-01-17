@@ -1,14 +1,17 @@
+from datetime import datetime, timedelta, timezone
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
-from app.schemas.user import User
-from app.schemas.team import Team
-from app.schemas.problem_type import ProblemType
-from app.schemas.problem import Problem
-from app.schemas.competition import Competition
-from app.schemas.announcement import Announcement
-from app.schemas.config import Config
+
 from app.core.security import get_password_hash
-from datetime import datetime, timedelta, timezone
+from app.schemas.announcement import Announcement
+from app.schemas.competition import Competition
+from app.schemas.config import Config
+from app.schemas.problem import Problem
+from app.schemas.problem_type import ProblemType
+from app.schemas.team import Team
+from app.schemas.user import User
+
 
 # 生成一些固定的测试比赛，题目分类，题目，初始用户用于测试
 async def init_test_data(session: AsyncSession):

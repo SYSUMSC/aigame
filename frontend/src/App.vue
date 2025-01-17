@@ -2,24 +2,14 @@
     <a-config-provider :theme="{
     token:{
         colorPrimary: '#757FDE',
-        // colorPrimaryActive: '#000',
         colorPrimaryHover: '#6C75CA',
-        // colorPrimaryBg: '#757FDE',
-        // colorPrimaryText: '#757FDE',
-        // colorPrimaryTextHover: '#6C75CA',
-        // colorLink: '#757FDE',
         colorLinkHover: '#757FDE',
 
         colorPrimaryBgHover: '#000',
-        // colorBgBase: '#FFF',
-        // colorBgContainer: '#fff',
         colorBgLayout: '#FAFAFA',
-        // colorPrimaryBg: '#757FDE',
-        // colorBgElevated:'#757FDE'
         colorError:'#FF5C5C',
         colorErrorHover: '#B44343',
         colorErrorActive: ''
-        // color
     }}">
         <a-layout class="h-screen">
             <a-layout-sider style="position: fixed;" theme="light" class="h-screen z-50" v-if="windowWidth < AntdWindowsWidth.lg"
@@ -32,9 +22,7 @@
                     <NavBar/>
                 </a-layout-header>
                 <a-layout-content class="overflow-x-hidden overflow-y-aut" style="padding: 30px ;">
-                    <!-- <div :style="{ padding: '24px', background: '#fff', height: '100%' }"> -->
                     <RouterView />
-                    <!-- </div> -->
                 </a-layout-content>
                 <a-layout-footer style="text-align: center">
                     Ant Design ©2018 Created by Ant UED
@@ -45,11 +33,12 @@
 </template>
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted } from 'vue';
-import { UserOutlined, VideoCameraOutlined, UploadOutlined } from '@ant-design/icons-vue';
 import { RouterView } from "vue-router";
+
 import NavBar from './components/NavBar.vue';
+
 import { AntdWindowsWidth } from './constants/antd-windows-width';
-import { windowWidth} from './global/window.js'
+import { windowWidth } from './global/window.js'
 const onCollapse = (collapsed: boolean, type: string) => {
     console.log(collapsed, type);
 };

@@ -1,6 +1,8 @@
-from sqlmodel import Field, SQLModel, Relationship
-from typing import Optional
 from datetime import datetime, timezone
+from typing import Optional
+
+from sqlmodel import Field, Relationship, SQLModel
+
 
 class Participation(SQLModel, table=True):
     __tablename__ = "participation"

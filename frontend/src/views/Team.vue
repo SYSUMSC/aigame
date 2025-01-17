@@ -177,11 +177,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
-import ClipboardJS from "clipboard";
 import { layer } from "vue3-layer";
+
+import axios from "axios";
+import ClipboardJS from "clipboard";
+
+import { useUserStore } from "../stores/user";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -192,15 +194,6 @@ const isCaptain = ref(false);
 const showCreateTeamModal = ref(false);
 const showTransferModal = ref(false);
 const selectedCaptainId = ref("");
-// const copyInviteCode = ref(false)
-
-// const sendData = () => {
-//   emit('commit',
-//   // userStore.user?.id === teamInfo.value.captain_id
-//     isCaptain.value
-//   )
-//   console.log("send value is "+isCaptain.value)
-// }
 
 const copyToClipboard = async (text: string) => {
   // 使用原生api

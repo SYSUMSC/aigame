@@ -1,18 +1,19 @@
 from logging.config import fileConfig
-from sqlalchemy.ext.asyncio import AsyncEngine
-from alembic import context
-from sqlmodel import SQLModel
-from app.db.session import engine  # 导入你项目中的异步engine
 
-# 导入所有的模型
-from app.schemas.user import User
-from app.schemas.team import Team
-from app.schemas.submission import Submission
-from app.schemas.problem_type import ProblemType
-from app.schemas.problem import Problem
+from app.db.session import engine  # 导入你项目中的异步engine
+from app.schemas.competition import Competition
 from app.schemas.config import Config
 from app.schemas.participation import Participation
-from app.schemas.competition import Competition
+from app.schemas.problem import Problem
+from app.schemas.problem_type import ProblemType
+from app.schemas.submission import Submission
+from app.schemas.team import Team
+# 导入所有的模型
+from app.schemas.user import User
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlmodel import SQLModel
+
+from alembic import context
 
 # Alembic Config对象，提供访问 .ini 文件中的配置
 config = context.config

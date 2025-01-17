@@ -1,17 +1,19 @@
 # 这里不能加app. 否则有bug？
-from app.schemas.problem import Problem
-from app.schemas.submission import Submission
-from app.schemas.participation import Participation  # 导入Participation模型
-from app.schemas.user import User
-from fastapi import APIRouter, Depends, File, UploadFile, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select
-from db.session import get_session
-from app.api.models import ResponseModel
-from datetime import datetime, timezone
-from core.security import get_current_user  # 确保你有这个函数
 import os
 import uuid
+from datetime import datetime, timezone
+
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
+
+from app.api.models import ResponseModel
+from app.schemas.participation import Participation  # 导入Participation模型
+from app.schemas.problem import Problem
+from app.schemas.submission import Submission
+from app.schemas.user import User
+from core.security import get_current_user  # 确保你有这个函数
+from db.session import get_session
 
 # 将路由器名称改为 submission_router
 submission_router = APIRouter()

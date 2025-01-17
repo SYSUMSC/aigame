@@ -1,9 +1,8 @@
-# from typing import Union
-# from datetime import datetime
-# from sqlmodel import Field, SQLModel
-from typing import Optional
-from sqlmodel import Field, Relationship, SQLModel
 from datetime import datetime
+from typing import Optional
+
+from sqlmodel import Field, Relationship, SQLModel
+
 
 class Announcement(SQLModel, table=True):
     __tablename__ = "announcement"

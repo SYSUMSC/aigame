@@ -7,8 +7,6 @@ import { LogoutOutlined } from "@ant-design/icons-vue";
 import { h } from "vue";
 import { windowWidth } from "../global/window";
 
-// const { windowWidth } = defineProps<{ windowWidth: number }>();
-
 const userStore = useUserStore();
 const router = useRouter();
 
@@ -19,12 +17,7 @@ const selectedKeys = ref<string[]>([router.currentRoute.value.path]);
 
 // 监听 selectedKeys 的变化并跳转路由
 watch(selectedKeys, (newKeys) => {
-    // const newKey = newKeys[0];
-    // if (newKey === '/logout') {
-    //   logout();
-    // } else {
     router.push(newKeys[0]);
-    // }
 });
 
 // 新的tab切换逻辑
@@ -75,48 +68,21 @@ const logout = () => {
             </a-menu-item>
         </template>
         <template v-else>
-            <!-- <div class="justify-self-end"> -->
             <a-menu-item key="/user/login" class="amenu-select-hidden !ml-auto lg:!px-0">
                 <a-button v-if="windowWidth > AntdWindowsWidth.lg">
                     登录
                 </a-button>
                 <span v-else>登录</span>
             </a-menu-item>
-            <!-- flex- self-end !justify-self-end fle justify-end  -->
             <a-menu-item key="/user/reg" class="amenu-select-hidden">
                 <a-button type="primary" v-if="windowWidth > AntdWindowsWidth.lg">
                     注册
                 </a-button>
                 <span v-else>注册</span>
             </a-menu-item>
-            <!-- </div> -->
-            <!-- <div class="self-end"> -->
-                <!-- <a-button class="justify-self-end">
-                    登录
-                </a-button>
-                <a-button type="primary" class="justify-self-end">
-                    注册
-                </a-button> -->
-            <!-- </div>  -->
         </template>
     </a-menu>
 </template>
 
 <style scoped>
-/* .amenu-select-hidden::after{
-    display: none;
-    border: none;
-    @apply border-none
-} */
- /* !啊啊所以原来是在这里不生效艹？？？…… */
-/* .ant-menu-item-selected::after{
-    border-bottom-width: 0 !important;
-} */
-/* ::v-deep .ant-menu-light.ant-menu-horizontal >.ant-menu-item::after, :where(.css-dev-only-do-not-override-1p3hq3p).ant-menu-light.ant-menu-horizontal >.ant-menu-submenu::after{
-    border: none !important;
-} */
- /* :where(.css-dev-only-do-not-override-1p3hq3p).ant-menu-light.ant-menu-horizontal >.ant-menu-submenu-selected::after{
-    border-bottom-width: 0 !important;
- } */
-
 </style>

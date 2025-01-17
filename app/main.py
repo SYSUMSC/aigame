@@ -12,15 +12,14 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from admin.router import admin_router
+from starlette.middleware.sessions import SessionMiddleware
 
+from admin.router import admin_router
 from api.admin.router import admin_api_router
 from api.user.router import user_router
 from core.config import settings
 from db.session import get_session, lifespan
 from middleware.auth_middleware import AdminAuthMiddleware, UserAuthMiddleware
-from starlette.middleware.sessions import SessionMiddleware
-
 
 app = FastAPI(title=settings.PROJECT_NAME, openapi_url=f"{settings.API_ADMIN_STR}/openapi.json",
     openapi_tags=[

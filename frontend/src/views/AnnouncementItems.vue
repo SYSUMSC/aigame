@@ -9,9 +9,5 @@ export type Announcement = {
 	content:String,
 	date:Date,
 }
-// defineProps({
-// 	content: String,
-// 	date: Date
-// });
 defineProps<Announcement>();
 </script>

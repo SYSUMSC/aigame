@@ -1,11 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import SQLModel, select
+
+from app.api.models import ResponseModel
 from app.schemas.config import Config, ConfigSchema
 from db.session import get_session
-from app.api.models import ResponseModel
-from fastapi import Form
-
 
 setting_router = APIRouter()
 @setting_router.post("/setting", response_model=ResponseModel, tags=["Admin"])
