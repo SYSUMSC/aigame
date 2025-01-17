@@ -34,7 +34,6 @@
 					</a-form-item>
 					<a-form-item label="密码">
 						<a-input-password v-model:value="password" placeholder="请输入密码" />
-						<!-- <span class="w-full block text-sm text-end text-gray-400 hover:text-primary hover:underline"><a @click="forget">忘记密码?</a></span> -->
 					</a-form-item>
 					<a-form-item>
 						<a-button type="primary" html-type="submit" class="w-full text-l">
@@ -50,8 +49,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
 import { windowWidth } from '../global/window';
 import { AntdWindowsWidth } from '../constants/antd-windows-width';
 

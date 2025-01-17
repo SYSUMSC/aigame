@@ -75,7 +75,6 @@ async def delete_user(ann_id: int, session: AsyncSession = Depends(get_session))
     try:
         statement = select(Announcement).where(Announcement.id == ann_id)
         result = await session.execute(statement)
-        # user_db = result.scalar_one_or_none()
         announcement_db = result.scalar_one_or_none()
         if not announcement_db:
             return ResponseModel(code=1, msg="公告未找到")

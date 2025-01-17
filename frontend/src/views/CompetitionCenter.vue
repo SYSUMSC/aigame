@@ -52,8 +52,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import axios from "axios";
-import { useUserStore } from "../stores/user";
+
 import router from "../router";
+import { useUserStore } from "../stores/user";
 type Competition = {
   id: number;
   name: string;

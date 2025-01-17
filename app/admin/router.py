@@ -138,7 +138,6 @@ async def announcement(request: Request, session: AsyncSession = Depends(get_ses
 
 
 
-    # return templates.TemplateResponse("announcement.html", {"request": request})
 
 # 公告管理
 @admin_router.get("/admin/announcement_form")

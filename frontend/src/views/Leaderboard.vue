@@ -26,8 +26,8 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import axios from 'axios';
 import { useRoute } from 'vue-router';
+import axios from 'axios';
 
 const leaderboard = ref([]);
 const loading = ref(false);

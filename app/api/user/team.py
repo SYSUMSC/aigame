@@ -250,8 +250,6 @@ async def leave_team(current_user: str = Depends(get_current_user), session: Asy
 async def transfer_captain(request: Request, current_user: str = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
     try:
         # # 获取当前用户
-        # statement = select(User).where(User.username == current_user)
-        # current_user_db = await session.execute(statement).scalar_one()
         body = await request.json()
         new_captain_id = body.get("new_captain_id")
         statement = select(User).where(User.username == current_user)
@@ -268,16 +266,12 @@ async def transfer_captain(request: Request, current_user: str = Depends(get_cur
         team_statement = select(Team).where(Team.id == user_db.team_id)
         result_team = await session.execute(team_statement)
         team_db = result_team.scalar_one()
-        # return ResponseModel(code=0, msg="队伍转让成功")
-        # check whether current user is captain
         if team_db.captain_id!= user_db.id:
             return ResponseModel(code=1, msg="用户不是队长，无法转让队长")
 
         # check whether new_captain_id is in team
         new_captain_statement = select(User).where(User.id == new_captain_id, User.team_id == team_db.id)
         new_captain_db = (await session.execute(new_captain_statement)).scalar_one_or_none()
-        # result_new_captain = await session.execute(new_captain_statement)
-        # new_captain_db = result_new_captain.scalar_one_or_none()
         if not new_captain_db:
             return ResponseModel(code=1, msg="新队长未找到或不在队伍中")
 
