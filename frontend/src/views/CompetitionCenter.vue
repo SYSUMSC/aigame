@@ -110,11 +110,9 @@ const getJoinInfo = async () => {
 };
 
 const quit = async (competition_id: number) => {
-  const res = await axios.delete("/api/user/participation", {
-    params: {
-      team_id: userStore.user?.team_id,
-      competition_id: competition_id,
-    },
+  const res = await axios.post("/api/user/participation/delete", {
+    team_id: userStore.user?.team_id,
+    competition_id: competition_id
   });
   if (res.status === 200 && res.data.code === 0) {
     alert("退出成功");

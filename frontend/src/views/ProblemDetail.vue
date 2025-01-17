@@ -126,10 +126,8 @@ const submitFile = async () => {
   }
 
   // 检查队伍是否已报名
-  const checkParticipation = await axios.get("/api/user/participation", {
-    params: {
-      team_id: userStore.team_id,
-    },
+  const checkParticipation = await axios.post("/api/user/participation/get", {
+    team_id: userStore.team_id
   });
 
   if (

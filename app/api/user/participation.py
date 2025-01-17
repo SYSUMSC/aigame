@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
+from pydantic import BaseModel
 
 from app.api.models import ResponseModel
 from app.schemas.participation import Participation, ParticipationSchema
@@ -33,10 +34,14 @@ async def get_team_info(current_user:str,session: AsyncSession = Depends(get_ses
         return team_info["captain_id"] == user_db.id
     except Exception as e:
         return False
+    
+class GetParticipationRequest(BaseModel):
+    team_id: int
 
-@participation_router.get("/participation", response_model=ResponseModel, tags=["User"])
-async def get_participation(team_id:int, session: AsyncSession = Depends(get_session)):
+@participation_router.post("/participation/get", response_model=ResponseModel, tags=["User"])
+async def get_participation(request:GetParticipationRequest, session: AsyncSession = Depends(get_session)):
     try:
+        team_id = request.team_id
         statement = select(Participation).where(Participation.team_id == team_id)
         result = await session.execute(statement)
         participation_list = result.scalars().all()
@@ -65,10 +70,16 @@ async def join_competition(participation: ParticipationSchema,current_user: str 
     except Exception as e:
         return ResponseModel(code=1, msg=str(e))
 
-@participation_router.delete("/participation", response_model=ResponseModel, tags=["User"])
-async def quit_competition(team_id: int, competition_id: int, session: AsyncSession = Depends(get_session)):
+class DeleteParticipationRequest(BaseModel):
+    team_id: int
+    competition_id: int
+
+@participation_router.post("/participation/delete", response_model=ResponseModel, tags=["User"])
+async def quit_competition(request:DeleteParticipationRequest, session: AsyncSession = Depends(get_session)):
     # 退出比赛
     try:
+        team_id = request.team_id
+        competition_id = request.competition_id
         # 检查用户是否已参加比赛
         existing_participation = await session.execute(
             select(Participation).where(Participation.team_id == team_id, Participation.competition_id == competition_id)
