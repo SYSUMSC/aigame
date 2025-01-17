@@ -82,7 +82,7 @@ const loadLeaderboard = async () => {
   try {
     const competitionId = route.params.id;
 
-    const res = await axios.post('/api/user/competition/leaderboard', 
+    const res = await axios.post('/api/user/leaderboard', 
       {
         // competition_id: competitionId,
         competition_id: parseInt(competitionId, 10), // 将 competitionId 转换为整数 
