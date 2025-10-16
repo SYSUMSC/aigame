@@ -1,4 +1,5 @@
 import asyncio
+import os
 import contextlib
 import io
 import json
@@ -181,13 +182,6 @@ def _run_in_docker_sync(submission_dir: Path, judge_dir: Path) -> dict:
             except Exception:
                 pass
 
-        # Build volume bindings
-        volumes = {
-            str(submission_dir.resolve()): {"bind": "/workspace/submission", "mode": "ro"},
-            str(judge_dir.resolve()): {"bind": "/workspace/judge", "mode": "ro"},
-            str(runner_host_path.resolve()): {"bind": "/workspace/eval_runner.py", "mode": "ro"},
-        }
-
         env = {
             # cap thread counts
             "OMP_NUM_THREADS": "1",
@@ -198,23 +192,108 @@ def _run_in_docker_sync(submission_dir: Path, judge_dir: Path) -> dict:
             "MALLOC_ARENA_MAX": "2",
         }
 
+        # Helper: package files/dirs into a tar stream for put_archive
+        def _make_workspace_tar() -> bytes:
+            import tarfile
+            import io as _io
+
+            buf = _io.BytesIO()
+            with tarfile.open(fileobj=buf, mode="w:") as tar:
+                # 1) eval_runner.py -> workspace/eval_runner.py
+                data = runner_host_path.read_bytes()
+                ti = tarfile.TarInfo(name="workspace/eval_runner.py")
+                ti.size = len(data)
+                ti.mode = 0o644
+                tar.addfile(ti, _io.BytesIO(data))
+
+                # 2) submission_dir -> workspace/submission
+                for p in submission_dir.rglob("*"):
+                    rel = p.relative_to(submission_dir)
+                    target_name = f"workspace/submission/{rel.as_posix()}"
+                    if p.is_dir():
+                        ti = tarfile.TarInfo(name=target_name.rstrip("/"))
+                        ti.type = tarfile.DIRTYPE
+                        ti.mode = 0o755
+                        tar.addfile(ti)
+                    else:
+                        data = p.read_bytes()
+                        ti = tarfile.TarInfo(name=target_name)
+                        ti.size = len(data)
+                        # preserve execute bit a little permissively for user scripts
+                        ti.mode = 0o644 | (0o111 if os.access(p, os.X_OK) else 0)
+                        tar.addfile(ti, _io.BytesIO(data))
+
+                # 3) judge_dir -> workspace/judge
+                for p in judge_dir.rglob("*"):
+                    rel = p.relative_to(judge_dir)
+                    target_name = f"workspace/judge/{rel.as_posix()}"
+                    if p.is_dir():
+                        ti = tarfile.TarInfo(name=target_name.rstrip("/"))
+                        ti.type = tarfile.DIRTYPE
+                        ti.mode = 0o755
+                        tar.addfile(ti)
+                    else:
+                        data = p.read_bytes()
+                        ti = tarfile.TarInfo(name=target_name)
+                        ti.size = len(data)
+                        ti.mode = 0o644
+                        tar.addfile(ti, _io.BytesIO(data))
+
+            buf.seek(0)
+            return buf.getvalue()
+
         container = None
         try:
-            container = client.containers.run(
-                image=image,
-                command=["python", "/workspace/eval_runner.py"],
-                detach=True,
-                stdout=True,
-                stderr=True,
-                remove=False,  # we need to capture logs after wait
-                volumes=volumes,
-                environment=env,
-                network_mode=network_mode,
-                nano_cpus=nano_cpus,
-                mem_limit=mem_limit,
-                user=user,
-                working_dir="/workspace",
-            )
+            # Two strategies:
+            #  - If EvaluateApp runs on the host, bind-mount host paths (fast path)
+            #  - If EvaluateApp runs inside a container (/.dockerenv exists), do NOT bind-mount
+            #    its internal temp dirs (host daemon can't see them). Instead, create the
+            #    container first and upload a tar archive into / (creating /workspace/*).
+            inside_container = Path("/.dockerenv").exists()
+
+            if not inside_container:
+                # Bind-mount host paths as before
+                volumes = {
+                    str(submission_dir.resolve()): {"bind": "/workspace/submission", "mode": "ro"},
+                    str(judge_dir.resolve()): {"bind": "/workspace/judge", "mode": "ro"},
+                    str(runner_host_path.resolve()): {"bind": "/workspace/eval_runner.py", "mode": "ro"},
+                }
+                container = client.containers.run(
+                    image=image,
+                    command=["python", "/workspace/eval_runner.py"],
+                    detach=True,
+                    stdout=True,
+                    stderr=True,
+                    remove=False,  # we need to capture logs after wait
+                    volumes=volumes,
+                    environment=env,
+                    network_mode=network_mode,
+                    nano_cpus=nano_cpus,
+                    mem_limit=mem_limit,
+                    user=user,
+                    working_dir="/workspace",
+                )
+            else:
+                # Create container via low-level API, upload /workspace tree, then start
+                hc = client.api.create_host_config(
+                    nano_cpus=nano_cpus,
+                    mem_limit=mem_limit,
+                    network_mode=network_mode,
+                )
+                resp = client.api.create_container(
+                    image=image,
+                    command=["python", "/workspace/eval_runner.py"],
+                    environment=env,
+                    working_dir="/workspace",
+                    user=user,
+                    host_config=hc,
+                )
+                cid = resp.get("Id")
+                container = client.containers.get(cid)
+                # Upload archive to '/'; it contains 'workspace/...'
+                archive = _make_workspace_tar()
+                client.api.put_archive(container=cid, path="/", data=archive)
+                client.api.start(cid)
 
             # 310s timeout similar to chroot timeout
             result = container.wait(timeout=310)

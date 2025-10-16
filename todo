@@ -1,0 +1,38 @@
+我运行了
+ docker compose -f docker-compose.deploy.yml up -d --build --no-deps evaluateapp
+ 启动容器
+ 但是评测失败了
+ root@GEM12PRO:/proj/aigame# docker compose -f docker-compose.deploy.yml logs
+evaluateapp  | 警告：未找到 'sandboxuser' 或 'sandboxgroup'。将以降权至 nobody 用户运行。
+evaluateapp  | new /gradio
+evaluateapp  | Gradio 调试页面已挂载: /gradio
+evaluateapp  | INFO:     Started server process [1]
+evaluateapp  | INFO:     Waiting for application startup.
+evaluateapp  | FastAPI app started. Concurrency limit: 4. ProcessPoolExecutor created.
+evaluateapp  | INFO:     Application startup complete.
+evaluateapp  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+evaluateapp  | INFO:     172.25.0.1:44867 - "POST /gradio/gradio_api/queue/join HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:44867 - "GET /gradio/gradio_api/queue/data?session_hash=ywjpvexfl1e HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:44871 - "GET /gradio/ HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:44871 - "GET /gradio/theme.css?v=2fa39f6df94156f7ef9d84370dbb2657d672827c75f082ac995879c32290c5ca HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:46467 - "GET /manifest.json HTTP/1.1" 404 Not Found
+evaluateapp  | INFO:     172.25.0.1:46459 - "POST /gradio/gradio_api/upload?upload_id=8ittrtl6pep HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:46459 - "GET /gradio/gradio_api/upload_progress?upload_id=8ittrtl6pep HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:48015 - "GET /gradio/gradio_api/upload_progress?upload_id=oslpqxpm6sm HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:46459 - "POST /gradio/gradio_api/upload?upload_id=oslpqxpm6sm HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:48023 - "POST /gradio/gradio_api/queue/join HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:48023 - "GET /gradio/gradio_api/queue/data?session_hash=jja55jerzpb HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:45335 - "GET /gradio/assets/ApiDocs-MshfCJX-.css HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:45369 - "GET /gradio/assets/ApiDocs-CeEw8iqv.js HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:45365 - "GET /gradio/assets/ApiRecorder-D74JT030.js HTTP/1.1" 200 OK
+evaluateapp  | INFO:     172.25.0.1:45349 - "GET /gradio/assets/ApiRecorder-N1NZAe7o.css HTTP/1.1" 200 OK
+{
+  "status": "ERROR",
+  "score": 0,
+  "logs": "Container exit_code=1. Logs:\n/usr/local/bin/python: can't find '__main__' module in '/workspace/eval_runner.py'\n"
+}
+
+在宿主机运行就可以
+两个问题：
+1. dockerfile是不是应该执行/proj/aigame/evaluateapp/setup_chroot.sh
+2.为什么我的env设置了docker，实际运行似乎还是用旧的sandbox模式？
