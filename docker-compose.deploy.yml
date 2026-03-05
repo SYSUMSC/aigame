@@ -78,12 +78,48 @@ services:
       - '${EVALUATEAPP_HOST_PORT:-38000}:8000'
     environment:
       - TZ=Asia/Shanghai
+      # 在 deploy 组网中，回调应指向 webapp 容器名而非 localhost
+      - WEBAPP_CALLBACK_URL=http://webapp:3000/api/submissions/callback
     env_file:
       - evaluateapp/.env
     volumes:
       # 允许容器内的 EvaluateApp 控制宿主机 Docker（用于启动评测容器）
       - /var/run/docker.sock:/var/run/docker.sock
       # 可选：时区
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: docker/webapp.Dockerfile
+    container_name: webapp
+    restart: always
+    networks:
+      - aigame
+    depends_on:
+      - mongo
+      - redis
+      - minio
+      - evaluateapp
+    ports:
+      - '${WEBAPP_HOST_PORT:-33000}:3000'
+    environment:
+      - TZ=Asia/Shanghai
+      - NODE_ENV=production
+      - NUXT_PORT=3000
+      - MONGODB_URI=mongodb://root:password@mongo:27017/aigame?authSource=admin&replicaSet=rs0
+      - REDIS_URL=redis://redis:6379
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_INTERNAL_URL=http://minio:9000
+      - MINIO_PUBLIC_URL=http://localhost:${MINIO_API_HOST_PORT:-39000}
+      - EVALUATE_APP_URL=http://evaluateapp:8000
+      - WEBAPP_BASE_URL=http://localhost:${WEBAPP_HOST_PORT:-33000}
+      - AUTH_ORIGIN=http://localhost:${WEBAPP_HOST_PORT:-33000}
+      - NUXT_PUBLIC_BASE_URL=http://localhost:${WEBAPP_HOST_PORT:-33000}
+    env_file:
+      - webapp/.env
+    volumes:
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro
 networks:
