@@ -6,7 +6,8 @@ services:
     networks:
       - aigame
     ports:
-      - '27017:27017'
+      # 可通过环境变量覆盖宿主机端口，避免与本机已有服务冲突
+      - '${MONGO_HOST_PORT:-37017}:27017'
     environment:
       - TZ=Asia/Shanghai
       - MONGODB_INITDB_ROOT_USERNAME=root
@@ -29,7 +30,7 @@ services:
     networks:
       - aigame
     ports:
-      - '6379:6379'
+      - '${REDIS_HOST_PORT:-36379}:6379'
     environment:
       - REDIS_PASSWORD=password
       - TZ=Asia/Shanghai
@@ -45,8 +46,8 @@ services:
     networks:
       - aigame
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - '${MINIO_API_HOST_PORT:-39000}:9000'
+      - '${MINIO_CONSOLE_HOST_PORT:-39001}:9001'
     environment:
       - MINIO_ROOT_USER=root
       - MINIO_ROOT_PASSWORD=password
@@ -74,7 +75,7 @@ services:
       - redis
       - minio
     ports:
-      - '8000:8000'
+      - '${EVALUATEAPP_HOST_PORT:-38000}:8000'
     environment:
       - TZ=Asia/Shanghai
     env_file:
@@ -87,4 +88,3 @@ services:
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro
 networks:
   aigame:
-

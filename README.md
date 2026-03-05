@@ -13,6 +13,12 @@
 
 - 部署态（EvaluateApp 在容器运行）：`docker-compose.deploy.yml`
   - 启动：`docker compose -f docker-compose.deploy.yml up -d --build`
+  - 默认宿主机端口（可通过环境变量覆盖）：
+    - MongoDB: `37017`（`MONGO_HOST_PORT`）
+    - Redis: `36379`（`REDIS_HOST_PORT`）
+    - MinIO API: `39000`（`MINIO_API_HOST_PORT`）
+    - MinIO Console: `39001`（`MINIO_CONSOLE_HOST_PORT`）
+    - EvaluateApp: `38000`（`EVALUATEAPP_HOST_PORT`）
   - 该方案会构建 `evaluateapp/docker/evaluateapp.Dockerfile`，镜像基于：
     - `swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/python:3.12-slim`
   - 容器默认 `SANDBOX_BACKEND=DOCKER` 且 `DOCKER_IMAGE=self`，评测容器会复用服务容器的 Python 环境与依赖。
