@@ -13,6 +13,7 @@
 
 - 部署态（EvaluateApp 在容器运行）：`docker-compose.deploy.yml`
   - 启动：`docker compose -f docker-compose.deploy.yml up -d --build`
+  - 该文件会自动初始化 MongoDB 副本集，无需再手工执行 `rs.initiate(...)`。
   - 该方案会同时启动：`mongo`、`redis`、`minio`、`evaluateapp`、`webapp`
   - 默认宿主机端口（可通过环境变量覆盖）：
     - MongoDB: `37017`（`MONGO_HOST_PORT`）
@@ -34,14 +35,11 @@
 
 Redis,Mongodb,minio
 
-### 初次启动mongodb的初始化
+### 初次启动 MongoDB 的说明
 
-需要设置data权限
-
-```shell
-chmod 755 ./init.sh
-sh ./init.sh
-```
+- 现在推荐直接使用 `docker-compose.dev.yml` / `docker-compose.deploy.yml`。
+- `docker-compose.deploy.yml` 已自动完成副本集初始化。
+- `init.sh` 仅在你需要手工初始化旧的 compose 流程时再使用。
 
 ### 后续正常启动docker compose（推荐使用 dev/deploy 文件）
 

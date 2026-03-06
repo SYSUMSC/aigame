@@ -23,6 +23,31 @@ services:
       - "--bind_ip_all"
       - "--keyFile"
       - "/etc/mongo/mongodb.key"
+  mongo-init:
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mongodb/mongodb-community-server:8.0.13-ubuntu2204
+    restart: "no"
+    networks:
+      - aigame
+    depends_on:
+      - mongo
+    # 自动初始化副本集，确保 deploy 在干净环境中也能直接启动。
+    entrypoint:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+
+        until mongosh --host mongo -u root -p password --authenticationDatabase admin --quiet --eval 'db.runCommand({ ping: 1 }).ok' | grep -q '^1$'; do
+          echo '等待 MongoDB 就绪...'
+          sleep 2
+        done
+
+        mongosh --host mongo -u root -p password --authenticationDatabase admin --quiet --eval 'try { rs.status().ok } catch (error) { rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "mongo:27017" }] }) }'
+
+        until mongosh --host mongo -u root -p password --authenticationDatabase admin --quiet --eval 'rs.status().ok' | grep -q '^1$'; do
+          echo '等待 MongoDB 副本集 PRIMARY 就绪...'
+          sleep 2
+        done
   redis:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/redis:8.0.3
     container_name: redis
@@ -97,10 +122,14 @@ services:
     networks:
       - aigame
     depends_on:
-      - mongo
-      - redis
-      - minio
-      - evaluateapp
+      mongo-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+      evaluateapp:
+        condition: service_started
     ports:
       - '${WEBAPP_HOST_PORT:-33000}:3000'
     environment:
