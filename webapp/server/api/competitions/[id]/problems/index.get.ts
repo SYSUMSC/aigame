@@ -68,21 +68,25 @@ export default defineEventHandler(async (event) => {
 
         if (team && problems.length > 0) {
             const problemIds = problems.map(p => p.id)
-            // 拉取该队伍在这些题目的所有已完成提交分数，聚合为每题最高分
-            const submissions = await prisma.submission.findMany({
+            // 与排行榜口径保持一致：这里直接读取 problem_scores 中维护的每题最佳分。
+            const leaderboardEntry = await prisma.leaderboardEntry.findFirst({
                 where: {
+                    leaderboard: { competitionId },
                     teamId: team.id,
-                    competitionId,
-                    problemId: { in: problemIds },
-                    status: 'COMPLETED'
                 },
-                select: { problemId: true, score: true }
+                select: {
+                    problemScores: {
+                        where: { problemId: { in: problemIds } },
+                        select: {
+                            problemId: true,
+                            score: true,
+                        },
+                    },
+                },
             })
 
-            for (const s of submissions) {
-                if (typeof s.score !== 'number') continue
-                const prev = userBestScoresMap[s.problemId]
-                userBestScoresMap[s.problemId] = Math.max(prev ?? -Infinity, s.score)
+            for (const scoreEntry of leaderboardEntry?.problemScores ?? []) {
+                userBestScoresMap[scoreEntry.problemId] = scoreEntry.score
             }
         }
     }

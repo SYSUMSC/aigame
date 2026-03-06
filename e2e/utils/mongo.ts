@@ -216,3 +216,43 @@ export async function cleanupRunData(runId: string): Promise<void> {
     db.collection('evaluate_nodes').deleteMany({ name: prefixRegex }),
   ]);
 }
+
+
+// 确保评测节点基线配置存在，并禁用其它旧节点，避免误命中历史脏数据。
+export async function ensureEvaluateNode(node: {
+  name: string;
+  baseUrl: string;
+  sharedSecret: string;
+  callbackUrl?: string;
+}): Promise<void> {
+  const db = await getDb();
+  const now = new Date();
+
+  await db.collection('evaluate_nodes').updateMany(
+    { name: { $ne: node.name } },
+    {
+      $set: {
+        active: false,
+        updatedAt: now,
+      },
+    },
+  );
+
+  await db.collection('evaluate_nodes').updateOne(
+    { name: node.name },
+    {
+      $set: {
+        name: node.name,
+        baseUrl: node.baseUrl,
+        sharedSecret: node.sharedSecret,
+        callbackUrl: node.callbackUrl ?? null,
+        active: true,
+        updatedAt: now,
+      },
+      $setOnInsert: {
+        createdAt: now,
+      },
+    },
+    { upsert: true },
+  );
+}

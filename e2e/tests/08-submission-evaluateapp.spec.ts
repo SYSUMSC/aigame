@@ -27,7 +27,7 @@ test.describe('08-提交与评测', () => {
     const adminApi = await createAdminApiContext();
     const publicApi = await createApiContext();
     const { runId, files } = await readRuntimeState();
-    const prefix = `e2e_${runId}_submission`;
+    const prefix = `e2e_${runId}_submission_retry${test.info().retry}`;
 
     const captain = await createTestUser('submission-captain');
     const captainApi = await createRegisteredUserApiContext(captain, { activate: true });

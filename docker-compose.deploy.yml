@@ -109,6 +109,7 @@ services:
       - NUXT_PORT=3000
       - MONGODB_URI=mongodb://root:password@mongo:27017/aigame?authSource=admin&replicaSet=rs0
       - REDIS_URL=redis://redis:6379
+      - REDIS_PASSWORD=password
       - MINIO_ENDPOINT=minio
       - MINIO_PORT=9000
       - MINIO_INTERNAL_URL=http://minio:9000
@@ -116,7 +117,17 @@ services:
       - EVALUATE_APP_URL=http://evaluateapp:8000
       - WEBAPP_BASE_URL=http://localhost:${WEBAPP_HOST_PORT:-33000}
       - AUTH_ORIGIN=http://localhost:${WEBAPP_HOST_PORT:-33000}
+      - NUXT_MONGODB_URI=mongodb://root:password@mongo:27017/aigame?authSource=admin&replicaSet=rs0
+      - NUXT_REDIS_URL=redis://redis:6379
+      - NUXT_REDIS_PASSWORD=password
+      - NUXT_MINIO_ENDPOINT=minio
+      - NUXT_MINIO_PORT=9000
+      - NUXT_MINIO_INTERNAL_URL=http://minio:9000
+      - NUXT_MINIO_PUBLIC_URL=http://localhost:${MINIO_API_HOST_PORT:-39000}
+      - NUXT_EVALUATE_APP_URL=http://evaluateapp:8000
+      - NUXT_WEBAPP_BASE_URL=http://localhost:${WEBAPP_HOST_PORT:-33000}
       - NUXT_PUBLIC_BASE_URL=http://localhost:${WEBAPP_HOST_PORT:-33000}
+      - NUXT_PUBLIC_MINIO_PUBLIC_URL=http://localhost:${MINIO_API_HOST_PORT:-39000}
     env_file:
       - webapp/.env
     volumes:

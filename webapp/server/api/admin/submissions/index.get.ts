@@ -30,7 +30,8 @@ export default defineEventHandler(async (event) => {
   const AND: any[] = []
 
   if (id) {
-    AND.push({ id: { contains: id } })
+    // Mongo ObjectId 字段不支持 contains，管理端按精确 ID 查询即可。
+    AND.push({ id })
   }
 
   if (username) {

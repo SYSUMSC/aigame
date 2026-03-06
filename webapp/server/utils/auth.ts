@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import type { User } from '@prisma/client'
-import { createError } from 'h3'
+import type { H3Event } from 'h3'
+import { createError, getHeader } from 'h3'
 
 export async function hashPassword(password: string): Promise<string> {
   const saltRounds = 12
@@ -66,3 +67,39 @@ export function checkUserCanLogin(user: User): void {
 }
 
 export type SafeUser = Omit<User, 'passwordHash'>
+
+/**
+ * 在 HTTPS、反向代理 HTTPS，或显式要求时启用 Secure Cookie。
+ * 这样既兼容线上生产环境，也兼容本地 HTTP 的 E2E / 冒烟环境。
+ */
+export function shouldUseSecureCookie(event: H3Event): boolean {
+  const explicit = process.env.AUTH_COOKIE_SECURE?.trim().toLowerCase()
+
+  if (explicit === 'true') {
+    return true
+  }
+
+  if (explicit === 'false') {
+    return false
+  }
+
+  const forwardedProto = getHeader(event, 'x-forwarded-proto')?.split(',')[0]?.trim().toLowerCase()
+  if (forwardedProto === 'https') {
+    return true
+  }
+
+  const forwardedSsl = getHeader(event, 'x-forwarded-ssl')?.trim().toLowerCase()
+  if (forwardedSsl === 'on') {
+    return true
+  }
+
+  const origin = getHeader(event, 'origin')?.trim().toLowerCase()
+  if (origin?.startsWith('https://')) {
+    return true
+  }
+
+  const host = getHeader(event, 'host')?.trim().toLowerCase() || ''
+  const isLocalHttpHost = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(host)
+
+  return process.env.NODE_ENV === 'production' && !isLocalHttpHost
+}

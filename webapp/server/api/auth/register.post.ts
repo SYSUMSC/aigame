@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { randomBytes } from 'crypto'
-import { hashPassword, verifyPassword, excludePassword } from '../../utils/auth'
+import { hashPassword, verifyPassword, excludePassword, shouldUseSecureCookie } from '../../utils/auth'
 import { generateToken } from '../../utils/jwt'
 import { sendEmailVerification } from '../../utils/email'
 import prisma from '../../utils/prisma'
@@ -127,7 +127,7 @@ export default defineEventHandler(async (event) => {
     // Set HTTP-only cookie
     setCookie(event, 'auth-token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: shouldUseSecureCookie(event),
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7 // 7 days
     })

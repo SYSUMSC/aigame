@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { adminAccount } from './fixtures/accounts';
 import { sampleFiles } from './fixtures/files';
-import { ensureAdminUser } from './utils/mongo';
+import { ensureAdminUser, ensureEvaluateNode } from './utils/mongo';
 import { waitForHttp } from './utils/polling';
 import { writeRuntimeState } from './utils/runtime';
 
@@ -15,7 +15,10 @@ export default async function globalSetup(): Promise<void> {
   const runId = buildRunId();
   const baseURL = process.env.E2E_BASE_URL || `http://127.0.0.1:${process.env.WEBAPP_HOST_PORT || '33000'}`;
   const evaluateBaseURL = process.env.E2E_EVALUATE_BASE_URL || `http://127.0.0.1:${process.env.EVALUATEAPP_HOST_PORT || '38000'}`;
-  const mongoUri = process.env.E2E_MONGODB_URI || `mongodb://root:password@127.0.0.1:${process.env.MONGO_HOST_PORT || '37017'}/aigame?authSource=admin&replicaSet=rs0`;
+  const mongoUri = process.env.E2E_MONGODB_URI || `mongodb://root:password@127.0.0.1:${process.env.MONGO_HOST_PORT || '37017'}/aigame?authSource=admin&replicaSet=rs0&directConnection=true`;
+  const evaluateNodeBaseUrl = process.env.E2E_INTERNAL_EVALUATE_BASE_URL || 'http://evaluateapp:8000';
+  const evaluateNodeCallbackBaseUrl = process.env.E2E_INTERNAL_WEBAPP_BASE_URL || 'http://webapp:3000';
+  const evaluateNodeSharedSecret = process.env.E2E_SHARED_SECRET || 'aigame-e2e-shared-secret';
 
   // 启动前先确认样例文件存在，避免后续评测链路在运行时才失败。
   for (const file of Object.values(sampleFiles)) {
@@ -39,4 +42,10 @@ export default async function globalSetup(): Promise<void> {
   await waitForHttp(`${baseURL}/api/settings`);
   await waitForHttp(`${evaluateBaseURL}/openapi.json`);
   await ensureAdminUser(adminAccount);
+  await ensureEvaluateNode({
+    name: 'node-1',
+    baseUrl: evaluateNodeBaseUrl,
+    sharedSecret: evaluateNodeSharedSecret,
+    callbackUrl: evaluateNodeCallbackBaseUrl,
+  });
 }
