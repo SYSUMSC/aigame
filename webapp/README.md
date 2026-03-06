@@ -47,26 +47,17 @@
 ### 1. 准备环境变量
 
 ```bash
-cd /proj/aigame/webapp
+cd /proj/aigame
 cp .env.example .env
+
+cd /proj/aigame/webapp
 ```
 
-默认 `.env.example` 中使用：
+现在默认推荐直接维护根目录 `.env`，WebApp 本地脚本会自动复用它，并自动推导本地开发所需的 MongoDB / Redis / MinIO 连接参数。
 
-- `mongo`
-- `redis`
-- `minio`
-
-作为服务主机名。
-
-如果你在宿主机开发，有两种常见做法：
-
-- 保留这些主机名，并在本机 `hosts` 中映射到 `127.0.0.1`
-- 或直接把 `.env` 改成 `127.0.0.1` 形式的连接地址
+如果你确实需要只覆盖 WebApp 自己的某些变量，才再额外创建 `webapp/.env`。
 
 更完整的建议见：`/proj/aigame/docs/development.md`
-
-如果你是通过 Compose 启动依赖服务，MongoDB / Redis / MinIO 的宿主机端口与密码统一由根目录 `.env` 管理。
 
 ### 2. 安装依赖
 

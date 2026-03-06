@@ -42,7 +42,6 @@ docker compose -f docker-compose.dev.yml up -d
 
 # 启动 WebApp
 cd /proj/aigame/webapp
-cp .env.example .env
 pnpm install
 pnpm dev
 ```
@@ -51,7 +50,6 @@ pnpm dev
 
 ```bash
 cd /proj/aigame/evaluateapp
-cp .env.example .env
 uv sync
 uv run uvicorn main:app --host 0.0.0.0 --port 8000
 ```
@@ -59,6 +57,9 @@ uv run uvicorn main:app --host 0.0.0.0 --port 8000
 ### 2. 服务器部署
 
 建议先看 `docs/deployment.md`。当前推荐命令：
+
+- 容器化部署里的 `EvaluateApp` 已显式固定为 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE=self`。
+- 根目录 `.env` 中的 `SANDBOX_BACKEND` 主要影响“宿主机直接运行 EvaluateApp”时的默认行为。
 
 ```bash
 cd /proj/aigame
@@ -70,6 +71,8 @@ docker compose -f docker-compose.deploy.yml up -d --build
 ### 3. E2E 冒烟
 
 建议先看 `docs/e2e-testing.md`。当前两条高价值冒烟用例：
+
+- E2E 会把容器内 `EvaluateApp` 显式固定为 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE=self`，避免被根目录 `.env` 中面向宿主机的配置影响。
 
 ```bash
 cd /proj/aigame/e2e

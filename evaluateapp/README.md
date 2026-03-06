@@ -7,7 +7,9 @@ EvaluateApp – Docker Sandbox Backend
   2) EvaluateApp 以容器部署，同时将宿主机 Docker 控制文件挂载进来（挂载 `/var/run/docker.sock`）。
 
 使用配置
-- 在 `evaluateapp/.env` 或环境变量中设置：
+- 现在默认推荐直接在根目录 `.env` 中设置；只有需要模块级覆盖时，才额外使用 `evaluateapp/.env`。
+- 宿主机直接运行 `EvaluateApp` 时，根目录 `.env` 中的 `SANDBOX_BACKEND` / `DOCKER_IMAGE` 会按原值生效。
+- 通过 `docker-compose.yml`、`docker-compose.deploy.yml` 或 E2E 运行容器版 `EvaluateApp` 时，Compose 会显式覆盖为 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE=self`，避免把宿主机开发用的 `CHROOT` 配置带进容器。
   - `SANDBOX_BACKEND=DOCKER`
   - `DOCKER_IMAGE`：评测容器镜像。需包含 judge 可能使用到的依赖（如 numpy/pandas/sklearn/opencv 等）。
   - 可选限制项：`DOCKER_MEMORY`（默认 `2g`）、`DOCKER_CPUS`（默认 `1.0`）、`DOCKER_NETWORK_MODE`（默认 `none` 禁网）、`DOCKER_USER`（容器内以哪个用户运行）。
@@ -32,8 +34,10 @@ EvaluateApp – Docker Sandbox Backend
 部署方式 B：EvaluateApp 以容器运行但挂载宿主机 Docker
 - 核心是把宿主机的 Docker socket 挂载到 EvaluateApp 容器：
   - `-v /var/run/docker.sock:/var/run/docker.sock`
-- 同时设置 `.env` 中 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE`。
+- 推荐直接在 Compose 里显式写死 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE=self`，不要依赖根目录 `.env` 中的默认值。
 - 示例 docker-compose 片段：
+  - `environment` 中包含 `SANDBOX_BACKEND=DOCKER`
+  - `environment` 中包含 `DOCKER_IMAGE=self`
   - volumes 中包含 `- /var/run/docker.sock:/var/run/docker.sock`
 
 评测镜像建议

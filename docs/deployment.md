@@ -28,7 +28,11 @@
 
 ## 部署前检查
 
-部署态 Compose 同样读取根目录 `.env`。建议先准备：
+部署态 Compose 同样读取根目录 `.env`。
+
+同时需要注意：部署态里的 `EvaluateApp` 会在 Compose 中显式覆盖为 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE=self`，这样即使根目录 `.env` 中保留了宿主机开发用的 `CHROOT` 配置，也不会影响容器部署。
+
+建议先准备：
 
 ```bash
 cd /proj/aigame
@@ -45,8 +49,7 @@ cp .env.example .env
 部署前至少检查这些位置：
 
 - `docker-compose.deploy.yml`
-- `webapp/.env`
-- `evaluateapp/.env`
+- 根目录 `.env`
 - `data/mongodb.key`
 
 尤其需要替换：
@@ -62,11 +65,10 @@ cp .env.example .env
 
 ```bash
 cd /proj/aigame
-cp webapp/.env.example webapp/.env
-cp evaluateapp/.env.example evaluateapp/.env
+# 如确有模块级覆盖需求，再额外创建 `webapp/.env` 或 `evaluateapp/.env`
 ```
 
-然后按你的域名、端口、密钥、邮件配置修改。
+然后按你的域名、端口、密钥、邮件配置修改。通常不再需要单独维护 `webapp/.env` 或 `evaluateapp/.env`。
 
 ### 3. 检查端口规划
 

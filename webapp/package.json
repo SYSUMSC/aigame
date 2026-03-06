@@ -3,15 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm prisma:generate && nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "build": "pnpm prisma:generate && ./scripts/nuxt-with-shared-env.sh build",
+    "dev": "./scripts/nuxt-with-shared-env.sh dev",
+    "generate": "./scripts/nuxt-with-shared-env.sh generate",
+    "preview": "./scripts/nuxt-with-shared-env.sh preview",
     "postinstall": "nuxt prepare",
-    "db:init": "node --env-file=.env scripts/init-db.js",
-    "db:admin": "node --env-file=.env scripts/init-admin.js",
-    "minio:init": "node --env-file=.env scripts/init-minio.cjs",
-    "db:seed": "node --env-file=.env scripts/generate-test-data.js",
+    "db:init": "./scripts/with-shared-env.sh node scripts/init-db.js",
+    "db:admin": "./scripts/with-shared-env.sh node scripts/init-admin.js",
+    "minio:init": "./scripts/with-shared-env.sh node scripts/init-minio.cjs",
+    "db:seed": "./scripts/with-shared-env.sh node scripts/generate-test-data.js",
     "prisma:generate": "prisma generate"
   },
   "dependencies": {

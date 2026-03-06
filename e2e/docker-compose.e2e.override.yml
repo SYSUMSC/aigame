@@ -11,8 +11,11 @@ services:
   evaluateapp:
     container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-evaluateapp
     environment:
+      # E2E 固定复用容器镜像做评测，避免根目录 `.env` 里默认的宿主机沙箱配置影响测试稳定性。
       WEBAPP_CALLBACK_URL: http://webapp:3000/api/submissions/callback
       SHARED_SECRET: ${E2E_SHARED_SECRET:-aigame-e2e-shared-secret}
+      SANDBOX_BACKEND: DOCKER
+      DOCKER_IMAGE: self
 
   webapp:
     container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-webapp

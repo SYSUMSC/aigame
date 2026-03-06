@@ -110,8 +110,11 @@ services:
     environment:
       - TZ=${TZ:-Asia/Shanghai}
       - WEBAPP_CALLBACK_URL=http://webapp:3000/api/submissions/callback
+      # deploy 场景固定使用 Docker 沙箱，避免根目录 `.env` 里的 CHROOT 配置进入容器后失效。
+      - SANDBOX_BACKEND=DOCKER
+      - DOCKER_IMAGE=self
     env_file:
-      - evaluateapp/.env
+      - ./.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
@@ -164,7 +167,7 @@ services:
       - NUXT_PUBLIC_BASE_URL=http://${PUBLIC_HOST:-localhost}:${WEBAPP_HOST_PORT:-33000}
       - NUXT_PUBLIC_MINIO_PUBLIC_URL=http://${PUBLIC_HOST:-localhost}:${MINIO_API_HOST_PORT:-39000}
     env_file:
-      - webapp/.env
+      - ./.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro

@@ -1,10 +1,18 @@
-from pydantic_settings import BaseSettings
 from pathlib import Path
+from pydantic import model_validator
+from pydantic_settings import BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent  # evaluateapp/ 目录
+ROOT_DIR = BASE_DIR.parent
+ROOT_ENV_FILE = ROOT_DIR / ".env"
+LOCAL_ENV_FILE = BASE_DIR / ".env"
+ENV_FILE = str(ROOT_ENV_FILE if ROOT_ENV_FILE.exists() else LOCAL_ENV_FILE)
+
 
 class Settings(BaseSettings):
-    WEBAPP_CALLBACK_URL: str = "http://127.0.0.1:3000/api/submissions/callback"
+    PUBLIC_HOST: str = "localhost"
+    WEBAPP_HOST_PORT: int = 33000
+    WEBAPP_CALLBACK_URL: str = ""
     # 统一共享密钥：用于双向签名校验
     SHARED_SECRET: str = "a-very-long-and-random-shared-secret"
     # 是否启用调试用的 Gradio 页面
@@ -21,20 +29,23 @@ class Settings(BaseSettings):
     DOCKER_PULL: bool = False
     DOCKER_SOCKET: str = "/var/run/docker.sock"  # 仅用于部署文档提示
     DOCKER_MEMORY: str = "2g"
-    DOCKER_CPUS: float = 1.0  # 逻辑 CPU 数量限制
-    DOCKER_NETWORK_MODE: str = "none"  # 默认禁网
-    DOCKER_USER: str | None = None  # 例如 "65534:65534" 以 nobody 运行，None 表示镜像默认用户
-    # 当 DOCKER_IMAGE=self 且 EvaluateApp 运行在宿主机时，是否自动构建服务镜像供评测复用
+    DOCKER_CPUS: float = 1.0
+    DOCKER_NETWORK_MODE: str = "none"
+    DOCKER_USER: str | None = None
     DOCKER_SELF_BUILD_ON_HOST: bool = True
-    # 构建出的自用镜像 tag（宿主机 self 模式）
     DOCKER_SELF_TAG: str = "aigame-eval:self"
-    # 构建上下文与 Dockerfile（相对项目根）
     DOCKER_SELF_CONTEXT: str = str(BASE_DIR.parent)
     DOCKER_SELF_DOCKERFILE: str = "evaluateapp/docker/evaluateapp.Dockerfile"
 
+    @model_validator(mode="after")
+    def apply_derived_defaults(self):
+        if not self.WEBAPP_CALLBACK_URL:
+            self.WEBAPP_CALLBACK_URL = f"http://{self.PUBLIC_HOST}:{self.WEBAPP_HOST_PORT}/api/submissions/callback"
+        return self
+
     class Config:
-        # 使用绝对路径加载 .env，避免工作目录变化导致无法读取
-        env_file = str(BASE_DIR / ".env")
+        env_file = ENV_FILE
         env_file_encoding = "utf-8"
+
 
 settings = Settings()

@@ -17,6 +17,7 @@
 
 - 直接使用 `docker-compose.deploy.yml`
 - WebApp 与 EvaluateApp 都在容器里运行
+- 容器里的 `EvaluateApp` 会固定使用 `SANDBOX_BACKEND=DOCKER` 与 `DOCKER_IMAGE=self`
 - 优点：行为更接近线上，环境差异更小
 
 ## 环境准备
@@ -57,7 +58,6 @@ docker compose -f docker-compose.dev.yml up -d
 
 ```bash
 cd /proj/aigame/webapp
-cp .env.example .env
 pnpm install
 pnpm prisma:generate
 pnpm dev
@@ -67,7 +67,6 @@ pnpm dev
 
 ```bash
 cd /proj/aigame/evaluateapp
-cp .env.example .env
 uv sync
 uv run uvicorn main:app --host 0.0.0.0 --port 8000
 ```
@@ -76,28 +75,16 @@ uv run uvicorn main:app --host 0.0.0.0 --port 8000
 
 ### WebApp
 
-`webapp/.env.example` 默认使用 `mongo`、`redis`、`minio` 作为主机名。
+WebApp 本地开发默认优先复用根目录 `.env`，不再要求单独维护 `webapp/.env`。
 
-另外，根目录 `.env` 控制的是 Compose 暴露到宿主机的端口和依赖服务密码；如果你在宿主机直接运行 `webapp`，记得让 `webapp/.env` 中的连接配置与根 `.env` 保持一致。
+另外，根目录 `.env` 同时控制 Compose 暴露到宿主机的端口和 WebApp 本地脚本所需的连接配置。只有在你确实要做模块级覆盖时，才需要额外创建 `webapp/.env`。
 
-你有两种做法：
+默认情况下，你现在不需要再改 `webapp/.env` 或系统 `hosts`。
 
-- 做法 A：保留默认配置，并在本机 `hosts` 中加入：
+- 根目录 `.env` 负责维护共享端口、密码、公开地址等基础变量
+- `webapp` 的本地命令会自动从根 `.env` 推导 `MONGODB_URI`、`REDIS_URL`、`MINIO_*`、`WEBAPP_BASE_URL` 等常用值
 
-```text
-127.0.0.1 mongo
-127.0.0.1 redis
-127.0.0.1 minio
-```
-
-- 做法 B：直接把 `webapp/.env` 改成宿主机地址，并与根目录 `.env` 中的共享端口保持一致，例如默认示例值：
-  - `MONGODB_URI=mongodb://root:password@127.0.0.1:37017/aigame?authSource=admin&replicaSet=rs0&directConnection=true`
-  - `REDIS_URL=redis://127.0.0.1:36379`
-  - `MINIO_ENDPOINT=127.0.0.1`
-  - `MINIO_PORT=39000`
-  - `MINIO_INTERNAL_URL=http://127.0.0.1:39000`
-
-建议：如果你只在自己电脑开发，优先使用做法 B，少改系统级配置。
+只有在你确实要做模块级覆盖时，才需要额外创建 `webapp/.env`。
 
 ### MongoDB 副本集说明
 
