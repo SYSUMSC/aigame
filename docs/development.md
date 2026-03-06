@@ -36,6 +36,16 @@
 
 ## 第一次启动建议
 
+开发态和部署态的 Compose 现在都优先读取根目录 `.env`。建议先执行：
+
+```bash
+cd /proj/aigame
+cp .env.example .env
+```
+
+其中 MongoDB / Redis / MinIO 的宿主机端口、密码、时区等共享配置，都放在这一个文件里统一维护。
+
+
 ### 1. 启动开发依赖
 
 ```bash
@@ -68,6 +78,8 @@ uv run uvicorn main:app --host 0.0.0.0 --port 8000
 
 `webapp/.env.example` 默认使用 `mongo`、`redis`、`minio` 作为主机名。
 
+另外，根目录 `.env` 控制的是 Compose 暴露到宿主机的端口和依赖服务密码；如果你在宿主机直接运行 `webapp`，记得让 `webapp/.env` 中的连接配置与根 `.env` 保持一致。
+
 你有两种做法：
 
 - 做法 A：保留默认配置，并在本机 `hosts` 中加入：
@@ -78,11 +90,12 @@ uv run uvicorn main:app --host 0.0.0.0 --port 8000
 127.0.0.1 minio
 ```
 
-- 做法 B：直接把 `webapp/.env` 改成宿主机地址，例如：
-  - `MONGODB_URI=mongodb://root:password@127.0.0.1:27017/aigame?authSource=admin&replicaSet=rs0&directConnection=true`
-  - `REDIS_URL=redis://127.0.0.1:6379`
+- 做法 B：直接把 `webapp/.env` 改成宿主机地址，并与根目录 `.env` 中的共享端口保持一致，例如默认示例值：
+  - `MONGODB_URI=mongodb://root:password@127.0.0.1:37017/aigame?authSource=admin&replicaSet=rs0&directConnection=true`
+  - `REDIS_URL=redis://127.0.0.1:36379`
   - `MINIO_ENDPOINT=127.0.0.1`
-  - `MINIO_INTERNAL_URL=http://127.0.0.1:9000`
+  - `MINIO_PORT=39000`
+  - `MINIO_INTERNAL_URL=http://127.0.0.1:39000`
 
 建议：如果你只在自己电脑开发，优先使用做法 B，少改系统级配置。
 

@@ -66,6 +66,8 @@ cp .env.example .env
 
 更完整的建议见：`/proj/aigame/docs/development.md`
 
+如果你是通过 Compose 启动依赖服务，MongoDB / Redis / MinIO 的宿主机端口与密码统一由根目录 `.env` 管理。
+
 ### 2. 安装依赖
 
 ```bash

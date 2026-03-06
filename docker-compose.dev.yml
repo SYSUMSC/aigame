@@ -1,5 +1,5 @@
 services:
-  # 开发态仅启动依赖服务，EvaluateApp 在宿主机通过 uv 运行
+  # 开发态仅启动依赖服务，WebApp / EvaluateApp 在宿主机运行。
   mongo:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mongodb/mongodb-community-server:8.0.13-ubuntu2204
     container_name: mongo
@@ -7,22 +7,23 @@ services:
     networks:
       - aigame
     ports:
-      - '27017:27017'
+      - '${MONGO_HOST_PORT:-27017}:27017'
     environment:
-      - TZ=Asia/Shanghai
-      - MONGODB_INITDB_ROOT_USERNAME=root
-      - MONGODB_INITDB_ROOT_PASSWORD=password
+      - TZ=${TZ:-Asia/Shanghai}
+      - MONGODB_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME:-root}
+      - MONGODB_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-password}
     volumes:
       - ./data/mongo:/data/db
       - /etc/localtime:/etc/localtime:ro
       - ./data/mongodb.key:/etc/mongo/mongodb.key:ro
     command:
-      - "mongod"
-      - "--replSet"
-      - "rs0"
-      - "--bind_ip_all"
-      - "--keyFile"
-      - "/etc/mongo/mongodb.key"
+      - mongod
+      - --replSet
+      - ${MONGODB_REPLICA_SET:-rs0}
+      - --bind_ip_all
+      - --keyFile
+      - /etc/mongo/mongodb.key
+
   redis:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/redis:8.0.3
     container_name: redis
@@ -30,15 +31,19 @@ services:
     networks:
       - aigame
     ports:
-      - '6379:6379'
+      - '${REDIS_HOST_PORT:-6379}:6379'
     environment:
-      - REDIS_PASSWORD=password
-      - TZ=Asia/Shanghai
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
+      - TZ=${TZ:-Asia/Shanghai}
     volumes:
       - ./data/redis:/data
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro
-    command: redis-server --requirepass password
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD:-password}
+
   minio:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/quay.io/minio/minio:latest
     container_name: minio
@@ -46,12 +51,12 @@ services:
     networks:
       - aigame
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - '${MINIO_API_HOST_PORT:-9000}:9000'
+      - '${MINIO_CONSOLE_HOST_PORT:-9001}:9001'
     environment:
-      - MINIO_ROOT_USER=root
-      - MINIO_ROOT_PASSWORD=password
-      - TZ=Asia/Shanghai
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER:-root}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-password}
+      - TZ=${TZ:-Asia/Shanghai}
     volumes:
       - ./data/minio:/data
       - /etc/localtime:/etc/localtime:ro
@@ -62,6 +67,6 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+
 networks:
   aigame:
-

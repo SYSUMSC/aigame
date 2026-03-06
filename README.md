@@ -23,6 +23,14 @@
 
 ## 快速入口
 
+在使用任意 Compose 文件前，建议先准备根目录共享环境变量：
+
+```bash
+cd /proj/aigame
+cp .env.example .env
+```
+
+
 ### 1. 本地开发
 
 建议先看 `docs/development.md`。最常用的起步方式如下：
