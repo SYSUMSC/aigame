@@ -20,6 +20,7 @@ export interface RuntimeState {
   files: {
     judgeZip: string;
     submissionZip: string;
+    judgeSumDir: string;
   };
 }
 
