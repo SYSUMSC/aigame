@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto'
 import { sendPasswordReset } from '../../utils/email'
 import prisma from '../../utils/prisma'
 
-// 验证请求参数的schema
+// 定义请求参数校验规则
 const forgotPasswordSchema = z.object({
     email: z.string().email()
 })
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
             }
         } catch (emailError) {
             console.error('发送密码重置邮件时出错:', emailError)
-            // 邮件发送失败不影响API响应，但会记录日志
+            // 邮件发送失败不影响接口响应，但会记录日志
         }
 
         // 返回成功消息
@@ -84,6 +84,10 @@ export default defineEventHandler(async (event) => {
                 statusMessage: '参数验证失败',
                 data: error.issues
             })
+        }
+
+        if (error?.statusCode) {
+            throw error
         }
 
         console.error('密码重置请求过程中发生错误:', error)

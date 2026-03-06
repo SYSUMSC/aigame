@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import prisma from '~/server/utils/prisma'
 import { sendInvitationEmail } from '~/server/utils/email'
 
 const inviteSchema = z.object({
@@ -27,9 +28,6 @@ export default defineEventHandler(async (event) => {
   try {
     const { email } = inviteSchema.parse(body)
 
-
-
-    // Get team and verify user is creator
     const team = await prisma.team.findUnique({
       where: { id: teamId },
       include: {
@@ -48,8 +46,7 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if user is the creator of the team
-    const userMembership = team.members.find(member => member.userId === user.id);
+    const userMembership = team.members.find(member => member.userId === user.id)
     if (!userMembership || userMembership.role !== 'CREATOR') {
       throw createError({
         statusCode: 403,
@@ -64,7 +61,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Find user to invite
     const userToInvite = await prisma.user.findUnique({
       where: { email }
     })
@@ -76,7 +72,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if user is already a member
     const existingMember = team.members.find(member => member.userId === userToInvite.id)
     if (existingMember) {
       throw createError({
@@ -85,7 +80,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Check if there is already a pending invitation
     const existingInvitation = await prisma.invitation.findFirst({
       where: {
         teamId: team.id,
@@ -101,7 +95,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Create invitation
     const invitation = await prisma.invitation.create({
       data: {
         teamId: team.id,
@@ -110,11 +103,12 @@ export default defineEventHandler(async (event) => {
       }
     })
 
-    // Send invitation email
-    await sendInvitationEmail(invitation.id, userToInvite.email)
+    await sendInvitationEmail(invitation.id, userToInvite.email, team.name, user.username)
 
-    return invitation
-
+    return {
+      success: true,
+      invitation
+    }
   } catch (error) {
     if (error instanceof z.ZodError) {
       throw createError({

@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
         select: {
           id: true,
           realName: true,
+          username: true,
         },
       },
     },

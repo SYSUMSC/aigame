@@ -7,13 +7,14 @@
             登录到您的账户
           </h2>
         </div>
-        <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
+        <form class="mt-8 space-y-6" data-testid="login-form" @submit.prevent="handleLogin">
           <div class="space-y-4">
             <div>
               <label for="identifier" class="sr-only">邮箱地址或用户名</label>
               <input
                 id="identifier"
                 v-model="form.identifier"
+                data-testid="login-identifier"
                 name="identifier"
                 type="text"
                 autocomplete="username"
@@ -27,6 +28,7 @@
               <input
                 id="password"
                 v-model="form.password"
+                data-testid="login-password"
                 name="password"
                 type="password"
                 autocomplete="current-password"
@@ -37,7 +39,7 @@
             </div>
           </div>
 
-        <div v-if="error" class="text-red-600 text-sm text-center">
+        <div v-if="error" class="text-red-600 text-sm text-center" data-testid="login-error">
           {{ error }}
         </div>
 
@@ -45,6 +47,7 @@
           <button
             type="submit"
             :disabled="isLoading"
+            data-testid="login-submit"
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
           >
             {{ isLoading ? "登录中..." : "登录" }}
@@ -52,7 +55,7 @@
         </div>
 
         <div class="text-center">
-          <NuxtLink to="/register" class="text-blue-600 hover:text-blue-500">
+          <NuxtLink to="/register" data-testid="login-to-register" class="text-blue-600 hover:text-blue-500">
             还没有账户？注册
           </NuxtLink>
         </div>

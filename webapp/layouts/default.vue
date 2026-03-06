@@ -87,6 +87,7 @@
             <!-- 用户下拉菜单 -->
             <div class="relative group">
               <button
+                data-testid="nav-user-menu"
                 class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 <i class="nav-icon fa-solid fa-user mr-2" aria-hidden="true"></i>
@@ -136,6 +137,7 @@
                   </NuxtLink>
                   <button
                     @click="handleLogout"
+                    data-testid="nav-logout"
                     class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
                   >
                     <i class="nav-icon fa-solid fa-right-from-bracket mr-2" aria-hidden="true"></i>
@@ -148,6 +150,7 @@
           <template v-else>
             <NuxtLink
               to="/login"
+              data-testid="nav-login"
               class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               <i class="nav-icon fa-solid fa-right-to-bracket mr-2" aria-hidden="true"></i>
@@ -155,6 +158,7 @@
             </NuxtLink>
             <NuxtLink
               to="/register"
+              data-testid="nav-register"
               class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               <i class="nav-icon fa-solid fa-user-plus mr-2" aria-hidden="true"></i>

@@ -1,7 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import type { Transporter } from 'nodemailer';
 
-// SMTP配置接口
+// 邮件传输配置接口
 interface SMTPConfig {
   host: string;
   port: number;
@@ -13,6 +13,10 @@ interface SMTPConfig {
   tls: boolean;
 }
 
+function shouldStubEmail(): boolean {
+  return process.env.SMTP_STUB === 'true';
+}
+
 // 邮件选项接口
 interface EmailOptions {
   to: string;
@@ -21,7 +25,7 @@ interface EmailOptions {
   text?: string;
 }
 
-// 从环境变量获取SMTP配置
+// 从环境变量获取邮件传输配置
 function getSMTPConfig(): SMTPConfig {
   const config: SMTPConfig = {
     host: process.env.SMTP_HOST || 'localhost',
@@ -69,6 +73,11 @@ function createTransporter(): Transporter {
 
 // 基础邮件发送函数
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
+  if (shouldStubEmail()) {
+    console.log(`[SMTP_STUB] Skip sending email to ${options.to}: ${options.subject}`);
+    return true;
+  }
+
   try {
     const config = getSMTPConfig();
     const transporter = createTransporter();
@@ -78,7 +87,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
       to: options.to,
       subject: options.subject,
       html: options.html,
-      text: options.text || options.html.replace(/<[^>]*>/g, '') // 如果没有提供纯文本，从HTML中提取
+      text: options.text || options.html.replace(/<[^>]*>/g, '') // 如果没有提供纯文本，则从富文本内容中提取
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -90,7 +99,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
   }
 }
 
-// 生成HTML邮件模板
+// 生成富文本邮件模板
 function generateEmailTemplate(title: string, content: string, actionUrl?: string, actionText?: string): string {
   return `
     <!DOCTYPE html>

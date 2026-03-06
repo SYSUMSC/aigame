@@ -5,13 +5,14 @@
         <div>
           <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">创建新账户</h2>
         </div>
-        <form class="mt-8 space-y-6" @submit.prevent="handleRegister">
+        <form class="mt-8 space-y-6" data-testid="register-form" @submit.prevent="handleRegister">
           <div class="space-y-4">
             <div>
               <label for="username" class="sr-only">用户名</label>
               <input
                 id="username"
                 v-model="form.username"
+                data-testid="register-username"
                 name="username"
                 type="text"
                 required
@@ -24,6 +25,7 @@
               <input
                 id="email"
                 v-model="form.email"
+                data-testid="register-email"
                 name="email"
                 type="email"
                 autocomplete="email"
@@ -37,6 +39,7 @@
               <input
                 id="password"
                 v-model="form.password"
+                data-testid="register-password"
                 name="password"
                 type="password"
                 autocomplete="new-password"
@@ -50,6 +53,7 @@
               <input
                 id="realName"
                 v-model="form.realName"
+                data-testid="register-real-name"
                 name="realName"
                 type="text"
                 class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
@@ -61,6 +65,7 @@
               <input
                 id="studentId"
                 v-model="form.studentId"
+                data-testid="register-student-id"
                 name="studentId"
                 type="text"
                 class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
@@ -72,6 +77,7 @@
               <input
                 id="phoneNumber"
                 v-model="form.phoneNumber"
+                data-testid="register-phone-number"
                 name="phoneNumber"
                 type="tel"
                 class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
@@ -83,6 +89,7 @@
               <select
                 id="education"
                 v-model="form.education"
+                data-testid="register-education"
                 name="education"
                 class="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
                 :class="{ 'text-gray-500': !form.education }"
@@ -95,7 +102,7 @@
             </div>
           </div>
 
-        <div v-if="error" class="text-red-600 text-sm text-center">
+        <div v-if="error" class="text-red-600 text-sm text-center" data-testid="register-error">
           {{ error }}
         </div>
 
@@ -103,6 +110,7 @@
           <button
             type="submit"
             :disabled="isLoading"
+            data-testid="register-submit"
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
           >
             {{ isLoading ? "注册中..." : "注册" }}
@@ -110,7 +118,7 @@
         </div>
 
         <div class="text-center">
-          <NuxtLink to="/login" class="text-blue-600 hover:text-blue-500">
+          <NuxtLink to="/login" data-testid="register-to-login" class="text-blue-600 hover:text-blue-500">
             已有账户？登录
           </NuxtLink>
         </div>

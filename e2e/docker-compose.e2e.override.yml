@@ -1,0 +1,26 @@
+services:
+  mongo:
+    container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-mongo
+
+  redis:
+    container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-redis
+
+  minio:
+    container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-minio
+
+  evaluateapp:
+    container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-evaluateapp
+    environment:
+      WEBAPP_CALLBACK_URL: http://webapp:3000/api/submissions/callback
+      SHARED_SECRET: ${E2E_SHARED_SECRET:-aigame-e2e-shared-secret}
+
+  webapp:
+    container_name: ${COMPOSE_PROJECT_NAME:-aigame-e2e}-webapp
+    environment:
+      EVALUATE_APP_SECRET: ${E2E_SHARED_SECRET:-aigame-e2e-shared-secret}
+      EVALUATE_APP_UPLOAD_SECRET: ${E2E_SHARED_SECRET:-aigame-e2e-shared-secret}
+      WEBAPP_BASE_URL: http://127.0.0.1:${WEBAPP_HOST_PORT:-33000}
+      AUTH_ORIGIN: http://127.0.0.1:${WEBAPP_HOST_PORT:-33000}
+      NUXT_PUBLIC_BASE_URL: http://127.0.0.1:${WEBAPP_HOST_PORT:-33000}
+      MINIO_PUBLIC_URL: http://127.0.0.1:${MINIO_API_HOST_PORT:-39000}
+      SMTP_STUB: "true"

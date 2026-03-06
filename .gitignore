@@ -110,3 +110,9 @@ docker-compose.local.yml
 tmp/
 temp/
 mongodb.key
+
+# Playwright E2E artifacts
+e2e/playwright-report/
+e2e/test-results/
+e2e/.state/
+e2e/artifacts/

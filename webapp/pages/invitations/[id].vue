@@ -20,8 +20,8 @@
     <div v-else-if="invitation" class="bg-white shadow-lg rounded-lg p-8 text-center">
       <h1 class="text-3xl font-bold text-gray-900 mb-4">您收到了一个邀请</h1>
       <p class="text-lg text-gray-700 mb-6">
-        <template v-if="invitation.inviter">
-          <span class="font-semibold">{{ invitation.inviter.username }}</span>
+        <template v-if="invitation.invitedBy">
+          <span class="font-semibold">{{ invitation.invitedBy.username || invitation.invitedBy.realName || '队长' }}</span>
           邀请您加入队伍
           <span class="font-semibold text-blue-600">{{ invitation.team.name }}</span
           >。
@@ -91,7 +91,7 @@ const { data: invitation, pending, error } = await useFetch(
   `/api/invitations/${invitationId}`,
   {
     lazy: true,
-    server: false, // Fetch on client side
+    server: false, // 仅在客户端发起请求
   }
 );
 
@@ -118,7 +118,7 @@ const rejectInvitation = async () => {
       method: "POST",
     });
     push.success("已拒绝邀请。");
-    // Refresh data to show updated status
+    // 刷新数据以展示最新邀请状态
     const { data: updatedInvitation } = await useFetch(
       `/api/invitations/${invitationId}`
     );
