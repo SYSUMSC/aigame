@@ -23,17 +23,31 @@
 
 ### 冒烟测试
 
-当前建议至少保这两条：
+当前建议至少保这三条：
 
 ```bash
 cd /proj/aigame/e2e
-./run.sh tests/05-admin-problem.spec.ts tests/08-submission-evaluateapp.spec.ts
+./run.sh tests/05-admin-problem.spec.ts tests/08-submission-evaluateapp.spec.ts tests/09-evaluate-example-upload-submit.spec.ts
 ```
 
-这两条覆盖了：
+这三条覆盖了：
 
 - 管理端题目资源上传与批量导入
 - 提交流程、评测回调、重入队与排行榜口径
+- 基于 `evaluate_example` 打包上传后再提交 `test_submit.zip` 的真实主链路
+
+### `evaluate_example` 全量验证
+
+```bash
+cd /proj/aigame/e2e
+./run.sh tests/evaluate-example
+```
+
+这个子目录会逐个验证 `evaluate_example/` 下现存题目都能：
+
+- 打包后成功上传
+- 被参赛用户看到并提交 `test_submit.zip`
+- 在评测完成后写回分数
 
 ### 全量测试
 
