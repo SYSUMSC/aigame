@@ -1,11 +1,33 @@
 services:
   # 开发态仅启动依赖服务，WebApp / EvaluateApp 在宿主机运行。
+  mongo-perms:
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mongodb/mongodb-community-server:8.0.13-ubuntu2204
+    restart: "no"
+    user: "0:0"
+    networks:
+      - aigame
+    volumes:
+      - ./data/mongo:/data/db
+    # 清库后 data/mongo 可能由 root 创建，先修正权限再启动 mongo。
+    entrypoint:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+        mkdir -p /data/db
+        MONGO_UID="$(id -u mongodb)"
+        MONGO_GID="$(id -g mongodb)"
+        chown -R "$${MONGO_UID}:$${MONGO_GID}" /data/db
+
   mongo:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mongodb/mongodb-community-server:8.0.13-ubuntu2204
     container_name: mongo
     restart: always
     networks:
       - aigame
+    depends_on:
+      mongo-perms:
+        condition: service_completed_successfully
     ports:
       - '${MONGO_HOST_PORT:-27017}:27017'
     environment:
@@ -23,6 +45,32 @@ services:
       - --bind_ip_all
       - --keyFile
       - /etc/mongo/mongodb.key
+
+  mongo-init:
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mongodb/mongodb-community-server:8.0.13-ubuntu2204
+    restart: "no"
+    networks:
+      - aigame
+    depends_on:
+      - mongo
+    # 开发态自动初始化副本集，避免每次清库后手工执行 rs.initiate(...)
+    entrypoint:
+      - bash
+      - -lc
+      - |
+        set -euo pipefail
+
+        until mongosh --host mongo -u "${MONGO_ROOT_USERNAME:-root}" -p "${MONGO_ROOT_PASSWORD:-password}" --authenticationDatabase admin --quiet --eval 'db.runCommand({ ping: 1 }).ok' | grep -q '^1$'; do
+          echo '等待 MongoDB 就绪...'
+          sleep 2
+        done
+
+        mongosh --host mongo -u "${MONGO_ROOT_USERNAME:-root}" -p "${MONGO_ROOT_PASSWORD:-password}" --authenticationDatabase admin --quiet --eval 'try { rs.status().ok } catch (error) { rs.initiate({ _id: "${MONGODB_REPLICA_SET:-rs0}", members: [{ _id: 0, host: "mongo:27017" }] }) }'
+
+        until mongosh --host mongo -u "${MONGO_ROOT_USERNAME:-root}" -p "${MONGO_ROOT_PASSWORD:-password}" --authenticationDatabase admin --quiet --eval 'rs.status().ok' | grep -q '^1$'; do
+          echo '等待 MongoDB 副本集 PRIMARY 就绪...'
+          sleep 2
+        done
 
   redis:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/redis:8.0.3
