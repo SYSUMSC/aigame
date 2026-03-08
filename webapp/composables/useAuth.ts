@@ -6,18 +6,29 @@ interface AuthState {
   isLoading: boolean
 }
 
+function createAuthError(error: any, fallbackMessage: string) {
+  const payload = error?.data ?? error?.response?._data
+
+  return createError({
+    statusCode: error?.status ?? error?.statusCode ?? error?.response?.status ?? payload?.statusCode ?? 400,
+    statusMessage: payload?.statusMessage ?? payload?.message ?? error?.statusMessage ?? error?.message ?? fallbackMessage
+  })
+}
+
 export const useCustomAuth = () => {
   const user = useState<SafeUser | null>('auth.user', () => null)
   const isLoading = useState<boolean>('auth.loading', () => false)
 
   const isLoggedIn = computed(() => !!user.value)
+  const requestFetch = process.server ? useRequestFetch() : $fetch
 
   const login = async (identifier: string, password: string) => {
     isLoading.value = true
     try {
-      const data = await $fetch<{ success: boolean; user: SafeUser; token: string }>('/api/auth/login', {
+      const data = await requestFetch<{ success: boolean; user: SafeUser; token: string }>('/api/auth/login', {
         method: 'POST',
-        body: { identifier, password }
+        body: { identifier, password },
+        credentials: 'include'
       })
 
       if (data.success) {
@@ -27,10 +38,7 @@ export const useCustomAuth = () => {
 
       return { success: true }
     } catch (error: any) {
-      throw createError({
-        statusCode: error?.status || 400,
-        statusMessage: error?.statusMessage || 'Login failed'
-      })
+      throw createAuthError(error, 'Login failed')
     } finally {
       isLoading.value = false
     }
@@ -39,22 +47,30 @@ export const useCustomAuth = () => {
   const register = async (username: string, email: string, password: string, phoneNumber?: string, studentId?: string, realName?: string, education?: string) => {
     isLoading.value = true
     try {
-      const data = await $fetch<{ success: boolean; user: SafeUser; token: string }>('/api/auth/register', {
+      const body = {
+        username,
+        email,
+        password,
+        ...(phoneNumber ? { phoneNumber } : {}),
+        ...(studentId ? { studentId } : {}),
+        ...(realName ? { realName } : {}),
+        ...(education ? { education } : {})
+      }
+
+      const data = await requestFetch<{ success: boolean; user: SafeUser; token: string }>('/api/auth/register', {
         method: 'POST',
-        body: { username, email, password, phoneNumber, studentId, realName, education }
+        body,
+        credentials: 'include'
       })
 
       if (data.success) {
         user.value = data.user
-        // Don't redirect here, let the page handle it
+        await navigateTo('/')
       }
 
       return { success: true }
     } catch (error: any) {
-      throw createError({
-        statusCode: error?.status || 400,
-        statusMessage: error?.statusMessage || 'Registration failed'
-      })
+      throw createAuthError(error, 'Registration failed')
     } finally {
       isLoading.value = false
     }
@@ -63,8 +79,9 @@ export const useCustomAuth = () => {
   const logout = async () => {
     isLoading.value = true
     try {
-      await $fetch('/api/auth/logout', {
-        method: 'POST'
+      await requestFetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
       })
 
       user.value = null
@@ -79,7 +96,9 @@ export const useCustomAuth = () => {
   const fetchUser = async () => {
     isLoading.value = true
     try {
-      const data = await $fetch<{ success: boolean; user: SafeUser }>('/api/auth/me')
+      const data = await requestFetch<{ success: boolean; user: SafeUser }>('/api/auth/me', {
+        credentials: 'include'
+      })
 
       if (data.success) {
         user.value = data.user

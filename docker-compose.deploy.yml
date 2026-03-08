@@ -6,7 +6,7 @@ services:
     networks:
       - aigame
     volumes:
-      - ./data:/work-data
+      - ${APP_DATA_DIR:-./data}:/work-data
     # 清空 data/ 后自动准备 Mongo 数据目录与 keyfile，并修正权限。
     entrypoint:
       - bash
@@ -49,9 +49,9 @@ services:
       - MONGODB_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME:-root}
       - MONGODB_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-password}
     volumes:
-      - ./data/mongo:/data/db
+      - ${APP_DATA_DIR:-./data}/mongo:/data/db
       - /etc/localtime:/etc/localtime:ro
-      - ./data/mongodb.key:/etc/mongo/mongodb.key:ro
+      - ${APP_DATA_DIR:-./data}/mongodb.key:/etc/mongo/mongodb.key:ro
     command:
       - mongod
       - --replSet
@@ -98,7 +98,7 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD:-password}
       - TZ=${TZ:-Asia/Shanghai}
     volumes:
-      - ./data/redis:/data
+      - ${APP_DATA_DIR:-./data}/redis:/data
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro
     command:
@@ -120,7 +120,7 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD:-password}
       - TZ=${TZ:-Asia/Shanghai}
     volumes:
-      - ./data/minio:/data
+      - ${APP_DATA_DIR:-./data}/minio:/data
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo/Asia/Shanghai:/etc/timezone:ro
     command: server /data --console-address ":9001"

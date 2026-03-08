@@ -88,9 +88,17 @@ export function shouldUseSecureCookie(event: H3Event): boolean {
     return true
   }
 
+  if (forwardedProto === 'http') {
+    return false
+  }
+
   const forwardedSsl = getHeader(event, 'x-forwarded-ssl')?.trim().toLowerCase()
   if (forwardedSsl === 'on') {
     return true
+  }
+
+  if (forwardedSsl === 'off') {
+    return false
   }
 
   const origin = getHeader(event, 'origin')?.trim().toLowerCase()
@@ -98,8 +106,23 @@ export function shouldUseSecureCookie(event: H3Event): boolean {
     return true
   }
 
-  const host = getHeader(event, 'host')?.trim().toLowerCase() || ''
-  const isLocalHttpHost = /^(127\.0\.0\.1|localhost)(:\d+)?$/.test(host)
+  if (origin?.startsWith('http://')) {
+    return false
+  }
 
-  return process.env.NODE_ENV === 'production' && !isLocalHttpHost
+  const referer = getHeader(event, 'referer')?.trim().toLowerCase()
+  if (referer?.startsWith('https://')) {
+    return true
+  }
+
+  if (referer?.startsWith('http://')) {
+    return false
+  }
+
+  const socket = event.node.req.socket as typeof event.node.req.socket & { encrypted?: boolean }
+  if (socket.encrypted) {
+    return true
+  }
+
+  return false
 }

@@ -130,6 +130,22 @@ docker exec mongo mongosh -u root -p password --authenticationDatabase admin --q
 - WebApp 用域名反代到 `33000`
 - 如不需要外部直连，可不直接暴露 MongoDB / Redis / MinIO
 - 开启 HTTPS 后，登录态 Cookie 行为会更接近真实线上
+- 如果接了 Nginx，请透传 `X-Forwarded-Proto` / `X-Forwarded-SSL`，让 WebApp 正确判断是否下发 `Secure` Cookie
+
+推荐 Nginx 片段：
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:33000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-SSL $https;
+}
+```
+
+如果你的代理层无法透传这些头，也可以在 `.env` 中显式设置 `AUTH_COOKIE_SECURE=true`（HTTPS）或 `AUTH_COOKIE_SECURE=false`（纯 HTTP）。
 
 ## 数据与目录建议
 

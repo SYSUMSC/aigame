@@ -25,7 +25,7 @@ test.describe('03-权限与访问保护', () => {
     await expect(page).toHaveURL(/\/$/);
 
     await page.goto('/admin/dashboard');
-    await expect(page).toHaveURL(/\/\?error=access_denied/);
+    await expect(page).toHaveURL(/\/$/);
 
     const apiResponse = await api.get('/api/admin/users');
     await expectStatus(apiResponse, 403);

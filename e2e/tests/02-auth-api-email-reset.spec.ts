@@ -1,8 +1,10 @@
+import { request as httpRequest } from 'node:http';
 import { expect, test } from '@playwright/test';
 import { createApiContext, expectStatus } from '../utils/apiClient';
 import { loginUser, registerUser } from '../utils/auth';
 import { createTestUser } from '../utils/factory';
 import { activateUser, banUser, findUserByEmail, setEmailVerification, setPasswordReset } from '../utils/mongo';
+import { readRuntimeState } from '../utils/runtime';
 
 test.describe('02-认证接口与找回密码', () => {
   test('邮箱验证接口使用数据库中的令牌可以成功激活', async () => {
@@ -72,6 +74,60 @@ test.describe('02-认证接口与找回密码', () => {
     await api.dispose();
   });
 
+  test('HTTP 非 localhost Host 登录时不会下发 Secure Cookie', async () => {
+    const api = await createApiContext();
+    const runtime = await readRuntimeState();
+    const user = await createTestUser('login-cookie-http-host');
+
+    await expectStatus(await registerUser(api, user), 200);
+    await activateUser(user.email);
+
+    const loginUrl = new URL('/api/auth/login', runtime.baseURL);
+    const body = JSON.stringify({
+      identifier: user.email,
+      password: user.password,
+    });
+
+    const response = await new Promise<{ statusCode?: number; setCookie: string }>((resolve, reject) => {
+      const request = httpRequest(
+        {
+          hostname: loginUrl.hostname,
+          port: loginUrl.port,
+          path: loginUrl.pathname,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'content-length': Buffer.byteLength(body),
+            host: '172.18.198.210:33000',
+            origin: 'http://172.18.198.210:33000',
+          },
+        },
+        (rawResponse) => {
+          rawResponse.resume();
+          rawResponse.on('end', () => {
+            const setCookieHeader = rawResponse.headers['set-cookie'];
+            const setCookie = Array.isArray(setCookieHeader)
+              ? setCookieHeader.join('; ')
+              : (setCookieHeader ?? '');
+
+            resolve({
+              statusCode: rawResponse.statusCode,
+              setCookie,
+            });
+          });
+        },
+      );
+
+      request.on('error', reject);
+      request.write(body);
+      request.end();
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.setCookie.toLowerCase()).toContain('auth-token=');
+    expect(response.setCookie.toLowerCase()).not.toContain('secure');
+    await api.dispose();
+  });
   test('忘记密码与重置密码覆盖成功和异常状态', async () => {
     const api = await createApiContext();
 

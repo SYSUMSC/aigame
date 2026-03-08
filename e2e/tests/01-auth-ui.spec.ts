@@ -29,7 +29,7 @@ test.describe('01-认证界面', () => {
     await page.getByTestId('register-education').selectOption(user.education);
     await page.getByTestId('register-submit').click();
 
-    await page.goto('/');
+    await expect(page).toHaveURL(/\/$/);
     await expect(page.getByTestId('nav-user-menu')).toContainText(user.username);
   });
 
