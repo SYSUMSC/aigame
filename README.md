@@ -66,7 +66,7 @@ cd /proj/aigame
 docker compose -f docker-compose.deploy.yml up -d --build
 ```
 
-`docker-compose.deploy.yml` 已自动完成 MongoDB 副本集初始化，不需要再手工执行 `rs.initiate(...)`。
+`docker-compose.deploy.yml` 现在会在首次启动时自动准备 `data/mongo` 与 `data/mongodb.key`，并自动完成 MongoDB 副本集初始化，不需要再手工执行 `rs.initiate(...)`。
 
 ### 3. E2E 冒烟
 

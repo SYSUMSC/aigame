@@ -7,17 +7,32 @@ services:
     networks:
       - aigame
     volumes:
-      - ./data/mongo:/data/db
-    # 清库后 data/mongo 可能由 root 创建，先修正权限再启动 mongo。
+      - ./data:/work-data
+    # 清空 data/ 后自动准备 Mongo 数据目录与 keyfile，并修正权限。
     entrypoint:
       - bash
       - -lc
       - |
         set -euo pipefail
-        mkdir -p /data/db
+
+        mkdir -p /work-data/mongo
+
+        if [ -d /work-data/mongodb.key ]; then
+          rmdir /work-data/mongodb.key 2>/dev/null || {
+            echo '错误：data/mongodb.key 当前是非空目录，请先移除后重试。' >&2
+            exit 1
+          }
+        fi
+
+        if [ ! -f /work-data/mongodb.key ]; then
+          python3 -c "from pathlib import Path; import base64, os; path = Path('/work-data/mongodb.key'); path.parent.mkdir(parents=True, exist_ok=True); path.write_text(base64.b64encode(os.urandom(756)).decode() + '\n', encoding='utf-8')"
+        fi
+
         MONGO_UID="$(id -u mongodb)"
         MONGO_GID="$(id -g mongodb)"
-        chown -R "$${MONGO_UID}:$${MONGO_GID}" /data/db
+        chown -R "$${MONGO_UID}:$${MONGO_GID}" /work-data/mongo
+        chown "$${MONGO_UID}:$${MONGO_GID}" /work-data/mongodb.key
+        chmod 400 /work-data/mongodb.key
 
   mongo:
     image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mongodb/mongodb-community-server:8.0.13-ubuntu2204

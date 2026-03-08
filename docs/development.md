@@ -89,9 +89,9 @@ WebApp 本地开发默认优先复用根目录 `.env`，不再要求单独维护
 ### MongoDB 副本集说明
 
 - WebApp 当前使用带副本集参数的 MongoDB 连接串。
-- `docker-compose.deploy.yml` 已自动初始化副本集。
-- `docker-compose.dev.yml` 现在也包含 `mongo-init`，首次清库后启动会自动初始化副本集。
-- `docker-compose.dev.yml` 已包含 `mongo-perms` 预处理，删除 `data/mongo` 后可直接 `docker compose -f docker-compose.dev.yml up -d`。
+- `docker-compose.deploy.yml` 已自动准备 `data/mongo`、`data/mongodb.key` 并初始化副本集。
+- `docker-compose.dev.yml` 也包含相同的 `mongo-perms` 预处理与 `mongo-init` 初始化逻辑。
+- 清空整个 `data/` 后，仍可直接执行 `docker compose -f docker-compose.dev.yml up -d`。
 
 如果你在开发态首次启动 MongoDB 且初始化未成功，可以：
 

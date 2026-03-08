@@ -8,7 +8,7 @@
 
 - 会同时拉起 `mongo`、`redis`、`minio`、`evaluateapp`、`webapp`
 - WebApp 和 EvaluateApp 都跑在容器里，和线上更接近
-- 已自动初始化 MongoDB 副本集，避免首启时额外手工操作
+- 已自动准备 MongoDB 数据目录 / keyfile，并初始化副本集，避免首启时额外手工操作
 
 ## 服务器基线建议
 
@@ -94,6 +94,8 @@ export EVALUATEAPP_HOST_PORT=38080
 cd /proj/aigame
 docker compose -f docker-compose.deploy.yml up -d --build
 ```
+
+如果 `data/` 是空目录，Compose 会在首启时自动创建 `data/mongo`、生成 `data/mongodb.key` 并修正权限。
 
 ## 启动后检查
 
