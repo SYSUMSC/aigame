@@ -394,7 +394,11 @@ const {
   `user-teams-${user.value?.id}`,
   async () => {
     try {
-      const response = await $fetch("/api/teams");
+      // During SSR, forward browser cookies so the protected teams API can identify the user.
+      const authFetch = import.meta.server ? useRequestFetch() : $fetch;
+      const response = await authFetch("/api/teams", {
+        credentials: "include",
+      });
       return response.teams || [];
     } catch (err) {
       console.error("获取用户团队列表失败:", err);
